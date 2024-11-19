@@ -1,4 +1,6 @@
 import './App.css'
+import { FlairSelectionRenderer } from './components/wizard/components/flairSelectionRenderer/FlairSelectionRenderer'
+import { ColorSelectionRenderer } from './components/wizard/components/WizardColorSelect'
 import WizardController from './components/wizard/wizardController'
 
 function App() {
@@ -16,6 +18,7 @@ function App() {
                 id: 'flair',
                 next: 'color',
                 title: 'Select your level of flair',
+                selectionRenderer: FlairSelectionRenderer,
                 selections: [
                   { id: 1, label: '1 piece' },
                   { id: 15, label: '15 pieces' },
@@ -25,13 +28,7 @@ function App() {
               {
                 id: 'color',
                 title: 'Choose a favorite color',
-                selections: [
-                  { id: 1, label: 'RED' },
-                  { id: 15, label: 'YELLOW' },
-                  { id: 37, label: 'GREEN' },
-                  { id: 53, label: 'PURPLE' },
-                  { id: 79, label: 'BLUE' },
-                ],
+                selectionRenderer: ColorSelectionRenderer
               },
             ],
           },
