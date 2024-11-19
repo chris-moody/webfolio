@@ -1,14 +1,15 @@
 import { FC } from 'react'
 import { ColorPicker } from '@/components/colorPicker/ColorPicker'
-import { WizardSelectionRendererProps } from '../wizard.types'
+import { SelectionRendererProps } from './DefaultSelectionRenderer'
+import { Box } from '@mui/material'
 
-const WizardColorSelectSelect: FC<WizardSelectionRendererProps> = ({
-  selection,
-  onSelect
+export const WizardColorSelection: FC<SelectionRendererProps> = ({
+  onSelect,
+  next
 }) => {
   
   const selectionHandler = (color: string) => {
-    onSelect({ id: selection.id, next: selection.next || '', value: color })
+    onSelect({ id: 'color', next, value: color })()
   }
 
   return (
@@ -18,4 +19,11 @@ const WizardColorSelectSelect: FC<WizardSelectionRendererProps> = ({
   )
 }
 
-export default WizardColorSelectSelect
+export const ColorSelectionRenderer: FC<SelectionRendererProps> = ({
+  onSelect,
+  next
+}) => (
+  <Box className="wizard-step-content">
+    <WizardColorSelection next={next} onSelect={onSelect} />
+  </Box>
+)

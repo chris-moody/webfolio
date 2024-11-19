@@ -17,7 +17,7 @@ export type WizardProps = Omit<BoxProps, 'id'> & {
   active?: boolean
   defaultStep?: WizardValue
   onComplete?: (value: WizardResult) => void
-  renderer?: (
+  i?: (
     wizard: WizardProps,
     onComplete: (value: WizardResult) => void,
     active: boolean
@@ -80,17 +80,16 @@ export const Wizard: React.FC<WizardProps> = ({
   )
 
   const onStepSelect = (step: WizardStepProps) => (value: WizardResult) => {
-    console.log('onStepSelect', value, step)
     //setCurrentStep(value.next)
   }
 
   const renderStep = (
-    { renderer, ...step }: WizardStepProps,
+    step: WizardStepProps,
     onComplete: (value: WizardResult) => void,
     onSelect: (value: WizardResult) => void,
     active: boolean
   ) => {
-    if (renderer) return renderer(step, onComplete, onSelect)
+    //if (renderer) return renderer(step, onComplete, onSelect)
     return (
       <WizardStep
         onComplete={onComplete}
