@@ -1,9 +1,10 @@
-import React, { useCallback, useRef } from 'react'
+import React, { FC, useCallback, useRef } from 'react'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
-import { Box, BoxProps, Button, Stack, Typography } from '@mui/material'
+import { Box, BoxProps, Button, Typography } from '@mui/material'
 import classNames from 'classnames'
 import { WizardResult, WizardSelection, WizardValue } from '../wizard.types'
+import { DefaultSelectionRenderer, SelectionRendererProps } from './DefaultSelectionRenderer'
 gsap.registerPlugin(useGSAP)
 
 export type WizardStepProps = Omit<BoxProps, 'onSelect' | 'id'> & {
@@ -14,11 +15,7 @@ export type WizardStepProps = Omit<BoxProps, 'onSelect' | 'id'> & {
   selections?: WizardSelection[]
   title: string
   active?: boolean
-  renderer?: (
-    step: WizardStepProps,
-    onComplete: (value: WizardResult) => void,
-    onSelect: (value: WizardResult) => void
-  ) => React.ReactNode
+  selectionRenderer?: FC<SelectionRendererProps>
 }
 
 export const WizardStep: React.FC<WizardStepProps> = ({
@@ -30,6 +27,7 @@ export const WizardStep: React.FC<WizardStepProps> = ({
   next = '',
   title,
   id,
+  selectionRenderer,
   ...props
 }) => {
   const container = useRef<HTMLDivElement>()
@@ -69,40 +67,19 @@ export const WizardStep: React.FC<WizardStepProps> = ({
     { dependencies: [active], scope: container }
   )
 
-  const renderSelection = useCallback(
-    (
-      { renderer, ...selection }: WizardSelection,
-      onSelect: (value: WizardResult) => () => void,
-      active: boolean
-    ) => {
-      if (renderer) {
-        return renderer(selection, onSelect, active)
-      }
-      return (
-        <Button
-          className={classNames({ active })}
-          key={selection.id}
-          onClick={onSelect({
-            id: selection.id,
-            next: selection.next || next,
-            value: selection.id,
-          })}
-        >
-          {selection.label}
-        </Button>
-      )
-    },
-    [next]
-  )
-
   const renderComplete = useCallback(() => {
     return (
-      <Button disabled={!selected && selections.length > 0} onClick={completeHandler}>
+      <Button
+        disabled={!selected && selections.length > 0}
+        onClick={completeHandler}
+        sx={{ position: 'relative', zIndex: 2 }}
+      >
         Next
       </Button>
     )
   }, [completeHandler, selected, selections.length])
 
+  const SelectionRenderer = selectionRenderer || DefaultSelectionRenderer
   return (
     <Box
       id={`wizard-step-${id}`}
@@ -110,16 +87,13 @@ export const WizardStep: React.FC<WizardStepProps> = ({
       className={classNames(`wizard-step`, className)}
       {...props}
     >
-      <Typography variant="h2">{title}</Typography>
-      <Stack className="wizard-step-content">
-        {selections.map((selection) =>
-          renderSelection(
-            selection,
-            selectionHandler,
-            selected?.id === selection.id
-          )
-        )}
-      </Stack>
+      <Typography variant="h2" sx={{ position: 'relative', zIndex: 2 }}>{title}</Typography>
+      <SelectionRenderer
+        selections={selections}
+        selected={selected}
+        onSelect={selectionHandler}
+        next={next}
+      />
       {renderComplete()}
     </Box>
   )

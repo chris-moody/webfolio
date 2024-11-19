@@ -11,8 +11,10 @@
   },
   "dependencies": {
     "@gsap/react": "^2.1.1",
+    "circlepacker": "^2.1.0",
     "classnames": "^2.5.1",
     "color-2-name": "^1.4.4",
+    "d3": "^7.9.0",
     "gsap": "^3.12.5",
     "react": "^18.3.1",
     "react-colorful": "^5.6.1",
@@ -23,6 +25,7 @@
     "@emotion/styled": "^11.13.0",
     "@eslint/js": "^9.13.0",
     "@mui/material": "^6.1.7",
+    "@types/d3": "^7.4.3",
     "@types/node": "^22.9.0",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",

@@ -16,12 +16,18 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({ onSelect }) => {
   }
 
   return (
-    <Box bgcolor={color}>
+    <Box bgcolor={color} sx={{
+      '.react-colorful': {
+        width: '80%',
+        mx: 'auto',
+        borderRadius: '0 !important',
+      },
+    }}>
       <Typography color={isDark(color) ? 'white' : 'black'}>
         {closest(color)?.name || 'Unknown Color'}
       </Typography>
       <HexColorPicker color={color} onChange={handleColorChange} />
-      <HexColorInput color={color} onChange={handleColorChange} />
+      <HexColorInput prefixed color={color} onChange={handleColorChange} />
     </Box>
   )
 }
