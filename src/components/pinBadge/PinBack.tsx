@@ -1,64 +1,39 @@
 import { BoxProps } from '@mui/material'
 import { FC } from 'react'
+import { PinData } from '../wizard/components/flairSelectionRenderer/flairSelectionRenderer.helpers'
 
 export interface PinBackProps extends BoxProps {
-  background?: string
-  group?: number
-  radius?: number
-  x?: number
-  y?: number
+  data: PinData
 }
 
-/* const pinBackStyles = {
-  borderRadius: '50%',
-  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
-  position: 'absolute',
-  top: 0,
-  left: 0,
-  overflow: 'hidden',
-  backgroundSize: 'cover',
-  //transform: 'translate(-50%, -50%)',
-  opacity: 0,
-  '&::after': {
-    content: '""',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-    background:
-      'linear-gradient(145deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0))',
-    borderRadius: '50%',
-  },
-} */
-export const PinBack: FC<PinBackProps> = ({
-  id,
-  group = 1,
-  background = 'red',
-  radius = 50,
-  x = 50,
-  y = 50,
-}) => {
+export const PinBack: FC<PinBackProps> = ({ data }) => {
+  const {
+    name,
+    background = 'red',
+    value = 50,
+    x = 50,
+    y = 50
+  } = data
 
   return (
     <g
-      key={id}
-      transform={`translate(${x}, ${y})`}
-      className={`pin-${group}`}
-      id={`pin-${id}`}
-      style={{ opacity: 0 }}
+      transform={`translate(${x},${y})`}
+      id={`pin-${name}`}
+      onClick={() => console.log(`Clicked ${name}`)}
     >
       <defs>
-        <mask className="mask" id={`pinmask-${id}`}>
-          <circle cx={radius} cy={radius} r={radius} fill="white" />
+        <mask className="mask" id={`pinmask-${name}`}>
+          <circle cx={0} cy={0} r={value} fill="white" />
         </mask>
       </defs>
-      <circle cx={radius} cy={radius} r={radius} fill="white" />
+      <circle cx={0} cy={0} r={value} fill="white" />
       <image
         href={background}
-        mask={`url(#pinmask-${id})`}
-        width={radius * 2}
-        height={radius * 2}
+        mask={`url(#pinmask-${name})`}
+        width={value * 2}
+        height={value * 2}
+        x={-value}
+        y={-value}
       />
     </g>
   )

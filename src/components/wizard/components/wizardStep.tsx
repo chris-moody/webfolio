@@ -13,7 +13,7 @@ export type WizardStepProps = Omit<BoxProps, 'onSelect' | 'id'> & {
   onComplete?: (value: WizardResult) => void
   onSelect?: (value: WizardResult) => void
   selections?: WizardSelection[]
-  title: string
+  title: JSX.Element
   active?: boolean
   selectionRenderer?: FC<SelectionRendererProps>
 }
