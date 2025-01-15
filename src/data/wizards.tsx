@@ -1,9 +1,11 @@
 import { FlairSelectionRenderer } from "@/components/wizard/components/flairSelectionRenderer/FlairSelectionRenderer";
 import { ColorSelectionRenderer } from "@/components/wizard/components/colorSelectionRenderer/ColorSelectionRenderer";
+import { WizardProps } from "@/components/wizard/wizard";
 
-const wizards = [
+const wizards: WizardProps[] = [
   {
     id: 'settings',
+    title: 'Settings',
     next: 'purpose',
     defaultStep: 'flair',
     stepData: [
@@ -27,6 +29,7 @@ const wizards = [
   },
   {
     id: 'purpose',
+    title: 'State your purpose',
     next: 'complete',
     defaultStep: 'about',
     stepData: [
@@ -43,6 +46,7 @@ const wizards = [
   },
   {
     id: 'storytime',
+    title: 'Story Time!',
     next: 'purpose',
     defaultStep: 'story-selection',
     stepData: [
@@ -148,7 +152,7 @@ const wizards = [
       {
         id: '7',
         next: '8',
-        title: <>“I need you to make it bad,” she said to me in hushed tones. I couldn&rsquo;t believe what I was hearing, but she was serious.</>
+        title: <span>“I need you to make it bad,” she said to me in hushed tones. I couldn&rsquo;t believe what I was hearing, but she was serious.</span>
       },
       {
         id: '8',
