@@ -1,8 +1,5 @@
-import React, { useCallback, useState } from 'react'
-import {
-  WizardStep,
-  WizardStepProps,
-} from './components/wizardStep'
+import { FC, useCallback, useRef, useState } from 'react'
+import { WizardStep, WizardStepProps } from './components/wizardStep'
 import { Box, BoxProps, Typography } from '@mui/material'
 import classNames from 'classnames'
 import gsap from 'gsap'
@@ -15,7 +12,9 @@ export type WizardProps = Omit<BoxProps, 'id'> & {
   next: WizardValue
   stepData: WizardStepProps[]
   active?: boolean
+  title?: React.ReactNode | string
   defaultStep?: WizardValue
+  onBack?: () => void
   onComplete?: (value: WizardResult) => void
   i?: (
     wizard: WizardProps,
@@ -25,12 +24,11 @@ export type WizardProps = Omit<BoxProps, 'id'> & {
   renderer?: (
     wizard: WizardProps,
     onComplete: (value: WizardResult) => void,
-    active: boolean 
+    active: boolean
   ) => React.ReactNode
-
 }
 
-export const Wizard: React.FC<WizardProps> = ({
+export const Wizard: FC<WizardProps> = ({
   id,
   next,
   active,
@@ -38,11 +36,13 @@ export const Wizard: React.FC<WizardProps> = ({
   defaultStep = 0,
   stepData,
   title,
+  onBack,
   onComplete,
   ...props
 }) => {
-  const container = React.useRef<HTMLDivElement>()
+  const container = useRef<HTMLDivElement>()
   const [currentStep, setCurrentStep] = useState<WizardValue>(defaultStep)
+  const [history, setHistory] = useState<WizardValue[]>([])
 
   useGSAP(
     () => {
@@ -67,19 +67,33 @@ export const Wizard: React.FC<WizardProps> = ({
     [id, onComplete]
   )
 
+  const onStepBack = useCallback(
+    () => () => {
+      //go to the prvious step
+      const stepHistory = [...history]
+      const prevStep = stepHistory.pop()
+      if (prevStep) {
+        setCurrentStep(prevStep)
+        setHistory(stepHistory)
+      }
+      else if (onBack) onBack()
+    },
+    [history, onBack]
+  )
+
   //works if wizardStep.next is undefined
   //each wizardStep links to the next via next property
   //wizardStep.next === 'complete' will trigger the onComplete handler
 
   //receives data from the step selection when the complete button is hit
-  const onStepComplete = useCallback(
+  const onStepNext = useCallback(
     (step: WizardStepProps) => (result: WizardResult) => {
-      console.log('onStepComplete', result, step)
       if (!step.next) {
         completeHandler(result)
         return
       }
       //go to the next step
+      setHistory((history) => [...history, step.id])
       setCurrentStep(result.next || defaultStep)
     },
     [defaultStep, completeHandler]
@@ -89,18 +103,20 @@ export const Wizard: React.FC<WizardProps> = ({
     //setCurrentStep(value.next)
   }
 
-  const renderStep = (
-    step: WizardStepProps,
-    onComplete: (value: WizardResult) => void,
-    onSelect: (value: WizardResult) => void,
-    active: boolean
-  ) => {
-    //if (renderer) return renderer(step, onComplete, onSelect)
-    return (
-      <WizardStep
-        onComplete={onComplete}
-        onSelect={onSelect}
-        active={active}
+  return (
+    <Box
+      id={`wizard-${id}`}
+      ref={container}
+      className={classNames('wizard', className)}
+      {...props}
+    >
+      <Typography variant="h1">{title}</Typography>
+      {stepData.map((step) => (
+        <WizardStep
+        onBack={onStepBack(step)}
+        onNext={onStepNext(step)}
+        onSelect={onStepSelect(step)}
+        active={step.id === currentStep}
         key={step.id}
         sx={{
           width: '100vw',
@@ -111,13 +127,8 @@ export const Wizard: React.FC<WizardProps> = ({
         }}
         {...step}
       />
-    )
-  }
-
-  return (
-    <Box id={`wizard-${id}`} ref={container} className={classNames('wizard', className)} {...props}>
-      <Typography variant="h1">{title}</Typography>
-      {stepData.map((step) => renderStep(step, onStepComplete(step), onStepSelect(step), step.id === currentStep))}
+      )
+      )}
     </Box>
   )
 }
