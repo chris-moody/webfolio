@@ -1,4 +1,3 @@
-import * as d3 from 'd3'
 import balance from '@/assets/pins/balance.png'
 import batman from '@/assets/pins/batman.png'
 import xmen from '@/assets/pins/xmen.png'
@@ -36,83 +35,53 @@ import hanshotfirst from '@/assets/pins/hanshotfirst.png'
 import garfield from '@/assets/pins/garfield.png'
 import stevenuniverse from '@/assets/pins/stevenuniverse.png'
 import kansas from '@/assets/pins/kansas.png'
-import { useEffect, useState } from 'react'
+import { BoxProps } from '@mui/material'
+import { Node } from './components/circlePacking.types'
 
-export type PinData = {
-  name: string
+export type PinData = Node & {
   background?: string
-  group?: number
-  r?: number
-  x?: number
-  y?: number
 }
-export const getPinData = () => [
-  { name: 'kansas', background: kansas },
-  { name: 'garfield', background: garfield },
-  { name: 'hanshotfirst', background: hanshotfirst },
-  { name: 'wutang', background: wutang },
-  { name: 'rebel', background: rebel },
-  { name: 'protoman', background: protoman },
-  { name: 'gonewiththewind', background: gonewiththewind },
-  { name: 'byefelisha', background: byefelisha },
-  { name: 'blockbuster', background: blockbuster },
-  { name: 'triforce', background: triforce },
-  { name: 'lukevsvader', background: lukevsvader },
-  { name: 'imdoingmypart', background: imdoingmypart },
-  { name: 'stevenuniverse', background: stevenuniverse },
-  { name: 'highground', background: highground },
-  { name: 'kingofthehill', background: kingofthehill },
-  { name: 'uchiha', background: uchiha },
-  { name: 'thumbsup', background: thumbsup },
-  { name: 'radioshack', background: radioshack },
-  { name: 'luffy', background: luffy },
-  { name: 'scouts', background: scouts },
-  { name: 'ecko', background: ecko },
-  { name: 'breakingbad', background: breakingbad },
-  { name: 'greenranger', background: greenranger },
-  { name: 'inigo', background: inigo },
-  { name: 'resistanceisfutile', background: resistanceisfutile },
-  { name: 'ssf2t', background: ssf2t },
-  { name: 'butterbot', background: butterbot },
-  { name: 'vote', background: vote },
-  { name: 'xenomorph', background: xenomorph },
-  { name: 'mario', background: mario },
-  { name: 'palmtree', background: palmtree },
-  { name: 'rollsafe', background: rollsafe },
-  { name: 'nocryinginbaseball', background: nocryinginbaseball },
-  { name: 'jake', background: jake },
-  { name: 'xmen', background: xmen },
-  { name: 'batman', background: batman },
-  { name: 'balance', background: balance },
-]
 
-export const usePinPack = (width = 800, height = 200) => {
-  const pinData = getPinData().map((d) => ({
-    ...d,
-    r: Math.min(150, Math.max(50, d.name.length * 5)),
-  })) as d3.SimulationNodeDatum[]
+export const getPinData = (): PinData[] => [
+  { name: 'kansas', group: 'one', background: kansas },
+  { name: 'garfield', group: 'one', background: garfield },
+  { name: 'hanshotfirst', group: 'one', background: hanshotfirst },
+  { name: 'wutang', group: 'one', background: wutang },
+  { name: 'rebel', group: 'one', background: rebel },
+  { name: 'protoman', group: 'one', background: protoman },
+  { name: 'gonewiththewind', group: 'one', background: gonewiththewind },
+  { name: 'byefelisha', group: 'one', background: byefelisha },
+  { name: 'blockbuster', group: 'one', background: blockbuster },
+  { name: 'triforce', group: 'one', background: triforce },
+  { name: 'lukevsvader', group: 'one', background: lukevsvader },
+  { name: 'imdoingmypart', group: 'one', background: imdoingmypart },
+  { name: 'stevenuniverse', group: 'one', background: stevenuniverse },
+  { name: 'highground', group: 'one', background: highground },
+  { name: 'kingofthehill', group: 'one', background: kingofthehill },
+  { name: 'uchiha', group: 'one', background: uchiha },
+  { name: 'thumbsup', group: 'one', background: thumbsup },
+  { name: 'radioshack', group: 'one', background: radioshack },
+  { name: 'luffy', group: 'one', background: luffy },
+  { name: 'scouts', group: 'one', background: scouts },
+  { name: 'ecko', group: 'one', background: ecko },
+  { name: 'breakingbad', group: 'one', background: breakingbad },
+  { name: 'greenranger', group: 'one', background: greenranger },
+  { name: 'inigo', group: 'one', background: inigo },
+  { name: 'resistanceisfutile', group: 'one', background: resistanceisfutile },
+  { name: 'ssf2t', group: 'one', background: ssf2t },
+  { name: 'butterbot', group: 'one', background: butterbot },
+  { name: 'vote', group: 'one', background: vote },
+  { name: 'xenomorph', group: 'one', background: xenomorph },
+  { name: 'mario', group: 'one', background: mario },
+  { name: 'palmtree', group: 'one', background: palmtree },
+  { name: 'rollsafe', group: 'one', background: rollsafe },
+  { name: 'nocryinginbaseball', group: 'one', background: nocryinginbaseball },
+  { name: 'jake', group: 'one', background: jake },
+  { name: 'xmen', group: 'one', background: xmen },
+  { name: 'batman', group: 'one', background: batman },
+  { name: 'balance', group: 'one', background: balance },
+].map(p => ({ ...p, value: Math.min(150, Math.max(50, p.name.length * (5 + Math.random() * 5))) }))
 
-  const [pins, setPins] = useState<d3.SimulationNodeDatum[]>(pinData)
-
-  useEffect(() => {
-    const ticked = () => {
-      setPins(simulation.nodes())
-    }
-
-    const simulation = d3
-      .forceSimulation(pins)
-      .force('charge', d3.forceManyBody().strength(3))
-      .force('center', d3.forceCenter(width / 2, height / 2))
-      .force(
-        'collision',
-        d3.forceCollide().radius((d) => (d as PinData).r || 1)
-      )
-      .on('tick', ticked)
-
-    return () => {
-      simulation.stop()
-    }
-  }, [height, pins, width])
-
-  return pins
+export interface PinPackProps extends BoxProps {
+  level: number
 }
