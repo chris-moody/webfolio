@@ -22,6 +22,12 @@ export type WizardProps = Omit<BoxProps, 'id'> & {
     onComplete: (value: WizardResult) => void,
     active: boolean
   ) => React.ReactNode
+  renderer?: (
+    wizard: WizardProps,
+    onComplete: (value: WizardResult) => void,
+    active: boolean 
+  ) => React.ReactNode
+
 }
 
 export const Wizard: React.FC<WizardProps> = ({

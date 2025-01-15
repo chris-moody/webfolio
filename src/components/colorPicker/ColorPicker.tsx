@@ -4,11 +4,12 @@ import { closest, isDark } from 'color-2-name'
 import { Box, Typography } from '@mui/material'
 
 export interface ColorPickerProps {
+  defaultColor?: string
   onSelect: (color: string) => void
 }
 
-export const ColorPicker: React.FC<ColorPickerProps> = ({ onSelect }) => {
-  const [color, setColor] = useState<string>('#aabbcc')
+export const ColorPicker: React.FC<ColorPickerProps> = ({ defaultColor = '#aabbcc', onSelect }) => {
+  const [color, setColor] = useState<string>(defaultColor)
 
   const handleColorChange = (newColor: string) => {
     setColor(newColor)
