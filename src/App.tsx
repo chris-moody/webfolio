@@ -29,7 +29,7 @@ function Main() {
 }
 export default App
 /* 
-TODO wizard pagination
-TODO wizard close, to use wizard back
-
+TODO Flair theming
+TODO Flair and pinback interaction
+TODO settings modal
 */

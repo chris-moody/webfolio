@@ -23,18 +23,32 @@ export const useDynamicTheme = (options: ThemeOptions = {}) => {
     divider: 'rgba(137,0,154,0.12)',
     ...options.palette,
   }
-  
+
   const themeOptions: ThemeOptions = {
     colorSchemes: {
       dark: {
         palette: {
-          ...defaultPalette
-        }
+          ...defaultPalette,
+        },
       },
       light: {
         palette: {
-          ...defaultPalette
-        }
+          ...defaultPalette,
+        },
+      },
+    },
+    components: {
+      MuiButton: {
+        styleOverrides: {
+          root: {
+            variants: [
+              {
+                props: { variant: 'text' },
+                style: { background: 'rgba(0,0,0,.75)' },
+              },
+            ],
+          },
+        },
       },
     },
   }

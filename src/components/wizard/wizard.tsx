@@ -1,10 +1,19 @@
 import { FC, useCallback, useRef, useState } from 'react'
 import { WizardStep, WizardStepProps } from './components/wizardStep'
-import { Box, BoxProps, Typography } from '@mui/material'
+import {
+  Box,
+  BoxProps,
+  IconButton,
+  Stack,
+  Typography,
+  useTheme,
+} from '@mui/material'
 import classNames from 'classnames'
+import CloseIcon from '@mui/icons-material/Close'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
 import { WizardResult, WizardValue } from './wizard.types'
+import { WizardDot } from './components/WizardDot'
 gsap.registerPlugin(useGSAP)
 
 export type WizardProps = Omit<BoxProps, 'id'> & {
@@ -30,7 +39,6 @@ export type WizardProps = Omit<BoxProps, 'id'> & {
 
 export const Wizard: FC<WizardProps> = ({
   id,
-  next,
   active,
   className,
   defaultStep = 0,
@@ -40,8 +48,10 @@ export const Wizard: FC<WizardProps> = ({
   onComplete,
   ...props
 }) => {
+  const theme = useTheme()
   const container = useRef<HTMLDivElement>()
   const [currentStep, setCurrentStep] = useState<WizardValue>(defaultStep)
+  const [prevStep, setPrevStep] = useState<WizardValue>()
   const [history, setHistory] = useState<WizardValue[]>([])
 
   useGSAP(
@@ -58,6 +68,53 @@ export const Wizard: FC<WizardProps> = ({
     { dependencies: [active], scope: container }
   )
 
+  useGSAP(
+    () => {
+      if (defaultStep)
+        gsap.set(`#wizard-step-${defaultStep}`, { xPercent: '0' })
+      if (stepData.length > 1)
+        gsap.to(`.wizard-step:not(#wizard-step-${defaultStep})`, {
+          xPercent: -200,
+        })
+    },
+    { dependencies: [defaultStep, stepData], scope: container }
+  )
+
+  useGSAP(
+    () => {
+      if (currentStep === defaultStep && !prevStep) return
+      const delta =
+        stepData.findIndex((step) => step.id === currentStep) -
+        stepData.findIndex((step) => step.id === prevStep)
+      const dir = delta / Math.abs(delta)
+
+      if (currentStep)
+        gsap.fromTo(
+          `#wizard-step-${currentStep}`,
+          { xPercent: dir * 200 },
+          { xPercent: '0' }
+        )
+      if (prevStep)
+        gsap.to(`#wizard-step-${prevStep}`, { xPercent: -dir * 200 })
+    },
+    {
+      dependencies: [currentStep, defaultStep, prevStep, stepData],
+      scope: container,
+    }
+  )
+
+  const updateStep = useCallback(
+    (step: WizardValue) => {
+      setPrevStep(currentStep)
+      setCurrentStep(step)
+    },
+    [currentStep]
+  )
+
+  const closeHandler = useCallback(() => {
+    if (onBack) onBack()
+  }, [onBack])
+
   const completeHandler = useCallback(
     (value: WizardResult) => {
       if (onComplete) {
@@ -69,16 +126,14 @@ export const Wizard: FC<WizardProps> = ({
 
   const onStepBack = useCallback(
     () => () => {
-      //go to the prvious step
       const stepHistory = [...history]
       const prevStep = stepHistory.pop()
       if (prevStep) {
-        setCurrentStep(prevStep)
+        updateStep(prevStep)
         setHistory(stepHistory)
-      }
-      else if (onBack) onBack()
+      } else if (onBack) onBack()
     },
-    [history, onBack]
+    [history, onBack, updateStep]
   )
 
   //works if wizardStep.next is undefined
@@ -92,42 +147,92 @@ export const Wizard: FC<WizardProps> = ({
         completeHandler(result)
         return
       }
-      //go to the next step
       setHistory((history) => [...history, step.id])
-      setCurrentStep(result.next || defaultStep)
+      updateStep(result.next || defaultStep)
     },
-    [defaultStep, completeHandler]
+    [defaultStep, completeHandler, updateStep]
   )
 
-  const onStepSelect = (step: WizardStepProps) => (value: WizardResult) => {
-    //setCurrentStep(value.next)
-  }
+  const onStepSelect = useCallback(
+    (stepId: WizardValue) => {
+      setHistory((history) => [...history, currentStep])
+      updateStep(stepId)
+    },
+    [currentStep, updateStep]
+  )
 
   return (
     <Box
       id={`wizard-${id}`}
       ref={container}
       className={classNames('wizard', className)}
+      sx={{
+        flexDirection: 'column',
+        display: 'flex',
+        position: 'absolute',
+        overflow: 'hidden',
+        width: '100%',
+        height: '100%',
+        top: 0,
+        left: 0,
+      }}
       {...props}
     >
-      <Typography variant="h1">{title}</Typography>
-      {stepData.map((step) => (
-        <WizardStep
-        onBack={onStepBack(step)}
-        onNext={onStepNext(step)}
-        onSelect={onStepSelect(step)}
-        active={step.id === currentStep}
-        key={step.id}
+      <IconButton
+        onClick={closeHandler}
         sx={{
-          width: '100vw',
           position: 'absolute',
-          top: '50%',
-          left: 0,
-          transform: 'translateY(-50%)',
+          top: theme.spacing(1),
+          right: theme.spacing(1),
+          zIndex: 2,
         }}
-        {...step}
-      />
-      )
+      >
+        <CloseIcon />
+      </IconButton>
+      <Typography variant="h1" zIndex={1}>
+        {title}
+      </Typography>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          flex: 0.8,
+        }}
+      >
+        {stepData.map((step) => (
+          <WizardStep
+            onBack={onStepBack()}
+            onNext={onStepNext(step)}
+            //onSelect={onStepSelect(step)}
+            active={step.id === currentStep}
+            key={step.id}
+            {...step}
+          />
+        ))}
+      </Box>
+      {stepData.length > 1 && (
+        <Stack
+          direction="row"
+          spacing={1}
+          sx={{
+            zIndex: 1,
+            justifyContent: 'center',
+            width: 'fit-content',
+            margin: '0 auto',
+            p: 1,
+            background: 'rgb(0,0,0,.5)',
+            borderRadius: 3,
+          }}
+        >
+          {stepData.map((step) => (
+            <WizardDot
+              key={step.id}
+              active={step.id === currentStep}
+              onClick={onStepSelect}
+              id={step.id}
+            />
+          ))}
+        </Stack>
       )}
     </Box>
   )
