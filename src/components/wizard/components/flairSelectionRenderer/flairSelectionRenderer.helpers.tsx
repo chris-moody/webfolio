@@ -35,11 +35,11 @@ import hanshotfirst from '@/assets/pins/hanshotfirst.png'
 import garfield from '@/assets/pins/garfield.png'
 import stevenuniverse from '@/assets/pins/stevenuniverse.png'
 import kansas from '@/assets/pins/kansas.png'
-import { BoxProps } from '@mui/material'
 import { Node } from './components/circlePacking.types'
 
 export type PinData = Node & {
   background?: string
+  index: number
 }
 
 export const getPinData = (): PinData[] => [
@@ -61,27 +61,23 @@ export const getPinData = (): PinData[] => [
   { name: 'uchiha', group: 'one', background: uchiha },
   { name: 'thumbsup', group: 'one', background: thumbsup },
   { name: 'radioshack', group: 'one', background: radioshack },
-  { name: 'luffy', group: 'one', background: luffy },
+  { name: 'strawhatluffy', group: 'one', background: luffy },
   { name: 'scouts', group: 'one', background: scouts },
   { name: 'ecko', group: 'one', background: ecko },
   { name: 'breakingbad', group: 'one', background: breakingbad },
   { name: 'greenranger', group: 'one', background: greenranger },
-  { name: 'inigo', group: 'one', background: inigo },
+  { name: 'inigomontoya', group: 'one', background: inigo },
   { name: 'resistanceisfutile', group: 'one', background: resistanceisfutile },
-  { name: 'ssf2t', group: 'one', background: ssf2t },
+  { name: 'superstreetfighter', group: 'one', background: ssf2t },
   { name: 'butterbot', group: 'one', background: butterbot },
-  { name: 'vote', group: 'one', background: vote },
+  { name: 'democracy', group: 'one', background: vote },
   { name: 'xenomorph', group: 'one', background: xenomorph },
-  { name: 'mario', group: 'one', background: mario },
+  { name: 'mariobros3', group: 'one', background: mario },
   { name: 'palmtree', group: 'one', background: palmtree },
   { name: 'rollsafe', group: 'one', background: rollsafe },
   { name: 'nocryinginbaseball', group: 'one', background: nocryinginbaseball },
-  { name: 'jake', group: 'one', background: jake },
-  { name: 'xmen', group: 'one', background: xmen },
+  { name: 'jakethedog', group: 'one', background: jake },
+  { name: 'mutant', group: 'one', background: xmen },
   { name: 'batman', group: 'one', background: batman },
   { name: 'balance', group: 'one', background: balance },
-].map(p => ({ ...p, value: Math.min(150, Math.max(50, p.name.length * (5 + Math.random() * 5))) }))
-
-export interface PinPackProps extends BoxProps {
-  level: number
-}
+].map((p, index) => ({ ...p, index, value: p.name.length * 7.5 }))
