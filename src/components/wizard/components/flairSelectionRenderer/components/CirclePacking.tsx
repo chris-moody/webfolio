@@ -1,8 +1,5 @@
 import { FC, useEffect, useState } from 'react'
-import {
-  ForceGraphProps,
-  useForceGraph,
-} from './circlePacking.helpers'
+import { ForceGraphProps, useForceGraph } from './circlePacking.helpers'
 import { Node } from './circlePacking.types'
 import { PinBack } from '@/components/pinBadge/PinBack'
 
@@ -18,14 +15,14 @@ export const CirclePacking: FC<CirclePackingProps> = ({
 }) => {
   const graph = useForceGraph({ width, height })
   const [nodes, setNodes] = useState<Node[]>(data)
-  
+
   useEffect(() => {
     const simulation = graph.initForce(data)
     simulation.on('tick', () => {
       setNodes([...simulation.nodes()])
     })
   }, [graph, data])
-  
+
   return (
     <svg
       width={graph.width}

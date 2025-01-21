@@ -1,6 +1,4 @@
 import { FC, useCallback, useRef, useState, ReactNode } from 'react'
-import gsap from 'gsap'
-import { useGSAP } from '@gsap/react'
 import { Box, BoxProps, Button, Stack, Typography } from '@mui/material'
 import classNames from 'classnames'
 import { WizardResult, WizardSelection, WizardValue } from '../wizard.types'
@@ -8,7 +6,6 @@ import {
   DefaultSelectionRenderer,
   SelectionRendererProps,
 } from './DefaultSelectionRenderer'
-gsap.registerPlugin(useGSAP)
 
 export type WizardStepProps = Omit<BoxProps, 'onSelect' | 'id'> & {
   next?: WizardValue
@@ -22,8 +19,7 @@ export type WizardStepProps = Omit<BoxProps, 'onSelect' | 'id'> & {
   selectionRenderer?: FC<SelectionRendererProps>
 }
 
-export const WizardStep: React.FC<WizardStepProps> = ({
-  active,
+export const WizardStep: FC<WizardStepProps> = ({
   selections = [],
   onBack,
   onNext,
@@ -33,6 +29,7 @@ export const WizardStep: React.FC<WizardStepProps> = ({
   title,
   id,
   selectionRenderer,
+  active,
   ...props
 }) => {
   const container = useRef<HTMLDivElement>()
@@ -57,33 +54,39 @@ export const WizardStep: React.FC<WizardStepProps> = ({
     }
   }, [id, next, onNext, selected, selections.length])
 
-  useGSAP(
-    () => {
-      const target = container.current
-      if (!target) return
-      if (active) {
-        gsap.to(target, { xPercent: '0' })
-      } else {
-        gsap.to(target, {
-          xPercent: '-200',
-          onComplete: () => {
-            gsap.set(target, { xPercent: '200' })
-          },
-        })
-      }
-    },
-    { dependencies: [active], scope: container }
-  )
-
   const SelectionRenderer = selectionRenderer || DefaultSelectionRenderer
   return (
     <Box
       id={`wizard-step-${id}`}
       ref={container}
-      className={classNames(`wizard-step`, className)}
+      className={classNames(`wizard-step`, active, className)}
+      sx={{
+        position: 'absolute',
+        top: '50%',
+        transform: 'translateY(-50%)',
+        margin: '0 auto',
+        width: {
+          xs: '100%',
+        },
+        maxWidth: {
+          md: 768,
+          lg: 992,
+          xl: 1280,
+        },
+      }}
       {...props}
     >
-      <Typography variant="h2" sx={{ position: 'relative', zIndex: 2 }}>
+      <Typography
+        variant="h3"
+        sx={{
+          position: 'relative',
+          p: 2,
+          mb: 4,
+          zIndex: 2,
+          background: 'rgb(0,0,0,.5)',
+          borderRadius: 3,
+        }}
+      >
         {title}
       </Typography>
       <SelectionRenderer
@@ -92,11 +95,13 @@ export const WizardStep: React.FC<WizardStepProps> = ({
         onSelect={selectionHandler}
         next={next}
       />
-      <Stack direction={{ xs: 'column', md: 'row' }} justifyContent="center">
-        <Button
-          onClick={backHandler}
-          sx={{ position: 'relative', zIndex: 2 }}
-        >
+      <Stack
+        direction={{ xs: 'column', md: 'row' }}
+        spacing={1}
+        justifyContent="center"
+        mt={2}
+      >
+        <Button onClick={backHandler} sx={{ position: 'relative', zIndex: 2 }}>
           Back
         </Button>
 

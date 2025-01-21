@@ -41,7 +41,9 @@ const WizardController: React.FC<WizardControllerProps> = ({
         width: '100vw',
         height: '100vh',
         overflow: 'hidden',
-        position: 'relative',
+        position: 'absolute',
+        top: 0,
+        left: 0
       }}
     >
       {wizards.map((wizard) => {
@@ -52,14 +54,6 @@ const WizardController: React.FC<WizardControllerProps> = ({
         return (
           <Wizard
             {...wizardProps}
-            sx={{
-              position: 'absolute',
-              overflow: 'hidden',
-              width: '100vw',
-              height: '100vh',
-              top: 0,
-              left: 0,
-            }}
             onComplete={onComplete}
             onBack={onWizardBack()}
             active={active}
