@@ -1,25 +1,37 @@
 import { FC } from 'react'
-import { Box, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, useColorScheme } from '@mui/material'
+import {
+  Box,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  Radio,
+  RadioGroup,
+  useColorScheme,
+} from '@mui/material'
 
 export const WizardColorSchemeSwitch: FC = () => {
-  const { mode, setMode } = useColorScheme();
-  
+  const { mode, setMode } = useColorScheme()
+
   if (!mode) {
-    return null;
+    return null
   }
   return (
     <Box
-      sx={{
-        display: 'flex',
-        width: '100%',
-        alignItems: 'center',
-        justifyContent: 'center',
-        bgcolor: 'background.default',
-        color: 'text.primary',
-        borderRadius: 1,
-        p: 3,
-        minHeight: '56px',
-      }}
+      sx={[
+        {
+          display: 'flex',
+          width: '100%',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: 'text.primary',
+          p: 1,
+          mb: 2,
+          minHeight: '56px',
+          background: 'rgb(255,255,255,.75)',
+          borderRadius: 3,
+        },
+        (theme) => theme.applyStyles('dark', { background: 'rgba(0,0,0,.5)' }),
+      ]}
     >
       <FormControl>
         <FormLabel id="color-scheme-toggle">Color Scheme</FormLabel>
@@ -38,5 +50,5 @@ export const WizardColorSchemeSwitch: FC = () => {
         </RadioGroup>
       </FormControl>
     </Box>
-  );
+  )
 }

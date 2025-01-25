@@ -1,11 +1,15 @@
 import { FC, useCallback, useRef, useState, ReactNode } from 'react'
-import { Box, BoxProps, Button, Stack, Typography } from '@mui/material'
+import { Box, BoxProps, Stack } from '@mui/material'
 import classNames from 'classnames'
 import { WizardResult, WizardSelection, WizardValue } from '../wizard.types'
 import {
   DefaultSelectionRenderer,
   SelectionRendererProps,
 } from './DefaultSelectionRenderer'
+import { FancyButton } from '@/components/fancyButton/FancyButton'
+import { useGSAP } from '@gsap/react'
+import gsap from 'gsap'
+import { FancyText } from '@/components/fancyText/FancyText'
 
 export type WizardStepProps = Omit<BoxProps, 'onSelect' | 'id'> & {
   next?: WizardValue
@@ -14,7 +18,8 @@ export type WizardStepProps = Omit<BoxProps, 'onSelect' | 'id'> & {
   onNext?: (value: WizardResult) => void
   onSelect?: (value: WizardResult) => void
   selections?: WizardSelection[]
-  title: ReactNode
+  header?: ReactNode
+  body?: ReactNode
   active?: boolean
   selectionRenderer?: FC<SelectionRendererProps>
 }
@@ -26,14 +31,20 @@ export const WizardStep: FC<WizardStepProps> = ({
   onSelect,
   className,
   next = '',
-  title,
+  header,
+  body,
   id,
   selectionRenderer,
   active,
   ...props
 }) => {
   const container = useRef<HTMLDivElement>()
-  const [selected, setSelected] = useState<WizardResult | null>(null)
+
+  const [selected, setSelected] = useState<WizardResult | null>({
+    id: selections[0]?.id,
+    value: selections[0]?.id,
+    next: selections[0]?.next || next,
+  })
 
   const selectionHandler = useCallback(
     (value: WizardResult) => () => {
@@ -54,6 +65,23 @@ export const WizardStep: FC<WizardStepProps> = ({
     }
   }, [id, next, onNext, selected, selections.length])
 
+  useGSAP(
+    () => {
+      if (active) {
+        gsap.fromTo('.content', { alpha: 0 }, { alpha: 1, delay: 0 })
+        gsap.fromTo(
+          '.wizard-step-content > *, .nav',
+          { alpha: 0 },
+          { alpha: 1, stagger: 0.2, delay: 0.2 }
+        )
+      } else {
+        gsap.to('.content', { alpha: 0 })
+        gsap.to('.wizard-step-content > *, .nav', { alpha: 0 })
+      }
+    },
+    { dependencies: [active], scope: container }
+  )
+
   const SelectionRenderer = selectionRenderer || DefaultSelectionRenderer
   return (
     <Box
@@ -62,8 +90,12 @@ export const WizardStep: FC<WizardStepProps> = ({
       className={classNames(`wizard-step`, active, className)}
       sx={{
         position: 'absolute',
-        top: '50%',
-        transform: 'translateY(-50%)',
+        //top: '50%',
+        //transform: 'translateY(-50%)',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        height: '100%',
         margin: '0 auto',
         width: {
           xs: '100%',
@@ -76,19 +108,55 @@ export const WizardStep: FC<WizardStepProps> = ({
       }}
       {...props}
     >
-      <Typography
-        variant="h3"
-        sx={{
-          position: 'relative',
-          p: 2,
-          mb: 4,
-          zIndex: 2,
-          background: 'rgb(0,0,0,.5)',
-          borderRadius: 3,
-        }}
-      >
-        {title}
-      </Typography>
+      {(header || body) && <Box>
+        {header && (
+          <FancyText
+            variant="h4"
+            fancy={{ depth: 10}}
+            className="content"
+            sx={[
+              {
+                position: 'relative',
+                p: 2,
+                mt: 4,
+                mb: 2,
+                mx: 'auto',
+                width: 'fit-content',
+                zIndex: 2,
+                background: 'rgb(255,255,255,.75)',
+                borderRadius: 3,
+              },
+              (theme) =>
+                theme.applyStyles('dark', { background: 'rgba(0,0,0,.75)' }),
+            ]}
+          >
+            {header}
+          </FancyText>
+        )}
+        {body && (
+          <FancyText
+            variant="body1"
+            fancy={{ depth:7}}
+            className="content"
+            sx={[
+              {
+                position: 'relative',
+                p: 2,
+                mb: 2,
+                mx: 'auto',
+                width: 'fit-content',
+                zIndex: 2,
+                background: 'rgb(255,255,255,.75)',
+                borderRadius: 3,
+              },
+              (theme) =>
+                theme.applyStyles('dark', { background: 'rgba(0,0,0,.75)' }),
+            ]}
+          >
+            {body}
+          </FancyText>
+        )}
+      </Box>}
       <SelectionRenderer
         selections={selections}
         selected={selected}
@@ -96,22 +164,26 @@ export const WizardStep: FC<WizardStepProps> = ({
         next={next}
       />
       <Stack
+        className="nav"
         direction={{ xs: 'column', md: 'row' }}
-        spacing={1}
+        spacing={2}
         justifyContent="center"
-        mt={2}
+        mb={2}
       >
-        <Button onClick={backHandler} sx={{ position: 'relative', zIndex: 2 }}>
+        <FancyButton
+          onClick={backHandler}
+          sx={{ position: 'relative', zIndex: 2 }}
+        >
           Back
-        </Button>
+        </FancyButton>
 
-        <Button
+        <FancyButton
           disabled={!selected && selections.length > 0}
           onClick={nextHandler}
           sx={{ position: 'relative', zIndex: 2 }}
         >
           Next
-        </Button>
+        </FancyButton>
       </Stack>
     </Box>
   )

@@ -2,8 +2,8 @@ import * as d3 from 'd3'
 import { Node } from './circlePacking.types'
 
 export interface ForceGraphProps {
-  width: number
-  height: number
+  width?: number
+  height?: number
 }
 
 export interface ForceGraph extends ForceGraphProps {
@@ -29,7 +29,7 @@ export const useForceGraph = ({
         d3.forceCollide().radius((d) => ((d as Node).value))
       )
       .force('charge', d3.forceManyBody().strength(2))
-      .force('center', d3.forceCenter(graph.width / 2, graph.height / 2))
+      .force('center', d3.forceCenter((graph.width || width) / 2, (graph.height || height) / 2))
   }
 
   graph.width = width

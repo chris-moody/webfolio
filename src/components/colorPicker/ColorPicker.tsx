@@ -18,13 +18,19 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({ defaultColor = '#aabbc
 
   return (
     <Box bgcolor={color} sx={{
+      borderRadius: 3,
+      p: 2,
       '.react-colorful': {
         width: '80%',
         mx: 'auto',
-        borderRadius: '0 !important',
+        mb: 2,
+        borderRadius: 3,
       },
+      'input': {
+        width: 'auto'
+      }
     }}>
-      <Typography color={isDark(color) ? 'white' : 'black'}>
+      <Typography mb={2} color={isDark(color) ? 'white' : 'black'}>
         {closest(color)?.name || 'Unknown Color'}
       </Typography>
       <HexColorPicker color={color} onChange={handleColorChange} />
