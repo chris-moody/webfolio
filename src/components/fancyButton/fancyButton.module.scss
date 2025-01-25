@@ -1,0 +1,106 @@
+$angle: 2;
+$duration: 1;
+
+.button {
+  position: relative;
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  outline-offset: 4px;
+  transition: filter 250ms;
+  &:not(:global(.active)) {
+    &:hover {
+      filter: brightness(120%);
+      .face {
+        transform: translateY(-6px);
+        transition: transform 250ms cubic-bezier(0.3, 0.7, 0.4, 1.5);
+      }
+      .shadow {
+        transform: translateY(4px);
+        transition: transform 250ms cubic-bezier(0.3, 0.7, 0.4, 1.5);
+      }
+    }
+    &:active {
+      filter: brightness(120%);
+      .face {
+        transform: translateY(-2px);
+        transition: transform 34ms;
+      }
+      .shadow {
+        transform: translateY(1px);
+        transition: transform 34ms;
+      }
+    }
+  }
+  &:global(.active) {
+    filter: brightness(120%);
+    animation: wave #{$duration}s ease infinite;
+    transform: rotate(var(--wave-angle)) scale(1.2);
+  }
+  &:focus {
+    &:not(:focus-visible) {
+      outline: none;
+    }
+  }
+}
+.shadow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  background: hsl(0deg 0% 0% / 0.25);
+  will-change: transform;
+  transform: translateY(2px);
+  transition: transform 600ms cubic-bezier(0.3, 0.7, 0.4, 1);
+}
+.wall {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  background: linear-gradient(
+    to left,
+    var(--mui-palette-primary-dark),
+    var(--mui-palette-primary-light),
+    var(--mui-palette-primary-light),
+    var(--mui-palette-primary-dark)
+  );
+}
+.face {
+  display: block;
+  position: relative;
+  padding: 12px 42px;
+  border-radius: 12px;
+  color: var(--mui-palette-text-primary);
+  background: var(--mui-palette-primary-main);
+  will-change: transform;
+  transform: translateY(-4px);
+  transition: transform 600ms cubic-bezier(0.3, 0.7, 0.4, 1);
+}
+@property --wave-angle {
+  inherits: false;
+  initial-value: 0deg;
+  syntax: '<angle>';
+}
+@keyframes wave {
+  0% {
+    --wave-angle: 0deg;
+  }
+  25% {
+    --wave-angle: -#{$angle}deg;
+  }
+  50% {
+    --wave-angle: 0deg;
+  }
+  75% {
+    --wave-angle: #{$angle}deg;
+  }
+  100% {
+    --wave-angle: 0deg;
+  }
+}

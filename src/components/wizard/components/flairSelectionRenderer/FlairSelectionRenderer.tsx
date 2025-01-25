@@ -40,7 +40,12 @@ export const FlairSelectionRenderer: FC<SelectionRendererProps> = ({
         next={next}
         onSelect={selectHandler}
       />
-      <CirclePacking width={400} height={10} data={getPinData().slice(0, flair)} level={flair} />
+      <CirclePacking data={getPinData().slice(0, flair)} level={flair} sx={{
+        position: 'absolute',
+        top: '40%',
+        left: '50%',
+        transform: 'translate(-50%, -40%)'
+      }} />
     </Box>
   )
 }

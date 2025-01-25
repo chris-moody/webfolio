@@ -5,7 +5,6 @@ import {
   BoxProps,
   IconButton,
   Stack,
-  Typography,
   useTheme,
 } from '@mui/material'
 import classNames from 'classnames'
@@ -14,6 +13,7 @@ import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
 import { WizardResult, WizardValue } from './wizard.types'
 import { WizardDot } from './components/WizardDot'
+import { FancyText } from '../fancyText/FancyText'
 gsap.registerPlugin(useGSAP)
 
 export type WizardProps = Omit<BoxProps, 'id'> & {
@@ -21,6 +21,7 @@ export type WizardProps = Omit<BoxProps, 'id'> & {
   next: WizardValue
   stepData: WizardStepProps[]
   active?: boolean
+  renderClose?: boolean
   title?: React.ReactNode | string
   defaultStep?: WizardValue
   onBack?: () => void
@@ -39,9 +40,11 @@ export type WizardProps = Omit<BoxProps, 'id'> & {
 
 export const Wizard: FC<WizardProps> = ({
   id,
+  next,
   active,
   className,
   defaultStep = 0,
+  renderClose = true,
   stepData,
   title,
   onBack,
@@ -50,7 +53,8 @@ export const Wizard: FC<WizardProps> = ({
 }) => {
   const theme = useTheme()
   const container = useRef<HTMLDivElement>()
-  const [currentStep, setCurrentStep] = useState<WizardValue>(defaultStep)
+  const [startStep, setStartStep] = useState<WizardValue>(defaultStep)
+  const [currentStep, setCurrentStep] = useState<WizardValue>()
   const [prevStep, setPrevStep] = useState<WizardValue>()
   const [history, setHistory] = useState<WizardValue[]>([])
 
@@ -58,26 +62,52 @@ export const Wizard: FC<WizardProps> = ({
     () => {
       const target = container.current
       if (!target) return
-      gsap.set(target, { alpha: '0', top: '100%' })
       if (active) {
-        gsap.to(target, { alpha: '100', top: '0%' })
-      } else {
-        gsap.to(target, { alpha: '0', top: '-100%' })
+        if (stepData.length > 1)
+          gsap.to('.wizard-dots', { alpha: 100, delay: 0.5 })
+        gsap.to(target, {
+          alpha: 100,
+          top: '0%',
+          onComplete: () => {
+            setCurrentStep(startStep || defaultStep)
+          },
+        })
       }
     },
-    { dependencies: [active], scope: container }
+    {
+      dependencies: [active, startStep, defaultStep, stepData],
+      scope: container,
+    }
   )
 
   useGSAP(
     () => {
-      if (defaultStep)
-        gsap.set(`#wizard-step-${defaultStep}`, { xPercent: '0' })
+      const target = container.current
+      if (!target) return
+      if (!active) {
+        gsap.to(target, { alpha: '0', top: '-100%' })
+        if (stepData.length > 1) gsap.to('.wizard-dots', { alpha: 0 })
+        gsap.delayedCall(0.5, () => {
+          setStartStep(currentStep || defaultStep)
+          setCurrentStep(undefined)
+        })
+      }
+    },
+    {
+      dependencies: [active, currentStep, defaultStep, stepData],
+      scope: container,
+    }
+  )
+
+  useGSAP(
+    () => {
+      if (startStep) gsap.set(`#wizard-step-${startStep}`, { xPercent: '0' })
       if (stepData.length > 1)
-        gsap.to(`.wizard-step:not(#wizard-step-${defaultStep})`, {
+        gsap.to(`.wizard-step:not(#wizard-step-${startStep})`, {
           xPercent: -200,
         })
     },
-    { dependencies: [defaultStep, stepData], scope: container }
+    { dependencies: [startStep, stepData], scope: container }
   )
 
   useGSAP(
@@ -116,12 +146,12 @@ export const Wizard: FC<WizardProps> = ({
   }, [onBack])
 
   const completeHandler = useCallback(
-    (value: WizardResult) => {
+    (result: WizardResult) => {
       if (onComplete) {
-        onComplete({ ...value, id })
+        onComplete({ ...result, id, next: result.next || next })
       }
     },
-    [id, onComplete]
+    [id, next, onComplete]
   )
 
   const onStepBack = useCallback(
@@ -155,6 +185,7 @@ export const Wizard: FC<WizardProps> = ({
 
   const onStepSelect = useCallback(
     (stepId: WizardValue) => {
+      if (!currentStep) return
       setHistory((history) => [...history, currentStep])
       updateStep(stepId)
     },
@@ -165,7 +196,7 @@ export const Wizard: FC<WizardProps> = ({
     <Box
       id={`wizard-${id}`}
       ref={container}
-      className={classNames('wizard', className)}
+      className={classNames('wizard', { active }, className)}
       sx={{
         flexDirection: 'column',
         display: 'flex',
@@ -175,36 +206,43 @@ export const Wizard: FC<WizardProps> = ({
         height: '100%',
         top: 0,
         left: 0,
+        p: 2,
       }}
       {...props}
     >
-      <IconButton
-        onClick={closeHandler}
-        sx={{
-          position: 'absolute',
-          top: theme.spacing(1),
-          right: theme.spacing(1),
-          zIndex: 2,
-        }}
+      {renderClose && (
+        <IconButton
+          onClick={closeHandler}
+          sx={{
+            position: 'absolute',
+            top: theme.spacing(1),
+            right: theme.spacing(1),
+            zIndex: 2,
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
+      )}
+      <FancyText
+        fancy={{ animate: true, renderBorder: true }}
+        variant="h1"
+        zIndex={1}
       >
-        <CloseIcon />
-      </IconButton>
-      <Typography variant="h1" zIndex={1}>
         {title}
-      </Typography>
+      </FancyText>
       <Box
         sx={{
           display: 'flex',
           justifyContent: 'center',
-          flex: 0.8,
+          position: 'relative',
+          flex: 1,
         }}
       >
         {stepData.map((step) => (
           <WizardStep
             onBack={onStepBack()}
             onNext={onStepNext(step)}
-            //onSelect={onStepSelect(step)}
-            active={step.id === currentStep}
+            active={active && step.id === currentStep}
             key={step.id}
             {...step}
           />
@@ -212,17 +250,22 @@ export const Wizard: FC<WizardProps> = ({
       </Box>
       {stepData.length > 1 && (
         <Stack
+          className="wizard-dots"
           direction="row"
           spacing={1}
-          sx={{
-            zIndex: 1,
-            justifyContent: 'center',
-            width: 'fit-content',
-            margin: '0 auto',
-            p: 1,
-            background: 'rgb(0,0,0,.5)',
-            borderRadius: 3,
-          }}
+          sx={[
+            {
+              zIndex: 1,
+              justifyContent: 'center',
+              width: 'fit-content',
+              margin: '0 auto',
+              p: 1,
+              background: 'rgb(255,255,255,.75)',
+              borderRadius: 3,
+              opacity: 0,
+            },
+            theme.applyStyles('dark', { background: 'rgba(0,0,0,.5)' }),
+          ]}
         >
           {stepData.map((step) => (
             <WizardDot
