@@ -33,6 +33,7 @@ export const WizardDot: FC<WizardDotProps> = ({
         height: theme.spacing(1.5),
         borderRadius: '50%',
         border: '1px solid black',
+        cursor: 'pointer',
         '&.active': {
           backgroundColor: 'primary.main',
         },

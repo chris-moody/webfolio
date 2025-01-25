@@ -1,0 +1,66 @@
+@use 'sass:color';
+
+@property --spin-angle {
+  inherits: false;
+  initial-value: 0deg;
+  syntax: '<angle>';
+}
+
+@keyframes spinner {
+  0% {
+    --spin-angle: 0deg;
+  }
+  100% {
+    --spin-angle: 360deg;
+  }
+}
+
+.wizard-controller {
+  &.flair-15 {
+    h1.MuiTypography-h1 {
+      text-shadow: 0px 0px 0 var(--mui-palette-primary-dark),
+      1px 1px 0 var(--mui-palette-primary-dark),
+      2px 2px 0 var(--mui-palette-primary-dark),
+      3px 3px 0 var(--mui-palette-primary-dark),
+      4px 4px 0 var(--mui-palette-primary-dark),
+      5px 5px 0 var(--mui-palette-primary-main),
+      6px 6px 0 var(--mui-palette-primary-main),
+      7px 7px 0 var(--mui-palette-primary-main),
+      8px 8px 0 var(--mui-palette-primary-main),
+      9px 9px 0 var(--mui-palette-primary-main),
+      10px 10px 0 var(--mui-palette-primary-light),
+      11px 11px 0 var(--mui-palette-primary-light),
+      12px 12px 0 var(--mui-palette-primary-light),
+      13px 13px 0 var(--mui-palette-primary-light),
+      14px 14px 0 var(--mui-palette-primary-light);
+    }
+  }
+  &.flair-37 {
+    background: repeating-conic-gradient(
+        from var(--spin-angle),
+        var(--mui-palette-primary-main) 0deg 10deg,
+        var(--mui-palette-primary-light) 10deg 20deg,
+        var(--mui-palette-grey-100) 20deg 30deg);
+    animation: spinner 300s linear infinite;
+  }
+}
+
+.dark {
+  .wizard-controller {
+    &.flair-15 {
+      h1.MuiTypography-h1 {
+        text-shadow: 0px 0px 8px var(--mui-palette-primary-light),
+        2px 2px 8px var(--mui-palette-primary-light),
+        -2px -2px 8px var(--mui-palette-primary-light);       
+      }
+    }
+    &.flair-37 {
+      background: repeating-conic-gradient(
+          from var(--spin-angle),
+          var(--mui-palette-primary-main) 0deg 10deg,
+          var(--mui-palette-primary-dark) 10deg 20deg,
+          var(--mui-palette-grey-800) 20deg 30deg);
+      animation: spinner 300s linear infinite;
+    }
+  }
+}
