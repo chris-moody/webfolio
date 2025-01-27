@@ -1,12 +1,6 @@
 import { FC, useCallback, useRef, useState } from 'react'
-import { WizardStep, WizardStepProps } from './components/wizardStep'
-import {
-  Box,
-  BoxProps,
-  IconButton,
-  Stack,
-  useTheme,
-} from '@mui/material'
+import { WizardStep, WizardStepProps } from './components/wizardStep/WizardStep'
+import { Box, BoxProps, IconButton, Stack, useTheme } from '@mui/material'
 import classNames from 'classnames'
 import CloseIcon from '@mui/icons-material/Close'
 import gsap from 'gsap'
@@ -14,15 +8,18 @@ import { useGSAP } from '@gsap/react'
 import { WizardResult, WizardValue } from './wizard.types'
 import { WizardDot } from './components/WizardDot'
 import { FancyText } from '../fancyText/FancyText'
+import { wizardOff, wizardOn, wizardStepOff, wizardStepOn } from './wizard.transitions'
 gsap.registerPlugin(useGSAP)
 
 export type WizardProps = Omit<BoxProps, 'id'> & {
   id: WizardValue
   next: WizardValue
-  stepData: WizardStepProps[]
+  stepData?: WizardStepProps[]
   active?: boolean
   renderClose?: boolean
-  title?: React.ReactNode | string
+  header?: React.ReactNode
+  body?: React.ReactNode
+  bodyComponent?: FC
   defaultStep?: WizardValue
   onBack?: () => void
   onComplete?: (value: WizardResult) => void
@@ -31,11 +28,7 @@ export type WizardProps = Omit<BoxProps, 'id'> & {
     onComplete: (value: WizardResult) => void,
     active: boolean
   ) => React.ReactNode
-  renderer?: (
-    wizard: WizardProps,
-    onComplete: (value: WizardResult) => void,
-    active: boolean
-  ) => React.ReactNode
+  renderer?: FC<WizardProps>
 }
 
 export const Wizard: FC<WizardProps> = ({
@@ -45,8 +38,10 @@ export const Wizard: FC<WizardProps> = ({
   className,
   defaultStep = 0,
   renderClose = true,
-  stepData,
-  title,
+  stepData = [],
+  header,
+  body,
+  bodyComponent,
   onBack,
   onComplete,
   ...props
@@ -63,11 +58,9 @@ export const Wizard: FC<WizardProps> = ({
       const target = container.current
       if (!target) return
       if (active) {
-        if (stepData.length > 1)
-          gsap.to('.wizard-dots', { alpha: 100, delay: 0.5 })
-        gsap.to(target, {
-          alpha: 100,
-          top: '0%',
+        wizardOn({
+          target,
+          stepCount: stepData.length,
           onComplete: () => {
             setCurrentStep(startStep || defaultStep)
           },
@@ -83,15 +76,15 @@ export const Wizard: FC<WizardProps> = ({
   useGSAP(
     () => {
       const target = container.current
-      if (!target) return
-      if (!active) {
-        gsap.to(target, { alpha: '0', top: '-100%' })
-        if (stepData.length > 1) gsap.to('.wizard-dots', { alpha: 0 })
-        gsap.delayedCall(0.5, () => {
+      if (!target || active) return
+      wizardOff({
+        target,
+        stepCount: stepData.length,
+        onComplete: () => {
           setStartStep(currentStep || defaultStep)
           setCurrentStep(undefined)
-        })
-      }
+        },
+      })
     },
     {
       dependencies: [active, currentStep, defaultStep, stepData],
@@ -119,13 +112,9 @@ export const Wizard: FC<WizardProps> = ({
       const dir = delta / Math.abs(delta)
 
       if (currentStep)
-        gsap.fromTo(
-          `#wizard-step-${currentStep}`,
-          { xPercent: dir * 200 },
-          { xPercent: '0' }
-        )
+        wizardStepOn(currentStep, dir)
       if (prevStep)
-        gsap.to(`#wizard-step-${prevStep}`, { xPercent: -dir * 200 })
+        wizardStepOff(prevStep, dir)
     },
     {
       dependencies: [currentStep, defaultStep, prevStep, stepData],
@@ -191,7 +180,8 @@ export const Wizard: FC<WizardProps> = ({
     },
     [currentStep, updateStep]
   )
-
+  const BodyComponent = bodyComponent
+  const wizardBody = BodyComponent ? <BodyComponent /> : body
   return (
     <Box
       id={`wizard-${id}`}
@@ -223,13 +213,14 @@ export const Wizard: FC<WizardProps> = ({
           <CloseIcon />
         </IconButton>
       )}
-      <FancyText
+      {header && <FancyText
         fancy={{ animate: true, renderBorder: true }}
         variant="h1"
         zIndex={1}
       >
-        {title}
-      </FancyText>
+        {header}
+      </FancyText>}
+      {wizardBody}
       <Box
         sx={{
           display: 'flex',
@@ -258,9 +249,10 @@ export const Wizard: FC<WizardProps> = ({
               zIndex: 1,
               justifyContent: 'center',
               width: 'fit-content',
-              margin: '0 auto',
+              mb: 2,
+              mx: 'auto',
               p: 1,
-              background: 'rgb(255,255,255,.75)',
+              background: 'rgba(255,255,255,.75)',
               borderRadius: 3,
               opacity: 0,
             },

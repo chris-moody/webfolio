@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from 'react'
 import { ForceGraphProps, useForceGraph } from './circlePacking.helpers'
 import { Node } from './circlePacking.types'
-import { PinBack } from '@/components/pinBadge/PinBack'
+import { PinBack } from '@/components/pinBack/PinBack'
 import { PinData } from '../flairSelectionRenderer.helpers'
 import { Box, BoxProps } from '@mui/material'
 

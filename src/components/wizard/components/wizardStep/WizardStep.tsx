@@ -1,15 +1,15 @@
 import { FC, useCallback, useRef, useState, ReactNode } from 'react'
 import { Box, BoxProps, Stack } from '@mui/material'
 import classNames from 'classnames'
-import { WizardResult, WizardSelection, WizardValue } from '../wizard.types'
+import { WizardResult, WizardSelection, WizardValue } from '../../wizard.types'
 import {
   DefaultSelectionRenderer,
   SelectionRendererProps,
-} from './DefaultSelectionRenderer'
+} from './components/DefaultSelectionRenderer'
 import { FancyButton } from '@/components/fancyButton/FancyButton'
 import { useGSAP } from '@gsap/react'
-import gsap from 'gsap'
 import { FancyText } from '@/components/fancyText/FancyText'
+import { buildStepOff, buildStepOn } from '../../wizard.transitions'
 
 export type WizardStepProps = Omit<BoxProps, 'onSelect' | 'id'> & {
   next?: WizardValue
@@ -67,16 +67,17 @@ export const WizardStep: FC<WizardStepProps> = ({
 
   useGSAP(
     () => {
+      buildStepOff()
+    },
+    { dependencies: [], scope: container }
+  )
+
+  useGSAP(
+    () => {
       if (active) {
-        gsap.fromTo('.content', { alpha: 0 }, { alpha: 1, delay: 0 })
-        gsap.fromTo(
-          '.wizard-step-content > *, .nav',
-          { alpha: 0 },
-          { alpha: 1, stagger: 0.2, delay: 0.2 }
-        )
+        buildStepOn()
       } else {
-        gsap.to('.content', { alpha: 0 })
-        gsap.to('.wizard-step-content > *, .nav', { alpha: 0 })
+        buildStepOff()
       }
     },
     { dependencies: [active], scope: container }
@@ -108,55 +109,57 @@ export const WizardStep: FC<WizardStepProps> = ({
       }}
       {...props}
     >
-      {(header || body) && <Box>
-        {header && (
-          <FancyText
-            variant="h4"
-            fancy={{ depth: 10}}
-            className="content"
-            sx={[
-              {
-                position: 'relative',
-                p: 2,
-                mt: 4,
-                mb: 2,
-                mx: 'auto',
-                width: 'fit-content',
-                zIndex: 2,
-                background: 'rgb(255,255,255,.75)',
-                borderRadius: 3,
-              },
-              (theme) =>
-                theme.applyStyles('dark', { background: 'rgba(0,0,0,.75)' }),
-            ]}
-          >
-            {header}
-          </FancyText>
-        )}
-        {body && (
-          <FancyText
-            variant="body1"
-            fancy={{ depth:7}}
-            className="content"
-            sx={[
-              {
-                position: 'relative',
-                p: 2,
-                mb: 2,
-                mx: 'auto',
-                width: 'fit-content',
-                zIndex: 2,
-                background: 'rgb(255,255,255,.75)',
-                borderRadius: 3,
-              },
-              (theme) =>
-                theme.applyStyles('dark', { background: 'rgba(0,0,0,.75)' }),
-            ]}
-          >
-            {body}
-          </FancyText>
-        )}
-      </Box>}
+      {(header || body) && (
+        <Box>
+          {header && (
+            <FancyText
+              variant="h4"
+              fancy={{ depth: 10 }}
+              className="content"
+              sx={[
+                {
+                  position: 'relative',
+                  p: 2,
+                  mt: 4,
+                  mb: 2,
+                  mx: 'auto',
+                  width: 'fit-content',
+                  zIndex: 2,
+                  background: 'rgba(255,255,255,.75)',
+                  borderRadius: 3,
+                },
+                (theme) =>
+                  theme.applyStyles('dark', { background: 'rgba(0,0,0,.75)' }),
+              ]}
+            >
+              {header}
+            </FancyText>
+          )}
+          {body && (
+            <FancyText
+              variant="body1"
+              fancy={{ depth: 7 }}
+              className="content"
+              sx={[
+                {
+                  position: 'relative',
+                  p: 2,
+                  mb: 2,
+                  mx: 'auto',
+                  width: 'fit-content',
+                  zIndex: 2,
+                  background: 'rgba(255,255,255,.75)',
+                  borderRadius: 3,
+                },
+                (theme) =>
+                  theme.applyStyles('dark', { background: 'rgba(0,0,0,.75)' }),
+              ]}
+            >
+              {body}
+            </FancyText>
+          )}
+        </Box>
+      )}
       <SelectionRenderer
         selections={selections}
         selected={selected}

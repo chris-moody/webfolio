@@ -1,11 +1,12 @@
 import React, { useCallback, useState } from 'react'
-import { Box, useTheme } from '@mui/material'
+import { Box, Typography, useTheme } from '@mui/material'
 import classNames from 'classnames'
-import { Wizard, WizardProps } from './wizard'
+import { Wizard, WizardProps } from './Wizard'
 import { WizardResult, WizardValue } from './wizard.types'
 import { useAppSelector } from '@/redux/hooks'
 import { selectThemeFlair } from '@/redux/slices/theme/theme.selector'
 import './wizardController.scss'
+import { NavMenu } from '../navMenu/NavMenu'
 
 interface WizardControllerProps {
   defaultWizard: string
@@ -53,13 +54,14 @@ const WizardController: React.FC<WizardControllerProps> = ({
         background: theme.palette.background.default,
       }}
     >
+      <NavMenu />
       {wizards.map((wizard, index) => {
         const active = wizard.id === current
         const onComplete = onWizardComplete(wizard.id)
         const { renderer, ...wizardProps } = wizard
-        if (renderer) return renderer(wizard, onComplete, active)
+        const WizardComponent = renderer || Wizard;
         return (
-          <Wizard
+          <WizardComponent
             {...wizardProps}
             renderClose={index !== 0}
             onComplete={onComplete}
@@ -69,6 +71,7 @@ const WizardController: React.FC<WizardControllerProps> = ({
           />
         )
       })}
+      <Typography variant="caption" component="p" sx={{ position: 'absolute', bottom: theme.spacing(1), width: '100%', mx: 'auto' }}>&copy; 2025 Christopher C. Moody</Typography>
     </Box>
   )
 }
