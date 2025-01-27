@@ -1,6 +1,5 @@
 import { useGSAP } from '@gsap/react'
 import {
-  Box,
   BoxProps,
   styled,
   Typography,
@@ -19,10 +18,11 @@ export interface ThreeDProps {
 }
 export type Text3dProps = TypographyProps & ThreeDProps
 
-const Container = styled(Box)({
+const Container = styled('span')({
   transformStyle: 'preserve-3d',
   transform: 'rotateY(15deg) rotateX(5deg) rotateZ(-1deg) translateZ(0)',
   position: 'relative',
+  display: 'inline-block',
   zIndex: 2,
 })
 
@@ -83,7 +83,7 @@ export const Text3d: FC<Text3dProps> = ({
 }) => {
   const theme = useTheme()
   const layers = Math.max(depth, 7)
-  const container = useRef<HTMLDivElement>()
+  const container = useRef<HTMLSpanElement>()
 
   useGSAP(
     () => {
@@ -128,7 +128,6 @@ export const Text3d: FC<Text3dProps> = ({
   const median = Math.floor(layers / 2)
   return (
     <Container
-      as={Box}
       ref={container}
       className="container"
       {...containerProps}
@@ -137,6 +136,7 @@ export const Text3d: FC<Text3dProps> = ({
       {Array.from({ length: layers }).map((_, n) => {
         return (
           <LayeredText
+            component="span"
             key={n}
             {...props}
             sx={[

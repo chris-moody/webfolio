@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { WizardResult, WizardSelection, WizardValue } from '../wizard.types'
+import { WizardResult, WizardSelection, WizardValue } from '../../../wizard.types'
 import { Stack } from '@mui/material'
 import classNames from 'classnames'
 import { FancyButton } from '@/components/fancyButton/FancyButton'

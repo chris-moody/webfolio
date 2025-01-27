@@ -4,7 +4,7 @@
     background-color: #ffffff;
   }
   a:hover {
-    color: #747bff;
+    color: var(--mui-palette-primary-main);
   }
   button {
     background-color: #f9f9f9;
