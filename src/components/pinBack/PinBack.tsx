@@ -1,6 +1,6 @@
 import { BoxProps } from '@mui/material'
 import { FC } from 'react'
-import { PinData } from '../wizard/components/flairSelectionRenderer/flairSelectionRenderer.helpers'
+import { PinData } from '../wizard/components/wizardStep/components/flairSelectionRenderer/flairSelectionRenderer.helpers'
 
 export interface PinBackProps extends BoxProps {
   data: PinData

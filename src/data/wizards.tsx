@@ -1,11 +1,13 @@
-import { FlairSelectionRenderer } from "@/components/wizard/components/flairSelectionRenderer/FlairSelectionRenderer";
-import { ColorSelectionRenderer } from "@/components/wizard/components/colorSelectionRenderer/ColorSelectionRenderer";
-import { WizardProps } from "@/components/wizard/wizard";
+import { FlairSelectionRenderer } from "@/components/wizard/components/wizardStep/components/flairSelectionRenderer/FlairSelectionRenderer";
+import { ColorSelectionRenderer } from "@/components/wizard/components/wizardStep/components/colorSelectionRenderer/ColorSelectionRenderer";
+import { WizardProps } from "@/components/wizard/Wizard";
+import { ResumeRenderer } from "@/components/wizard/components/resumeRenderer/ResumeRenderer";
+import { Text3d } from "@/components/text3d/Text3d";
 
 const wizards: WizardProps[] = [
   {
     id: 'settings',
-    title: 'Welcome!',
+    header: 'Welcome!',
     next: 'purpose',
     defaultStep: 'flair',
     stepData: [
@@ -30,7 +32,7 @@ const wizards: WizardProps[] = [
   },
   {
     id: 'purpose',
-    title: 'State your purpose',
+    header: 'State your purpose',
     next: 'complete',
     defaultStep: 'about',
     stepData: [
@@ -47,7 +49,7 @@ const wizards: WizardProps[] = [
   },
   {
     id: 'storytime',
-    title: 'Story Time!',
+    header: 'Story Time!',
     next: 'purpose',
     defaultStep: 'story-selection',
     stepData: [
@@ -66,7 +68,7 @@ const wizards: WizardProps[] = [
     id: 'fun',
     next: 'purpose',
     defaultStep: '0',
-    title: 'Flair',
+    header: 'Flair',
     stepData: [
       {
         id: '0',
@@ -105,7 +107,7 @@ const wizards: WizardProps[] = [
       },
       {
         id: '7',
-        header: 'And then I added some Flair!'
+        header: <>And then I added some <Text3d variant="h1" fontFamily="Rammetto One">Flair!</Text3d></>
       }
     ],
   },
@@ -113,7 +115,7 @@ const wizards: WizardProps[] = [
     id: 'work',
     next: 'purpose',
     defaultStep: '0',
-    title: 'Make it bad',
+    header: 'Make it bad',
     stepData: [
       {
         id: '0',
@@ -164,7 +166,7 @@ const wizards: WizardProps[] = [
   {
     id: 'beta',
     next: 'purpose',
-    title: 'Beta the game',
+    header: 'Beta the game',
     defaultStep: '0',
     stepData: [
       {
@@ -212,7 +214,7 @@ const wizards: WizardProps[] = [
     id: 'professional',
     next: 'purpose',
     defaultStep: '0',
-    title: 'About me',
+    header: 'About me',
     stepData: [
       {
         id: '0',
@@ -259,6 +261,12 @@ const wizards: WizardProps[] = [
         header: <>My first language was Java before I dove heavily into AS3 in the early 2000s. Transitioning to full time javascript in ES5&rsquo;s heyday was a bit of a departure from the typed languages I was accustomed to, but there is fun to be had with closures as well! Typescript is my happy place these days.</>
       }
     ]
+  },
+  {
+    id: 'resume',
+    next: 'purpose',
+    header: 'Resume',
+    bodyComponent: ResumeRenderer
   }
 ]
 

@@ -1,6 +1,6 @@
 import { ThemeProvider } from '@mui/material'
 import CssBaseline from '@mui/material/CssBaseline'
-import WizardController from './components/wizard/wizardController'
+import WizardController from './components/wizard/WizardController'
 import { useDynamicTheme } from './theme'
 import wizards from './data/wizards'
 import { Provider } from 'react-redux'
@@ -30,9 +30,10 @@ function Main() {
 }
 export default App
 /* 
-TODO Flair theming
-TODO Flair and pinback interaction
 TODO settings modal
-TODO revisiting a wizard should start it over
+TODO content center
+TODO animated doodads
+TODO alt transitions
+TODO Flair and pinback interaction
 TODO deep linking
 */
