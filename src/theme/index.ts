@@ -82,7 +82,7 @@ export const useDynamicTheme = (
                 props: { variant: 'text' },
                 style: ({ theme }) => [
                   {
-                    background: 'rgb(255,255,255,0.75)',
+                    background: 'rgba(255,255,255,0.75)',
                     '&.active, &:hover, &:focus, &:focus-visible': {
                       background: theme.palette.primary.main,
                       color: theme.palette.text.primary,
@@ -100,6 +100,21 @@ export const useDynamicTheme = (
           },
         },
       },
+      MuiLink: {
+        styleOverrides: {
+          root: ({ theme }) => ({
+            color: theme.palette.text.primary,
+            textDecorationColor: theme.palette.text.primary,
+            transition: theme.transitions.create(['color', 'text-decoration'], {
+              duration: theme.transitions.duration.standard,
+            }),
+            '&:hover': {
+              color: theme.palette.primary.light,
+              textDecorationColor: theme.palette.primary.light,
+            },
+          })
+        }
+      }
     },
   }
 
@@ -160,6 +175,7 @@ export const useDynamicTheme = (
           },
         },
       },
+      MuiLink: themeOptions.components?.MuiLink,
     },
   }
 
@@ -231,6 +247,7 @@ export const useDynamicTheme = (
           },
         },
       },
+      MuiLink: themeOptions.components?.MuiLink,
     },
   }
 

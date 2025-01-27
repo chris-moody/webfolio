@@ -10,7 +10,7 @@ $duration: 1;
   outline-offset: 4px;
   transition: filter 250ms;
   &:not(:global(.active)) {
-    &:hover {
+    &:hover, &:global(.pressed) {
       filter: brightness(120%);
       .face {
         transform: translateY(-6px);
@@ -76,7 +76,7 @@ $duration: 1;
   position: relative;
   padding: 12px 42px;
   border-radius: 12px;
-  color: var(--mui-palette-text-primary);
+  //color: var(--mui-palette-text-primary);
   background: var(--mui-palette-primary-main);
   will-change: transform;
   transform: translateY(-4px);
