@@ -3,6 +3,7 @@ import { ColorSelectionRenderer } from "@/components/wizard/components/wizardSte
 import { WizardProps } from "@/components/wizard/Wizard";
 import { ResumeRenderer } from "@/components/wizard/components/resumeRenderer/ResumeRenderer";
 import { Text3d } from "@/components/text3d/Text3d";
+import { Link } from "@mui/material";
 
 const wizards: WizardProps[] = [
   {
@@ -34,10 +35,11 @@ const wizards: WizardProps[] = [
     id: 'purpose',
     header: 'State your purpose',
     next: 'complete',
-    defaultStep: 'about',
+    prev: 'settings',
+    defaultStep: 'why',
     stepData: [
       {
-        id: 'about',
+        id: 'why',
         header: 'Why are you here?',
         selections: [
           { id: 'professional', label: 'Who is Chris Moody?', next: 'professional' },
@@ -64,9 +66,48 @@ const wizards: WizardProps[] = [
       },
     ],
   },
+
+  {
+    id: 'professional',
+    next: 'purpose',
+    defaultStep: '0',
+    header: 'About me',
+    stepData: [
+      {
+        id: '0',
+        next: '1',
+        header: <>My name is Christopher, but please, call me Chris. Only my Mom feels the need to invoke all three syllables. You can if you want, but less is more, right? My last name is Moody, and yeah I&rsquo;ve probably heard your joke already but go ahead and try me!</>
+      },
+      {
+        id: '1',
+        next: '2',
+        header: <>I&rsquo;m an engineer of the full-stack variety, specializing in user interfaces, and data visualization. I have had a full and robust set of experiences working in the advertising, finance, and biological science industries across startups, agencies, and large corporations.</>
+      },
+      {
+        id: '2',
+        next: '3',
+        header: <>I build applications for web, mobile and desktop, including games, advertisements and streaming media clients. Some of my favorite projects involve socket servers that enable real-time communication between networked devices, paving the way for remote-controlled media, or a live leaderboard connected to multiple game screens. I&rsquo;ve seen projects with no budget and no time, projects with too much budget and too much time and everything in between.</>
+      },
+      {
+        id: '3',
+        next: '4',
+        header: <>My first language was Java before I dove heavily into AS3 in the early 2000s. Transitioning to full time javascript in ES5&rsquo;s heyday was a bit of a departure from the typed languages I was accustomed to, but there is fun to be had with closures as well! Typescript is my happy place these days. My favorite tools are React, Vite, and MUI. I am proficient with all levels of javascript, ES5+. I am also familiar with a slew of other animation and visualization libraries such as gsap, highcharts, AG Grid, and D3 to name a few.</>
+      },
+      {
+        id: '4',
+        header: <>Outside of work I am a husband and father of 3 awesome kids. I used to play more video games than I do now, and anime is my favorite type of media to watch. I enjoy travelling but aside from the U.S. I have not travelled beyond the caribbean. I think I really just might actually belong there.</>
+      }
+    ]
+  },
+  {
+    id: 'resume',
+    next: 'purpose',
+    header: 'Resume',
+    bodyComponent: ResumeRenderer
+  },
   {
     id: 'fun',
-    next: 'purpose',
+    next: 'storytime',
     defaultStep: '0',
     header: 'Flair',
     stepData: [
@@ -113,161 +154,68 @@ const wizards: WizardProps[] = [
   },
   {
     id: 'work',
-    next: 'purpose',
+    next: 'storytime',
     defaultStep: '0',
     header: 'Make it bad',
     stepData: [
       {
         id: '0',
         next: '1',
-        header: 'A long time ago I was working at a digital agency in NYC (do they all start like this?)'
+        header: <>This one time at a digital agency in NYC, our team landed a pharmaceutical client that had recently gained new leadership in the form of a transplant from a big American beer brand. This guy was used to seeing flashy and exciting things, and was unwilling to accept that pharma had to be boring.</>
       },
       {
         id: '1',
         next: '2',
-        header: 'One of the pharmaceutical client accounts had recently gained new leadership in the form of a transplant from a big American beer brand'
+        header: <>Major pressure was placed on the creative team to keep the concept exciting, which in turn meant that it was even more important that the final product delivered that same energy. Even if they were just banner advertisments! The engineering manager warned me that this account was pushing the creative concepts to the limit. She was not confident that we could deliver what they wanted given the tight timeframe.</>
       },
       {
         id: '2',
         next: '3',
-        header: 'This guy was used to seeing flashy and exciting things, and was unwilling to accept that pharma had to be boring'
+        header: <>Her fears were not unfounded. Between high quality background images, a live text requirement with a non-websafe font, and the ridiculous 40kb size limit, there wasn't going to be any room to load in a fancy framework that could animate smoke. But once I had the designs I understood the assignment, and decided that the best way to animate the design was to leverage WebGL to create a particle emitter.</>
       },
       {
         id: '3',
         next: '4',
-        header: 'The project was a simple set of banner ads, but the engineering manager warned me that this account was pushing the creative concepts to the limit. She was not confident that we ci=ould deliver what they wanted.'
+        header: <>The end result was super smooth, even while generating a TON of particles. Everyone in our tech department loved it, but the engineering manager was freaking out. She was terrified that people outside of the department would see it and then expect projects in the future to be up to par.</>
       },
       {
         id: '4',
-        next: '5',
-        header: 'I understood the assignment, and decided that the best way to animate the design was to leverage WebGL to simulate smoke in the form of a particle emitter.'
+        header: <>“I need you to make it bad,” she said to me in hushed tones. I couldn&rsquo;t believe what I was hearing, but she was serious. I refactored the particle emitter to emit img tags and stipped out the WebGL code. I had to cut down the particle limit to almost a quarter of what it was to get half the framerate. <br/><br/>It was gross, and then it got approved by a client who never got to see the greatness that was 😭</>
       },
-      {
-        id: '5',
-        next: '6',
-        header: 'I was pleasantly surprised at what you could do within 40kb size limit'
-      },
-      {
-        id: '6',
-        next: '7',
-        header: 'Everyone in our tech department loved it, except the engineering manager. She was terrified that people outside of the department would see it and then expect projects in the future to be up to par.'
-      },
-      {
-        id: '7',
-        next: '8',
-        header: <span>“I need you to make it bad,” she said to me in hushed tones. I couldn&rsquo;t believe what I was hearing, but she was serious.</span>
-      },
-      {
-        id: '8',
-        header: 'I kept the particle emitter but stripped out WebGL and replaced the particles with img tags. It was gross, and then it got approved by a client who never got to see the greatness that was 😭'
-      }
     ]
   },
   {
     id: 'beta',
-    next: 'purpose',
+    next: 'storytime',
     header: 'Beta the game',
     defaultStep: '0',
     stepData: [
       {
         id: '0',
         next: '1',
-        header: 'During my startup phase, my partners and I created an ed-tech game centered around a cute little robot named Beta.'
+        header: 'I ran a small video game company between 2011 and 2017. My partners and I had a blast designing, animating and coding an ed-tech game centered around a cute little robot named Beta. Beta could manipulate his world and objects in it via a runtime scripting language we called CodePop!'
       },
       {
         id: '1',
         next: '2',
-        header: 'We created a runtime scripting language that Beta uses to manipulate his world and objects in it. We dubbed it CodePop!'
+        header: 'CodePop sported an event model, conditional statements, loops, and simple custom functions. We ran classes, camps and conference events where we showed attendees how to protoype a simple game on paper and then bring it to life using Beta!'
       },
       {
         id: '2',
         next: '3',
-        header: 'CodePop sported an event model, conditional statements, loops, and simple custom functions.'
+        header: 'Most of the kids we taught had never coded before, but left the event having successfully designed and programmed their own video games. The genuine joy of discovery coupled with the undeniable educational benefits of critical and creative thinking made Beta a one of a kind experience.'
       },
       {
         id: '3',
         next: '4',
-        header: 'We ran classes, camps and conference events where we showed attendees how to protoype a simple game on paper and then bring it to life using Beta!'
-      },
-      {
-        id: '4',
-        next: '5',
-        header: 'Most of the kids we taught had never coded before, but left the event having successfully designed and programmed their own video games.'
-      },
-      {
-        id: '5',
-        next: '6',
-        header: 'The genuine joy of discovery coupled with the undeniable educational benefits of critical and creative thinking made Beta a one of a kind experience.'
-      },
-      {
-        id: '6',
-        next: '7',
         header: 'All students received a BetaNet account with which they could continue to play and iterate on their games, make new ones, or experience what other creators were coming up with.'
       },
       {
-        id: '7',
-        header: 'Beta was a hit! 🎉'
-      }
-    ]
-  },
-  {
-    id: 'professional',
-    next: 'purpose',
-    defaultStep: '0',
-    header: 'About me',
-    stepData: [
-      {
-        id: '0',
-        next: '1',
-        header: 'My name is Christopher, but please, call me Chris. Only my Mom feels the need to invoke all three syllables. You can if you want, but less is more, right?'
-      },
-      {
-        id: '1',
-        next: '2',
-        header: <>My last name is Moody, and yeah I&rsquo;ve probably heard your joke already but go ahead and try me!</>
-      },
-      {
-        id: '2',
-        next: '3',
-        header: <>I&rsquo;m an engineer of the full-stack variety, specializing in javascript, user interfaces, and data visualization. And math. I get excited over a little geometry</>
-      },
-      {
-        id: '3',
-        next: '4',
-        header: 'I have had a full and robust set of experiences working in the advertising, finance, and biological science industries across startups, agencies, and large corporations.'
-      },
-      {
-        id: '4',
-        next: '5',
-        header: <>I&rsquo;ve seen projects with no budget and no time, projects with too much budget and too much time and everything in between</>
-      },
-      {
         id: '5',
-        next: '6',
-        header: 'I build websites, mobile and desktop applications, games, and advertisements.'
-      },
-      {
-        id: '6',
-        next: '7',
-        header: 'Some of my favorite projects involve socket servers that enable real-time communication between networked devices, paving the way for remote-controlled media, or a live leaderboard connected to multiple game screens.'
-      },
-      {
-        id: '7',
-        next: '8',
-        header: 'My favorite tools are Typescript, React, Vite, and MUI. I am proficient with all levels of javascript, ES5+. I am also familiar with a slew of other animation and visualization libraries such as gsap, highcharts, AG Grid, and D3 to name a few.'
-      },
-      {
-        id: '8',
-        header: <>My first language was Java before I dove heavily into AS3 in the early 2000s. Transitioning to full time javascript in ES5&rsquo;s heyday was a bit of a departure from the typed languages I was accustomed to, but there is fun to be had with closures as well! Typescript is my happy place these days.</>
+        header: <>While the BetaNet is no longer online, some of our <Link target="_blank" href="https://www.youtube.com/watch?v=rYybYqu00hk&list=PLrO16qybUOmdy_lwF8v8HwIEHFhKG9kpI&index=1&ab_channel=BetaTheRobot">tutorial videos</Link> and <Link target="_blank" href="https://beta-the-game.fandom.com/wiki/Special:AllPages">the Beta Wiki</Link> still are, check &rsquo;em out!</>
       }
     ]
   },
-  {
-    id: 'resume',
-    next: 'purpose',
-    header: 'Resume',
-    bodyComponent: ResumeRenderer
-  }
 ]
 
 export default wizards

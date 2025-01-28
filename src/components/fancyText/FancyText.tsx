@@ -9,14 +9,30 @@ export type FancyTextProps = TypographyProps & {
   fancy?: ThreeDProps
 }
 
-export const FancyText: FC<FancyTextProps> = ({ children, fancy, mode = 'normal', ...props }) => {
+export const FancyText: FC<FancyTextProps> = ({
+  children,
+  fancy,
+  mode = 'normal',
+  sx,
+  ...props
+}) => {
   const flair = useAppSelector(selectThemeFlair)
-
+  let styles = sx
+  if (Array.isArray(sx)) {
+    styles = sx[0]
+  }
+  const { background, ...restSx } = styles || {}
   if (mode === 'threed' || flair === 37) {
     return (
-      <Text3d {...fancy} {...props}>{children}</Text3d>
+      <Text3d {...fancy} {...props} containerProps={{ sx: restSx }}>
+        {children}
+      </Text3d>
     )
   }
 
-  return <Typography {...props}>{children}</Typography>
+  return (
+    <Typography {...props} sx={sx}>
+      {children}
+    </Typography>
+  )
 }

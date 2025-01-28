@@ -30,8 +30,9 @@ function Main() {
 }
 export default App
 /* 
-TODO settings modal
-TODO content center
+TODO add color mode to setting modal
+TODO pictures and media Youtube beta pics and trailer
+TODO 3d text cross fade is no good
 TODO animated doodads
 TODO alt transitions
 TODO Flair and pinback interaction

@@ -8,12 +8,18 @@ import { useGSAP } from '@gsap/react'
 import { WizardResult, WizardValue } from './wizard.types'
 import { WizardDot } from './components/WizardDot'
 import { FancyText } from '../fancyText/FancyText'
-import { wizardOff, wizardOn, wizardStepOff, wizardStepOn } from './wizard.transitions'
+import {
+  wizardOff,
+  wizardOn,
+  wizardStepOff,
+  wizardStepOn,
+} from './wizard.transitions'
 gsap.registerPlugin(useGSAP)
 
 export type WizardProps = Omit<BoxProps, 'id'> & {
   id: WizardValue
   next: WizardValue
+  prev?: WizardValue
   stepData?: WizardStepProps[]
   active?: boolean
   renderClose?: boolean
@@ -21,7 +27,7 @@ export type WizardProps = Omit<BoxProps, 'id'> & {
   body?: React.ReactNode
   bodyComponent?: FC
   defaultStep?: WizardValue
-  onBack?: () => void
+  onBack?: (value: WizardValue) => void
   onComplete?: (value: WizardResult) => void
   i?: (
     wizard: WizardProps,
@@ -34,6 +40,7 @@ export type WizardProps = Omit<BoxProps, 'id'> & {
 export const Wizard: FC<WizardProps> = ({
   id,
   next,
+  prev,
   active,
   className,
   defaultStep = 0,
@@ -51,7 +58,7 @@ export const Wizard: FC<WizardProps> = ({
   const [startStep, setStartStep] = useState<WizardValue>(defaultStep)
   const [currentStep, setCurrentStep] = useState<WizardValue>()
   const [prevStep, setPrevStep] = useState<WizardValue>()
-  const [history, setHistory] = useState<WizardValue[]>([])
+  //const [history, setHistory] = useState<WizardValue[]>([])
 
   useGSAP(
     () => {
@@ -111,10 +118,8 @@ export const Wizard: FC<WizardProps> = ({
         stepData.findIndex((step) => step.id === prevStep)
       const dir = delta / Math.abs(delta)
 
-      if (currentStep)
-        wizardStepOn(currentStep, dir)
-      if (prevStep)
-        wizardStepOff(prevStep, dir)
+      if (currentStep) wizardStepOn(currentStep, dir)
+      if (prevStep) wizardStepOff(prevStep, dir)
     },
     {
       dependencies: [currentStep, defaultStep, prevStep, stepData],
@@ -131,8 +136,8 @@ export const Wizard: FC<WizardProps> = ({
   )
 
   const closeHandler = useCallback(() => {
-    if (onBack) onBack()
-  }, [onBack])
+    if (onBack) onBack(prev || next)
+  }, [onBack, prev, next])
 
   const completeHandler = useCallback(
     (result: WizardResult) => {
@@ -144,29 +149,24 @@ export const Wizard: FC<WizardProps> = ({
   )
 
   const onStepBack = useCallback(
-    () => () => {
-      const stepHistory = [...history]
-      const prevStep = stepHistory.pop()
+    (index: number) => () => {
+      
+      const prevStep = index > 0 ? stepData[index - 1].id : undefined
       if (prevStep) {
         updateStep(prevStep)
-        setHistory(stepHistory)
-      } else if (onBack) onBack()
+        //setHistory(stepHistory)
+      } else if (onBack) onBack(prev || next)
     },
-    [history, onBack, updateStep]
+    [stepData, onBack, prev, next, updateStep]
   )
-
-  //works if wizardStep.next is undefined
-  //each wizardStep links to the next via next property
-  //wizardStep.next === 'complete' will trigger the onComplete handler
-
-  //receives data from the step selection when the complete button is hit
+  
   const onStepNext = useCallback(
     (step: WizardStepProps) => (result: WizardResult) => {
       if (!step.next) {
         completeHandler(result)
         return
       }
-      setHistory((history) => [...history, step.id])
+      //setHistory((history) => [...history, step.id])
       updateStep(result.next || defaultStep)
     },
     [defaultStep, completeHandler, updateStep]
@@ -175,7 +175,7 @@ export const Wizard: FC<WizardProps> = ({
   const onStepSelect = useCallback(
     (stepId: WizardValue) => {
       if (!currentStep) return
-      setHistory((history) => [...history, currentStep])
+      //setHistory((history) => [...history, currentStep])
       updateStep(stepId)
     },
     [currentStep, updateStep]
@@ -213,13 +213,15 @@ export const Wizard: FC<WizardProps> = ({
           <CloseIcon />
         </IconButton>
       )}
-      {header && <FancyText
-        fancy={{ animate: true, renderBorder: true }}
-        variant="h1"
-        zIndex={1}
-      >
-        {header}
-      </FancyText>}
+      {header && (
+        <FancyText
+          fancy={{ animate: true, renderBorder: true }}
+          variant="h1"
+          zIndex={1}
+        >
+          {header}
+        </FancyText>
+      )}
       {wizardBody}
       <Box
         sx={{
@@ -229,9 +231,10 @@ export const Wizard: FC<WizardProps> = ({
           flex: 1,
         }}
       >
-        {stepData.map((step) => (
+        {stepData.map((step, index) => (
           <WizardStep
-            onBack={onStepBack()}
+            index={index}
+            onBack={onStepBack(index)}
             onNext={onStepNext(step)}
             active={active && step.id === currentStep}
             key={step.id}
