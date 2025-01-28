@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Dialog,
   DialogActions,
   DialogContent,
@@ -28,9 +27,12 @@ export const NavMenu: FC = () => {
     setIsOpen(false)
   }
 
-  const handleFlair = useCallback((flairVal: number) => () => { 
-    dispatch(setFlair(flairVal))
-  }, [dispatch])
+  const handleFlair = useCallback(
+    (flairVal: number) => () => {
+      dispatch(setFlair(flairVal))
+    },
+    [dispatch]
+  )
 
   return (
     <Box
@@ -50,9 +52,17 @@ export const NavMenu: FC = () => {
         <DialogContent>
           <Typography variant="body1" mb={2}>
             I use this space to express myself, have fun and showcase some of
-            technical ability. Right now it's built in React with Redux, themed
+            technical ability. Right now it's built in TypeScript, React, themed
             with MUI, and animated with GSAP and a few CSS animations. The force
-            simulation on the home page is powered by d3.
+            simulation on the home page is powered by d3. I used Vite to package
+            it. Checkout of the source code&#32;
+            <Link
+              target="_blank"
+              href="https://github.com/chris-moody/webfolio/tree/develop"
+            >
+              here!
+            </Link>
+            .
           </Typography>
           <Typography variant="body1" mb={2}>
             I encourage you to explore, and click all the buttons! If you have
@@ -61,20 +71,47 @@ export const NavMenu: FC = () => {
               chris@moodydigital.com
             </Link>
           </Typography>
-          {flair === 1 && <Typography variant="body1" mb={2}>
-            At a single piece of flair, you're hardly living! Try adding a bit more, I doubt you'll regret it.
-          </Typography>}
-          {flair === 15 && <Typography variant="body1" mb={2}>
-            Fifteen pieces of flair! Not bad, but still only the bare minimum. Take the next step.
-          </Typography>}
-          {flair === 37 && <Typography variant="body1" mb={2}>
-            Look at all that flair! I bet you've got a great smile!
-          </Typography>}
-        </DialogContent>        
+          {flair === 1 && (
+            <Typography variant="body1" mb={2}>
+              At a single piece of flair, you're hardly living! Try adding a bit
+              more, I doubt you'll regret it.
+            </Typography>
+          )}
+          {flair === 15 && (
+            <Typography variant="body1" mb={2}>
+              Fifteen pieces of flair! Not bad, but still only the bare minimum.
+              Take the next step.
+            </Typography>
+          )}
+          {flair === 37 && (
+            <Typography variant="body1" mb={2}>
+              Look at all that flair! I bet you've got a great smile!
+            </Typography>
+          )}
+          <Typography variant="body1" mb={2}>
+            {flair === 37 && <>Too much? </>}You can adjust your Flair below
+            {flair === 1 && <>, a little more can't hurt!</>}!
+          </Typography>
+        </DialogContent>
         <DialogActions>
-          <FancyButton className={classNames({ active: flair === 1 })} onClick={handleFlair(1)}>1 piece</FancyButton>
-          <FancyButton className={classNames({ active: flair === 15 })} onClick={handleFlair(15)}>15 pieces</FancyButton>
-          <FancyButton className={classNames({ pressed: flair === 37 })} onClick={handleFlair(37)}>37 pieces</FancyButton>
+          <FancyButton
+            className={classNames({ active: flair === 1 })}
+            onClick={handleFlair(1)}
+          >
+            1 piece
+          </FancyButton>
+          <FancyButton
+            className={classNames({ active: flair === 15 })}
+            onClick={handleFlair(15)}
+          >
+            15 pieces
+          </FancyButton>
+          <FancyButton
+            className={classNames({ pressed: flair === 37 })}
+            onClick={handleFlair(37)}
+          >
+            37 pieces
+          </FancyButton>
         </DialogActions>
       </Dialog>
     </Box>
