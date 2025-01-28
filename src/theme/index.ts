@@ -193,6 +193,9 @@ export const useDynamicTheme = (
       },
     },
     typography: {
+      body1: {
+        fontSize: '1.2rem'
+      },
       h1: {
         fontFamily: 'Rammetto One',
         fontWeight: 400
