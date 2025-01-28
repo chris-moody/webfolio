@@ -6,6 +6,7 @@ import {
   TypographyProps,
   useTheme,
 } from '@mui/material'
+import classNames from 'classnames'
 import gsap from 'gsap'
 import { FC, useRef } from 'react'
 
@@ -18,7 +19,7 @@ export interface ThreeDProps {
 }
 export type Text3dProps = TypographyProps & ThreeDProps
 
-const Container = styled('span')({
+const Container = styled(Typography)({
   transformStyle: 'preserve-3d',
   transform: 'rotateY(15deg) rotateX(5deg) rotateZ(-1deg) translateZ(0)',
   position: 'relative',
@@ -79,6 +80,7 @@ export const Text3d: FC<Text3dProps> = ({
   containerProps = {},
   children,
   renderBorder = false,
+  className,
   ...props
 }) => {
   const theme = useTheme()
@@ -128,8 +130,9 @@ export const Text3d: FC<Text3dProps> = ({
   const median = Math.floor(layers / 2)
   return (
     <Container
+      component="span"
       ref={container}
-      className="container"
+      className={classNames("container", className)}
       {...containerProps}
     >
       <HiddenText {...props}>{children}</HiddenText>
