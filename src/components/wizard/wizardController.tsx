@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useState } from 'react'
 import { Box, Typography, useTheme } from '@mui/material'
 import classNames from 'classnames'
 import { Wizard, WizardProps } from './Wizard'
@@ -20,25 +20,15 @@ const WizardController: React.FC<WizardControllerProps> = ({
   const theme = useTheme()
   const flair = useAppSelector(selectThemeFlair)
   const [current, setCurrent] = useState<WizardValue>(defaultWizard)
-  const [history, setHistory] = useState<WizardValue[]>([])
 
-  const onWizardBack = useCallback(
-    () => () => {
-      const wizardHistory = [...history]
-      const prev = wizardHistory.pop()
-      if (prev) {
-        setCurrent(prev)
-        setHistory(wizardHistory)
-      }
-    },
-    [history]
-  )
+  const onWizardBack =
+    () => (value: WizardValue) => {
+      setCurrent(value)
+    }
 
-  //receives data from the step selection when the complete button is hit
   const onWizardComplete =
-    (id: WizardValue) => (value: WizardResult) => {
+    () => (value: WizardResult) => {
       setCurrent(value.next)
-      setHistory((history) => [...history, id])
     }
 
   return (
@@ -57,7 +47,7 @@ const WizardController: React.FC<WizardControllerProps> = ({
       <NavMenu />
       {wizards.map((wizard, index) => {
         const active = wizard.id === current
-        const onComplete = onWizardComplete(wizard.id)
+        const onComplete = onWizardComplete()
         const { renderer, ...wizardProps } = wizard
         const WizardComponent = renderer || Wizard;
         return (
