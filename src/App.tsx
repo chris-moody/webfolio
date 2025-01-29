@@ -30,11 +30,14 @@ function Main() {
 }
 export default App
 /* 
-TODO add color mode to setting modal
+
+TODO NAV,
+TODO deep linking, create component wrapper to handle timing with animation and mount/unmount
 TODO pictures and media Youtube beta pics and trailer
-TODO 3d text cross fade is no good
 TODO animated doodads
-TODO alt transitions
 TODO Flair and pinback interaction
-TODO deep linking
+TODO add color mode to setting modal
+TODO add content on select, ie: "Me? I know who I am! I'm a dude playing a dude disguised as another dude!"
+TODO 3d text cross fade is no good
+TODO alt transitions
 */

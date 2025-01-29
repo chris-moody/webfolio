@@ -1,6 +1,7 @@
 import { Box, IconButton, Link, styled, Toolbar, Typography, useTheme } from '@mui/material'
 import { FC } from 'react'
 import FileDownloadIcon from '@mui/icons-material/FileDownload'
+import { FancyText } from '@/components/fancyText/FancyText'
 
 export const StyledResume = styled(Box)(({ theme }) => [
   {
@@ -76,7 +77,7 @@ export const ResumeRenderer: FC = () => {
 
       <StyledResume>
         <Box className="section">
-          <Typography variant="h3">INTRODUCTION</Typography>
+          <FancyText variant="h3">INTRODUCTION</FancyText>
           <Typography variant="body1">
             Chris is a software engineer with over 20 years of experience and a
             passion for interactive development. He excels at building modular
@@ -89,7 +90,7 @@ export const ResumeRenderer: FC = () => {
         </Box>
 
         <Box className="section">
-          <Typography variant="h3">EDUCATION</Typography>
+          <FancyText variant="h3">EDUCATION</FancyText>
           <Typography variant="h4">
             CARNEGIE MELLON UNIVERSITY, Pittsburgh, PA
           </Typography>
@@ -146,7 +147,7 @@ export const ResumeRenderer: FC = () => {
           </Typography>
         </Box>
 
-        <Typography variant="h3">PROFESSIONAL EXPERIENCE</Typography>
+        <FancyText variant="h3">PROFESSIONAL EXPERIENCE</FancyText>
         <Box className="section">
           <Typography variant="h4">
             Moody&rsquo;s Corporation, New York, NY
