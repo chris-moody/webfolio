@@ -23,6 +23,7 @@ export type WizardStepProps = Omit<BoxProps, 'onSelect' | 'id'> & {
   selections?: WizardSelection[]
   header?: ReactNode
   body?: ReactNode
+  media?: ReactNode
   active?: boolean
   selectionRenderer?: FC<SelectionRendererProps>
 }
@@ -36,13 +37,14 @@ export const WizardStep: FC<WizardStepProps> = ({
   next = '',
   header,
   body,
+  media,
   id,
   index = -1,
   selectionRenderer,
   active,
   ...props
 }) => {
-  const container = useRef<HTMLDivElement>()
+  const container = useRef<HTMLDivElement>(undefined)
   const flair = useAppSelector(selectThemeFlair)
 
   const [selected, setSelected] = useState<WizardResult | null>({
@@ -103,8 +105,6 @@ export const WizardStep: FC<WizardStepProps> = ({
       className={classNames(`wizard-step`, active, className)}
       sx={{
         position: 'absolute',
-        //top: '50%',
-        //transform: 'translateY(-50%)',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
@@ -121,8 +121,8 @@ export const WizardStep: FC<WizardStepProps> = ({
       }}
       {...props}
     >
-      {(header || body) && (
-        <Stack flex={.4} justifyContent="center">
+      {(header || body || media) && (
+        <Stack flex={selections.length > 0 ? 0.4 : 1 } justifyContent="center">
           {header && (
             <FancyText
               variant="h4"
@@ -170,6 +170,7 @@ export const WizardStep: FC<WizardStepProps> = ({
               {body}
             </FancyText>
           )}
+          {media && <Box>{media}</Box>}
         </Stack>
       )}
       <SelectionRenderer
