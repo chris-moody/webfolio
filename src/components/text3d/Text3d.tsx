@@ -85,7 +85,7 @@ export const Text3d: FC<Text3dProps> = ({
 }) => {
   const theme = useTheme()
   const layers = Math.max(depth, 7)
-  const container = useRef<HTMLSpanElement>()
+  const container = useRef<HTMLSpanElement | null>(null)
 
   useGSAP(
     () => {
