@@ -4,6 +4,7 @@ import { Box, BoxProps, IconButton, Stack, useTheme } from '@mui/material'
 import classNames from 'classnames'
 import CloseIcon from '@mui/icons-material/Close'
 import gsap from 'gsap'
+import { TextPlugin } from 'gsap/TextPlugin'
 import { useGSAP } from '@gsap/react'
 import { WizardResult, WizardValue } from './wizard.types'
 import { WizardDot } from './components/WizardDot'
@@ -14,7 +15,7 @@ import {
   wizardStepOff,
   wizardStepOn,
 } from './wizard.transitions'
-gsap.registerPlugin(useGSAP)
+gsap.registerPlugin(useGSAP, TextPlugin)
 
 export type WizardProps = Omit<BoxProps, 'id'> & {
   id: WizardValue
@@ -54,7 +55,7 @@ export const Wizard: FC<WizardProps> = ({
   ...props
 }) => {
   const theme = useTheme()
-  const container = useRef<HTMLDivElement>()
+  const container = useRef<HTMLDivElement>(undefined)
   const [startStep, setStartStep] = useState<WizardValue>(defaultStep)
   const [currentStep, setCurrentStep] = useState<WizardValue>()
   const [prevStep, setPrevStep] = useState<WizardValue>()
