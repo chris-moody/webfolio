@@ -1,11 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
 import theme from './slices/theme/theme.reducer'
-import path from './slices/path/path.reducer'
+import wizard from './slices/wizard/wizard.reducer'
 
 export const store = configureStore({
   reducer: {
     theme,
-    path
+    wizard
   },
 })
 

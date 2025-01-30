@@ -1,9 +1,7 @@
-export type WizardValue = number | string
-
 export type WizardSelection = {
-  id: WizardValue
+  id: string
   label: string
-  next?: WizardValue
+  next?: string
   renderer?: (
     selection: WizardSelection,
     onSelect: (value: WizardResult) => () => void,
@@ -18,7 +16,7 @@ export interface WizardSelectionRendererProps {
 }
 
 export type WizardResult = {
-  id: WizardValue
-  next: WizardValue
-  value: WizardValue
+  id: string
+  next: string
+  value: string
 }

@@ -1,24 +1,26 @@
 import { FlairSelectionRenderer } from '@/components/wizard/components/wizardStep/components/flairSelectionRenderer/FlairSelectionRenderer'
 import { ColorSelectionRenderer } from '@/components/wizard/components/wizardStep/components/colorSelectionRenderer/ColorSelectionRenderer'
-import { WizardProps } from '@/components/wizard/Wizard'
+import { WizardConfig } from '@/components/wizard/Wizard'
 import { ResumeRenderer } from '@/components/wizard/components/resumeRenderer/ResumeRenderer'
 import { Text3d } from '@/components/text3d/Text3d'
 import { Link } from '@mui/material'
-
-import betaClass from '@/assets/beta/beta_classroom.jpg'
-import betaLaptop from '@/assets/beta/beta_laptop.png'
-import betaLevel from '@/assets/beta/beta_paper_level_design.png'
-import meAtMagens from '@/assets/aboutme/me_at_magens.jpg'
 import { Image } from '@/components/image/Image'
 import { Youtube } from '@/components/video/Youtube'
 import { TypeWriter } from '@/components/typeWriter/TypeWriter'
 import { TechMarquees } from '@/containers/techMarquees/TechMarquees'
 
-const wizards: WizardProps[] = [
-  {
+import betaClass from '@/assets/beta/beta_classroom.jpg'
+import betaLaptop from '@/assets/beta/beta_laptop.png'
+import betaLevel from '@/assets/beta/beta_paper_level_design.png'
+import meAtMagens from '@/assets/aboutme/me_at_magens.jpg'
+import { WizardStepConfig } from '@/components/wizard/components/wizardStep/WizardStep'
+
+const wizards: Record<string, WizardConfig> = {
+  settings: {
     id: 'settings',
     header: 'Welcome!',
     next: 'purpose',
+    prev: '',
     defaultStep: 'flair',
     stepData: [
       {
@@ -36,9 +38,9 @@ const wizards: WizardProps[] = [
         ),
         selectionRenderer: FlairSelectionRenderer,
         selections: [
-          { id: 1, label: '1 piece' },
-          { id: 15, label: '15 pieces' },
-          { id: 37, label: '37 pieces' },
+          { id: '1', label: '1 piece' },
+          { id: '15', label: '15 pieces' },
+          { id: '37', label: '37 pieces' },
         ],
       },
       {
@@ -48,10 +50,9 @@ const wizards: WizardProps[] = [
       },
     ],
   },
-  {
+  purpose: {
     id: 'purpose',
     header: 'State your purpose',
-    next: 'complete',
     prev: 'settings',
     defaultStep: 'why',
     stepData: [
@@ -70,10 +71,10 @@ const wizards: WizardProps[] = [
       },
     ],
   },
-  {
+  storytime: {
     id: 'storytime',
+    prev: 'purpose',
     header: 'Story Time!',
-    next: 'purpose',
     defaultStep: 'story-selection',
     stepData: [
       {
@@ -88,7 +89,7 @@ const wizards: WizardProps[] = [
     ],
   },
 
-  {
+  professional: {
     id: 'professional',
     next: 'purpose',
     defaultStep: '0',
@@ -151,15 +152,13 @@ const wizards: WizardProps[] = [
             early 2000s. Transitioning to full time javascript in ES5&rsquo;s
             heyday was a bit of a departure from the typed languages I was
             accustomed to, but there is fun to be had with closures as well!
-            Typescript is my happy place these days, and some of my favorite tools are
-            React, Vite, and MUI. I am also familiar with a slew of other animation and
-            visualization libraries such as gsap, highcharts, AG Grid, and D3 to
-            name a few.
+            Typescript is my happy place these days, and some of my favorite
+            tools are React, Vite, and MUI. I am also familiar with a slew of
+            other animation and visualization libraries such as gsap,
+            highcharts, AG Grid, and D3 to name a few.
           </>
         ),
-        media: (
-          <TechMarquees />
-        ),
+        media: <TechMarquees />,
       },
       {
         id: '4',
@@ -182,13 +181,13 @@ const wizards: WizardProps[] = [
       },
     ],
   },
-  {
+  resume: {
     id: 'resume',
     next: 'purpose',
     header: 'Resume',
     bodyComponent: ResumeRenderer,
   },
-  {
+  fun: {
     id: 'fun',
     next: 'storytime',
     defaultStep: '0',
@@ -248,7 +247,7 @@ const wizards: WizardProps[] = [
       },
     ],
   },
-  {
+  work: {
     id: 'work',
     next: 'storytime',
     defaultStep: '0',
@@ -327,7 +326,7 @@ const wizards: WizardProps[] = [
       },
     ],
   },
-  {
+  beta: {
     id: 'beta',
     next: 'storytime',
     header: 'Beta the game',
@@ -411,6 +410,16 @@ const wizards: WizardProps[] = [
       },
     ],
   },
-]
+}
+
+export const useWizard = (id: string = 'settings') => {
+  return wizards[id]
+}
+
+export const useWizardStep = (id: string, stepId: string) => {
+  return wizards[id].stepData?.find((step) => step.id === stepId) || {} as WizardStepConfig
+}
+
+
 
 export default wizards
