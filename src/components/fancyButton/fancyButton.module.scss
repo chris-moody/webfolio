@@ -9,7 +9,7 @@ $duration: 1;
   cursor: pointer;
   outline-offset: 4px;
   transition: filter 250ms;
-  &:not(:global(.active)) {
+  &:not(:global(.active, .disabled)) {
     &:hover, &:global(.pressed) {
       filter: brightness(120%);
       .face {
@@ -42,6 +42,11 @@ $duration: 1;
     &:not(:focus-visible) {
       outline: none;
     }
+  }
+  &:global(.disabled) {
+    pointer-events: none;
+    cursor: default;
+    filter: grayscale(1);
   }
 }
 .shadow {

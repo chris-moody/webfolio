@@ -14,7 +14,6 @@ import { setFlair } from '@/redux/slices/theme/theme.reducer'
 
 export const FlairSelectionRenderer: FC<SelectionRendererProps> = ({
   onSelect,
-  next,
   selections,
   selected,
 }) => {
@@ -31,8 +30,10 @@ export const FlairSelectionRenderer: FC<SelectionRendererProps> = ({
 
   useEffect(() => {
     setCurrent((prev) => {
-      if (prev && prev.id !== flair)
-        return { id: flair, value: flair, next: prev.next }
+      if (prev && parseInt(prev.id) !== flair) {
+        const f = flair.toString()
+        return { id: f, value: f, next: prev.next }
+      }
       return prev
     })
   }, [flair, current])
@@ -47,7 +48,6 @@ export const FlairSelectionRenderer: FC<SelectionRendererProps> = ({
       <DefaultSelectionRenderer
         selections={selections}
         selected={current}
-        next={next}
         onSelect={selectHandler}
       />
       <CirclePacking

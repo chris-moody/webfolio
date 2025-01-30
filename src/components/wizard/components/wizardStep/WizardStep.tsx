@@ -1,25 +1,24 @@
-import { FC, useCallback, useRef, useState, ReactNode } from 'react'
+import { FC, useCallback, useRef, ReactNode, useEffect } from 'react'
 import { Box, BoxProps, Stack } from '@mui/material'
 import classNames from 'classnames'
-import { WizardResult, WizardSelection, WizardValue } from '../../wizard.types'
+import { WizardResult, WizardSelection } from '../../wizard.types'
 import {
   DefaultSelectionRenderer,
   SelectionRendererProps,
 } from './components/DefaultSelectionRenderer'
-import { FancyButton } from '@/components/fancyButton/FancyButton'
 import { useGSAP } from '@gsap/react'
 import { FancyText } from '@/components/fancyText/FancyText'
 import { buildStepOff, buildStepOn } from '../../wizard.transitions'
-import { useAppSelector } from '@/redux/hooks'
+import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { selectThemeFlair } from '@/redux/slices/theme/theme.selector'
+import { useParams } from 'react-router'
+import { useWizardStep } from '@/data/wizards'
+import { setSelection, setStep } from '@/redux/slices/wizard/wizard.reducer'
+import { selectWizardSelection } from '@/redux/slices/wizard/wizard.selector'
 
-export type WizardStepProps = Omit<BoxProps, 'onSelect' | 'id'> & {
-  next?: WizardValue
-  id: WizardValue
-  index?: number
-  onBack?: () => void
-  onNext?: (value: WizardResult) => void
-  onSelect?: (value: WizardResult) => void
+export interface WizardStepConfig {
+  next?: string
+  id: string
   selections?: WizardSelection[]
   header?: ReactNode
   body?: ReactNode
@@ -28,55 +27,43 @@ export type WizardStepProps = Omit<BoxProps, 'onSelect' | 'id'> & {
   selectionRenderer?: FC<SelectionRendererProps>
 }
 
-export const WizardStep: FC<WizardStepProps> = ({
-  selections = [],
-  onBack,
-  onNext,
-  onSelect,
-  className,
-  next = '',
-  header,
-  body,
-  media,
-  id,
-  index = -1,
-  selectionRenderer,
-  active,
-  ...props
-}) => {
+export type WizardStepProps = Omit<BoxProps, 'onSelect' | 'id'>
+
+export const WizardStep: FC<WizardStepProps> = ({ className, ...props }) => {
+  const dispatch = useAppDispatch()
+  const { wizardId = '', stepId: id = '' } = useParams()
+
+  const stepConfig = useWizardStep(wizardId, id)
+
+  const {
+    selections = [],
+    header,
+    body,
+    media,
+    selectionRenderer,
+    active = true,
+    next = '',
+  } = stepConfig
+
   const container = useRef<HTMLDivElement>(undefined)
   const flair = useAppSelector(selectThemeFlair)
+  const selection = useAppSelector(selectWizardSelection)
 
-  const [selected, setSelected] = useState<WizardResult | null>({
-    id: selections[0]?.id,
-    value: selections[0]?.id,
-    next: selections[0]?.next || next,
-  })
+  useEffect(() => {
+    if (id) {
+      dispatch(setStep({ id, next, selections: selections.map((s) => ({
+        next: s.next,
+        id: s.id,
+        label: s.label,
+      })) }))
+    }
+  }, [dispatch, id, next, selections])
 
   const selectionHandler = useCallback(
     (value: WizardResult) => () => {
-      setSelected(value)
-      if (onSelect) {
-        onSelect(value)
-      }
+      dispatch(setSelection(value))
     },
-    [onSelect]
-  )
-  const backHandler = useCallback(() => {
-    if (onBack) onBack()
-  }, [onBack])
-
-  const nextHandler = useCallback(() => {
-    if (onNext && (selected || selections.length === 0)) {
-      onNext(selected || { id: id, next, value: '' })
-    }
-  }, [id, next, onNext, selected, selections.length])
-
-  useGSAP(
-    () => {
-      buildStepOff()
-    },
-    { dependencies: [], scope: container }
+    [dispatch]
   )
 
   useGSAP(
@@ -122,7 +109,10 @@ export const WizardStep: FC<WizardStepProps> = ({
       {...props}
     >
       {(header || body || media) && (
-        <Stack flex={selections.length > 0 ? 0.4 : 1 } justifyContent="center">
+        <Stack
+          flex={selectionRenderer || selections.length > 0 ? 0.4 : 1}
+          justifyContent="center"
+        >
           {header && (
             <FancyText
               variant="h4"
@@ -175,32 +165,9 @@ export const WizardStep: FC<WizardStepProps> = ({
       )}
       <SelectionRenderer
         selections={selections}
-        selected={selected}
+        selected={selection}
         onSelect={selectionHandler}
-        next={next}
       />
-      <Stack
-        className="nav"
-        direction={{ xs: 'column', md: 'row' }}
-        spacing={2}
-        justifyContent="center"
-        mb={2}
-      >
-        {index > 0 && <FancyButton
-          onClick={backHandler}
-          sx={{ position: 'relative', zIndex: 2 }}
-        >
-          Back
-        </FancyButton>}
-
-        <FancyButton
-          disabled={!selected && selections.length > 0}
-          onClick={nextHandler}
-          sx={{ position: 'relative', zIndex: 2 }}
-        >
-          Next
-        </FancyButton>
-      </Stack>
     </Box>
   )
 }

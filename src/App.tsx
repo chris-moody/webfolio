@@ -2,12 +2,15 @@ import { ThemeProvider } from '@mui/material'
 import CssBaseline from '@mui/material/CssBaseline'
 import WizardController from './components/wizard/WizardController'
 import { useDynamicTheme } from './theme'
-import wizards from './data/wizards'
 import { Provider } from 'react-redux'
 import { store } from './redux/store'
 import './App.css'
 import { useAppSelector } from './redux/hooks'
-import { selectThemeColor, selectThemeFlair } from './redux/slices/theme/theme.selector'
+import {
+  selectThemeColor,
+  selectThemeFlair,
+} from './redux/slices/theme/theme.selector'
+import { Outlet } from 'react-router'
 
 function App() {
   return (
@@ -20,11 +23,16 @@ function App() {
 function Main() {
   const color = useAppSelector(selectThemeColor)
   const flair = useAppSelector(selectThemeFlair)
-  const theme = useDynamicTheme({ palette: { primary: { main: color } } }, flair)
+  const theme = useDynamicTheme(
+    { palette: { primary: { main: color } } },
+    flair
+  )
   return (
     <ThemeProvider theme={theme} noSsr>
       <CssBaseline enableColorScheme />
-      <WizardController defaultWizard="settings" wizards={wizards} />
+      <WizardController>
+        <Outlet />
+      </WizardController>
     </ThemeProvider>
   )
 }

@@ -1,65 +1,66 @@
-import { FC, useCallback, useRef, useState } from 'react'
-import { WizardStep, WizardStepProps } from './components/wizardStep/WizardStep'
+import { FC, useEffect, useRef } from 'react'
+import { WizardStepConfig } from './components/wizardStep/WizardStep'
 import { Box, BoxProps, IconButton, Stack, useTheme } from '@mui/material'
 import classNames from 'classnames'
 import CloseIcon from '@mui/icons-material/Close'
 import gsap from 'gsap'
 import { TextPlugin } from 'gsap/TextPlugin'
 import { useGSAP } from '@gsap/react'
-import { WizardResult, WizardValue } from './wizard.types'
+import { WizardResult } from './wizard.types'
 import { WizardDot } from './components/WizardDot'
 import { FancyText } from '../fancyText/FancyText'
-import {
-  wizardOff,
-  wizardOn,
-  wizardStepOff,
-  wizardStepOn,
-} from './wizard.transitions'
+import { wizardOff, wizardOn } from './wizard.transitions'
+import { useWizard } from '@/data/wizards'
+import { NavLink, Outlet, useNavigate, useParams } from 'react-router'
+import { FancyNavButton } from '../fancyButton/FancyButton'
+import { useAppSelector } from '@/redux/hooks'
+import { selectWizardSelection, selectWizardStep } from '@/redux/slices/wizard/wizard.selector'
 gsap.registerPlugin(useGSAP, TextPlugin)
 
-export type WizardProps = Omit<BoxProps, 'id'> & {
-  id: WizardValue
-  next: WizardValue
-  prev?: WizardValue
-  stepData?: WizardStepProps[]
+export interface WizardConfig {
+  id: string
+  next?: string
+  prev?: string
+  stepData?: WizardStepConfig[]
   active?: boolean
   renderClose?: boolean
   header?: React.ReactNode
   body?: React.ReactNode
   bodyComponent?: FC
-  defaultStep?: WizardValue
-  onBack?: (value: WizardValue) => void
-  onComplete?: (value: WizardResult) => void
+  defaultStep?: string
   i?: (
-    wizard: WizardProps,
+    wizard: WizardConfig,
     onComplete: (value: WizardResult) => void,
     active: boolean
   ) => React.ReactNode
   renderer?: FC<WizardProps>
 }
 
-export const Wizard: FC<WizardProps> = ({
-  id,
-  next,
-  prev,
-  active,
-  className,
-  defaultStep = 0,
-  renderClose = true,
-  stepData = [],
-  header,
-  body,
-  bodyComponent,
-  onBack,
-  onComplete,
-  ...props
-}) => {
+export type WizardProps = Omit<BoxProps, 'id'>
+
+export const Wizard: FC<WizardProps> = ({ className, ...props }) => {
+  const { wizardId: id = '', stepId } = useParams()
+  const stepConfig = useAppSelector(selectWizardStep)
+  const selection = useAppSelector(selectWizardSelection)
+  const {
+    active = true,
+    defaultStep = '',
+    renderClose = true,
+    stepData = [],
+    header,
+    body,
+    next,
+    prev = next,
+    bodyComponent,
+  } = useWizard(id)
+
   const theme = useTheme()
   const container = useRef<HTMLDivElement>(undefined)
-  const [startStep, setStartStep] = useState<WizardValue>(defaultStep)
-  const [currentStep, setCurrentStep] = useState<WizardValue>()
-  const [prevStep, setPrevStep] = useState<WizardValue>()
-  //const [history, setHistory] = useState<WizardValue[]>([])
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (!stepId) navigate(defaultStep)
+  }, [defaultStep, navigate, stepId])
 
   useGSAP(
     () => {
@@ -69,14 +70,12 @@ export const Wizard: FC<WizardProps> = ({
         wizardOn({
           target,
           stepCount: stepData.length,
-          onComplete: () => {
-            setCurrentStep(startStep || defaultStep)
-          },
+          onComplete: () => {},
         })
       }
     },
     {
-      dependencies: [active, startStep, defaultStep, stepData],
+      dependencies: [active, defaultStep, stepData],
       scope: container,
     }
   )
@@ -88,98 +87,13 @@ export const Wizard: FC<WizardProps> = ({
       wizardOff({
         target,
         stepCount: stepData.length,
-        onComplete: () => {
-          setStartStep(currentStep || defaultStep)
-          setCurrentStep(undefined)
-        },
+        onComplete: () => {},
       })
     },
     {
-      dependencies: [active, currentStep, defaultStep, stepData],
+      dependencies: [active, defaultStep, stepData],
       scope: container,
     }
-  )
-
-  useGSAP(
-    () => {
-      if (startStep) gsap.set(`#wizard-step-${startStep}`, { xPercent: '0' })
-      if (stepData.length > 1)
-        gsap.to(`.wizard-step:not(#wizard-step-${startStep})`, {
-          xPercent: -200,
-        })
-    },
-    { dependencies: [startStep, stepData], scope: container }
-  )
-
-  useGSAP(
-    () => {
-      if (currentStep === defaultStep && !prevStep) return
-      const delta =
-        stepData.findIndex((step) => step.id === currentStep) -
-        stepData.findIndex((step) => step.id === prevStep)
-      const dir = delta / Math.abs(delta)
-
-      if (currentStep) wizardStepOn(currentStep, dir)
-      if (prevStep) wizardStepOff(prevStep, dir)
-    },
-    {
-      dependencies: [currentStep, defaultStep, prevStep, stepData],
-      scope: container,
-    }
-  )
-
-  const updateStep = useCallback(
-    (step: WizardValue) => {
-      setPrevStep(currentStep)
-      setCurrentStep(step)
-    },
-    [currentStep]
-  )
-
-  const closeHandler = useCallback(() => {
-    if (onBack) onBack(prev || next)
-  }, [onBack, prev, next])
-
-  const completeHandler = useCallback(
-    (result: WizardResult) => {
-      if (onComplete) {
-        onComplete({ ...result, id, next: result.next || next })
-      }
-    },
-    [id, next, onComplete]
-  )
-
-  const onStepBack = useCallback(
-    (index: number) => () => {
-      
-      const prevStep = index > 0 ? stepData[index - 1].id : undefined
-      if (prevStep) {
-        updateStep(prevStep)
-        //setHistory(stepHistory)
-      } else if (onBack) onBack(prev || next)
-    },
-    [stepData, onBack, prev, next, updateStep]
-  )
-  
-  const onStepNext = useCallback(
-    (step: WizardStepProps) => (result: WizardResult) => {
-      if (!step.next) {
-        completeHandler(result)
-        return
-      }
-      //setHistory((history) => [...history, step.id])
-      updateStep(result.next || defaultStep)
-    },
-    [defaultStep, completeHandler, updateStep]
-  )
-
-  const onStepSelect = useCallback(
-    (stepId: WizardValue) => {
-      if (!currentStep) return
-      //setHistory((history) => [...history, currentStep])
-      updateStep(stepId)
-    },
-    [currentStep, updateStep]
   )
   const BodyComponent = bodyComponent
   const wizardBody = BodyComponent ? <BodyComponent /> : body
@@ -201,9 +115,8 @@ export const Wizard: FC<WizardProps> = ({
       }}
       {...props}
     >
-      {renderClose && (
+      {renderClose && prev && (
         <IconButton
-          onClick={closeHandler}
           sx={{
             position: 'absolute',
             top: theme.spacing(1),
@@ -211,7 +124,7 @@ export const Wizard: FC<WizardProps> = ({
             zIndex: 2,
           }}
         >
-          <CloseIcon />
+          <NavLink style={{ lineHeight: 0 }} to={"/"+prev}><CloseIcon /></NavLink>
         </IconButton>
       )}
       {header && (
@@ -232,17 +145,35 @@ export const Wizard: FC<WizardProps> = ({
           flex: 1,
         }}
       >
-        {stepData.map((step, index) => (
-          <WizardStep
-            index={index}
-            onBack={onStepBack(index)}
-            onNext={onStepNext(step)}
-            active={active && step.id === currentStep}
-            key={step.id}
-            {...step}
-          />
-        ))}
+        <Outlet />
       </Box>
+
+      <Stack
+        className="nav"
+        direction={{ xs: 'column', md: 'row' }}
+        spacing={2}
+        justifyContent="center"
+        mb={2}
+      >
+        <FancyNavButton
+          to={"/"+prev}
+          disabled={!prev}
+          //onClick={backHandler}
+          sx={{ position: 'relative', zIndex: 2 }}
+        >
+          Back
+        </FancyNavButton>
+
+        <FancyNavButton
+          to={stepConfig.next  || (next && '/'+next) || (selection.next && '/'+selection.next)|| ""}
+          //disabled={!selected && selections.length > 0}
+          //onClick={nextHandler}
+          sx={{ position: 'relative', zIndex: 2 }}
+        >
+          Next
+        </FancyNavButton>
+      </Stack>
+
       {stepData.length > 1 && (
         <Stack
           className="wizard-dots"
@@ -264,12 +195,7 @@ export const Wizard: FC<WizardProps> = ({
           ]}
         >
           {stepData.map((step) => (
-            <WizardDot
-              key={step.id}
-              active={step.id === currentStep}
-              onClick={onStepSelect}
-              id={step.id}
-            />
+            <WizardDot key={step.id} id={step.id} />
           ))}
         </Stack>
       )}
