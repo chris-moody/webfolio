@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { WizardResult, WizardSelection, WizardValue } from '../../../wizard.types'
+import { WizardResult, WizardSelection } from '../../../wizard.types'
 import { Stack } from '@mui/material'
 import classNames from 'classnames'
 import { FancyButton } from '@/components/fancyButton/FancyButton'
@@ -8,13 +8,13 @@ export interface SelectionRendererProps {
   selections?: WizardSelection[]
   selected?: WizardResult | null
   onSelect: (value: WizardResult) => () => void
-  next: WizardValue
+  //next: string
 }
 export const DefaultSelectionRenderer: FC<SelectionRendererProps> = ({
   selections = [],
   selected,
   onSelect,
-  next,
+  //next,
 }) => {
   if (selections.length < 1) return null
 
@@ -44,7 +44,7 @@ export const DefaultSelectionRenderer: FC<SelectionRendererProps> = ({
             }}
             onClick={onSelect({
               id: selection.id,
-              next: selection.next || next,
+              next: selection.next || '',// || next,
               value: selection.id,
             })}
           >

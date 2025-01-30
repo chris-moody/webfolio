@@ -26,6 +26,7 @@ import node from '@/assets/tech_icons/node.svg'
 import pixijs from '@/assets/tech_icons/pixijs.png'
 import postgresql from '@/assets/tech_icons/postgresql.png'
 import react_router from '@/assets/tech_icons/react-router.svg'
+import wouter from '@/assets/tech_icons/wouter.svg'
 import react from '@/assets/tech_icons/react.svg'
 import redux from '@/assets/tech_icons/redux.png'
 import sass from '@/assets/tech_icons/sass.png'
@@ -95,12 +96,13 @@ export const TechMarquees: FC = () => {
     { id: 'Cytoscape', src: cytoscape },
     { id: 'd3', src: d3 },
     { id: 'dexiejs', src: dexie },
+    { id: 'react_router', src: react_router },
     { id: 'git', src: git },
     { id: 'gsap', src: gsap },
     { id: 'highcharts', src: highcharts },
     { id: 'mui', src: mui },
     { id: 'pixijs', src: pixijs },
-    { id: 'react_router', src: react_router },
+    { id: 'wouter', src: wouter },
     { id: 'react', src: react },
     { id: 'redux', src: redux },
     { id: 'styled_components', src: styledComponents },

@@ -1,5 +1,4 @@
 import gsap from 'gsap'
-import { WizardValue } from './wizard.types'
 
 export interface WizardTransitionProps {
   target: HTMLElement
@@ -8,7 +7,7 @@ export interface WizardTransitionProps {
 }
 
 export const wizardOn: (props: WizardTransitionProps) => void = ({ target, stepCount, onComplete }) => {
-  if (stepCount > 1) gsap.to('.wizard-dots', { alpha: 100, delay: 0.5 })
+  if (stepCount > 1) gsap.to('.nav, .wizard-dots', { alpha: 100, delay: 0.5 })
   gsap.to(target, {
     alpha: 100,
     top: '0%',
@@ -17,7 +16,7 @@ export const wizardOn: (props: WizardTransitionProps) => void = ({ target, stepC
 }
 
 export const wizardOff: (props: WizardTransitionProps) => void = ({ target, stepCount, onComplete }) => {
-  if (stepCount > 1) gsap.to('.wizard-dots', { alpha: 0 })
+  if (stepCount > 1) gsap.to('.nav, .wizard-dots', { alpha: 0 })
     gsap.to(target, {
       alpha: '0',
       top: '-100%',
@@ -25,7 +24,7 @@ export const wizardOff: (props: WizardTransitionProps) => void = ({ target, step
     })
 }
 
-export const wizardStepOn = (step: WizardValue, dir: number) => {
+export const wizardStepOn = (step: string, dir: number) => {
   gsap.fromTo(
     `#wizard-step-${step}`,
     { xPercent: dir * 200 },
@@ -33,7 +32,7 @@ export const wizardStepOn = (step: WizardValue, dir: number) => {
   )
 }
 
-export const wizardStepOff = (step: WizardValue, dir: number) => {
+export const wizardStepOff = (step: string, dir: number) => {
   gsap.to(`#wizard-step-${step}`, { xPercent: -dir * 200 })
 }
 

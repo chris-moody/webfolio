@@ -1,16 +1,21 @@
 import { FC, useCallback } from 'react'
-import { Box, BoxProps, useTheme } from '@mui/material'
+import { Box, BoxProps, styled, useTheme } from '@mui/material'
 import classNames from 'classnames'
-import { WizardValue } from '../wizard.types'
+import { NavLink } from 'react-router'
 
 export type WizardDotProps = Omit<BoxProps, 'onClick' | 'id'> & {
-  id: WizardValue
-  onClick?: (value: WizardValue) => void
-  active?: boolean
+  id: string
+  onClick?: (value: string) => void
 }
 
+const StyledLink = styled(NavLink)(({ theme }) => ({
+  '&.active': {
+    '.dot': {
+      backgroundColor: theme.palette.primary.main,
+    }
+  },
+}))
 export const WizardDot: FC<WizardDotProps> = ({
-  active,
   onClick,
   className,
   id,
@@ -23,25 +28,29 @@ export const WizardDot: FC<WizardDotProps> = ({
   }, [id, onClick])
 
   return (
-    <Box
+    <StyledLink
+      to={id}
       id={`wizard-dot-${id}`}
-      className={classNames(`wizard-dot`, { active }, className)}
+      className={({ isActive }) =>
+        classNames(`wizard-dot`, { active: isActive }, className)
+      }
       onClick={clickHandler}
-      sx={[
-        {
-        width: theme.spacing(1.5),
-        height: theme.spacing(1.5),
-        borderRadius: '50%',
-        border: '1px solid black',
-        cursor: 'pointer',
-        '&.active': {
-          backgroundColor: 'primary.main',
-        },
-      },
-      theme.applyStyles('dark', {
-        borderColor: 'white'
-      })
-    ]}
-    />
+    >
+      <Box
+      className="dot"
+        sx={[
+          {
+            width: theme.spacing(1.5),
+            height: theme.spacing(1.5),
+            borderRadius: '50%',
+            border: '1px solid black',
+            cursor: 'pointer',
+          },
+          theme.applyStyles('dark', {
+            borderColor: 'white',
+          }),
+        ]}
+      />
+    </StyledLink>
   )
 }
