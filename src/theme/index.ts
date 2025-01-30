@@ -240,6 +240,10 @@ export const useDynamicTheme = (
                     '&:hover, &:focus, &:focus-visible': {
                       outline: 0,
                     },
+                    '&.disabled': {
+                      pointerEvents: 'none',
+                      cursor: 'not-allowed',
+                    }
                   },
                   theme.applyStyles('dark', {
                     backgroundImage: `repeating-linear-gradient(150deg, ${theme.palette.primary.dark}, ${theme.palette.primary.main}, ${theme.palette.primary.light}, ${theme.palette.primary.main}, ${theme.palette.primary.dark} 20%)`,
