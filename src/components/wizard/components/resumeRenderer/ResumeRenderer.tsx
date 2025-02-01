@@ -97,11 +97,11 @@ export const ResumeRenderer: FC = () => {
         ]}
       >
         <Typography variant="body1" className="info">
-          <Link aria-title="Call Me" title="Call Me" href="tel:+19172257503" mr={{ xs: 2, md: 0 }}>{isMobile ? <IconButton><CallIcon /></IconButton> : "917.225.7503"}</Link>
+          <Link title="Call Me" href="tel:+19172257503" mr={{ xs: 2, md: 0 }}>{isMobile ? <IconButton><CallIcon /></IconButton> : "917.225.7503"}</Link>
           {!isMobile && <Typography mx={2} component="span">
             &bull;
           </Typography>}
-          <Link aria-title="Email Me" title="Email Me" target="_blank" href="mailto:chris@moodydigital.com">
+          <Link title="Email Me" target="_blank" href="mailto:chris@moodydigital.com">
             {isMobile ? <IconButton><AlternateEmailIcon /></IconButton> : "chris@moodydigital.com"}
           </Link>
           {!isMobile && (

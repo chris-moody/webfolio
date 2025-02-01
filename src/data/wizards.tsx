@@ -106,12 +106,22 @@ const wizards: Record<string, WizardConfig> = {
           </>
         ),
         media: (
-          <TypeWriter
-            variant="h3"
-            prefix="CHRIS"
-            text="TOPHER MOODY"
-            duration={2}
-          />
+          <>
+            <TypeWriter
+              variant="h3"
+              prefix="CHRIS"
+              text="TOPHER"
+              sx={{ display: 'block' }}
+              duration={3}
+            />
+            <TypeWriter
+              variant="h3"
+              prefix="M"
+              text="OODY"
+              sx={{ display: 'block' }}
+              duration={2}
+            />
+          </>
         ),
       },
       {
@@ -166,9 +176,8 @@ const wizards: Record<string, WizardConfig> = {
           <>
             Outside of work I am a husband and father of 3 awesome kids. I used
             to play more video games than I do now, and anime is my favorite
-            type of media to watch. I enjoy travelling but aside from the U.S. I
-            have not travelled beyond the caribbean. I think I really just might
-            actually belong there.
+            type of media to watch. I enjoy traveling but most of it has been
+            to the caribbean. I think I really just might actually belong there.
           </>
         ),
         media: (
@@ -417,9 +426,11 @@ export const useWizard = (id: string = 'settings') => {
 }
 
 export const useWizardStep = (id: string, stepId: string) => {
-  return wizards[id].stepData?.find((step) => step.id === stepId) || {} as WizardStepConfig
+  return (
+    useWizard(id).stepData?.find((step) => {
+      return step.id === stepId
+    }) || ({} as WizardStepConfig)
+  )
 }
-
-
 
 export default wizards
