@@ -67,9 +67,12 @@ export const WizardStep: FC<WizardStepProps> = ({ className, ...props }) => {
   const container = useRef<HTMLDivElement>(undefined)
   const selection = useAppSelector(selectWizardSelection)
 
-  useGSAP(() => {
-     if(id) buildStepOn()
-  }, { dependencies: [id], scope: container })
+  useGSAP(
+    () => {
+      if (id) buildStepOn()
+    },
+    { dependencies: [id], scope: container }
+  )
 
   useEffect(() => {
     if (id) {
@@ -108,6 +111,7 @@ export const WizardStep: FC<WizardStepProps> = ({ className, ...props }) => {
         <Stack
           flex={selectionRenderer || selections.length > 0 ? 0.4 : 1}
           justifyContent="center"
+          height="inherit"
         >
           {header && (
             <FancyText
@@ -118,10 +122,14 @@ export const WizardStep: FC<WizardStepProps> = ({ className, ...props }) => {
                 {
                   position: 'relative',
                   p: 2,
-                  mt: 4,
-                  mb: 2,
+                  mt: { xs: 0, md: 2, lg: 4 },
+                  mb: { xs: 0, md: 2 },
                   mx: 'auto',
                   width: 'fit-content',
+                  ...((body || media) && {
+                    maxHeight: { xs: 150, md: 'unset' },
+                  }),
+                  overflow: 'auto',
                   zIndex: 2,
                   background: 'rgba(255,255,255,.75)',
                   borderRadius: 3,
@@ -145,6 +153,7 @@ export const WizardStep: FC<WizardStepProps> = ({ className, ...props }) => {
                   mb: 2,
                   mx: 'auto',
                   width: 'fit-content',
+                  maxHeight: { xs: 150, md: 'unset' },
                   zIndex: 2,
                   background: 'rgba(255,255,255,.75)',
                   borderRadius: 3,

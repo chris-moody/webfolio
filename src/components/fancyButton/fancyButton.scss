@@ -1,0 +1,25 @@
+$angle: 2;
+$duration: 1;
+
+@property --wave-angle {
+  inherits: false;
+  initial-value: 0deg;
+  syntax: '<angle>';
+}
+@keyframes wave {
+  0% {
+    --wave-angle: 0deg;
+  }
+  25% {
+    --wave-angle: -#{$angle}deg;
+  }
+  50% {
+    --wave-angle: 0deg;
+  }
+  75% {
+    --wave-angle: #{$angle}deg;
+  }
+  100% {
+    --wave-angle: 0deg;
+  }
+}

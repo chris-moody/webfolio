@@ -8,9 +8,6 @@ $slideDistance: 300px;
 @keyframes fade-out {
   to { opacity: 0; }
 }
-@keyframes hold-out {
-  to { opacity: 99.99%; }
-}
 
 @keyframes slide-from-right {
   from { transform: translateX($slideDistance); }
