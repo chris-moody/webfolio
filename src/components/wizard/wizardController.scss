@@ -1,10 +1,93 @@
 @use 'sass:color';
 
-@property --spin-angle {
-  inherits: false;
-  initial-value: 0deg;
-  syntax: '<angle>';
+$slideDistance: 300px;
+@keyframes fade-in {
+  from { opacity: 0; }
 }
+
+@keyframes fade-out {
+  to { opacity: 0; }
+}
+@keyframes hold-out {
+  to { opacity: 99.99%; }
+}
+
+@keyframes slide-from-right {
+  from { transform: translateX($slideDistance); }
+}
+@keyframes slide-to-right {
+  to { transform: translateX($slideDistance); }
+}
+
+@keyframes slide-from-left {
+  from { transform: translateX(-$slideDistance); }
+}
+@keyframes slide-to-left {
+  to { transform: translateX(-$slideDistance); }
+}
+
+@keyframes slide-from-top {
+  from { transform: translateY(-$slideDistance); }
+}
+@keyframes slide-to-top {
+  to { transform: translateY(-$slideDistance); }
+}
+
+@keyframes slide-from-bottom {
+  from { transform: translateY($slideDistance); }
+}
+@keyframes slide-to-bottom {
+  to { transform: translateY($slideDistance); }
+}
+
+@keyframes scale-to-zero {
+  to { transform: scale(0); }
+}
+@keyframes scale-from-zero {
+  from { transform: scale(0); }
+}
+
+@keyframes wizard-step-enter {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+@keyframes wizard-step-exit {
+  100% {
+    transform: scale(0);
+    opacity: 0;
+  }
+}
+
+/* ::view-transition-old(wizard-title) {
+  animation: 250ms both fade-out;
+}
+::view-transition-new(wizard-title) {
+  animation: 250ms both fade-out;
+}
+*/
+::view-transition-new(wizard-step) {
+  animation-name: none;//1s wizard-step-enter;
+  animation-duration: .5s;
+}
+::view-transition-old(wizard-step) {
+  animation: .5s cubic-bezier(0.1, 0, .25, .5) wizard-step-exit;
+}
+
+/*
+::view-transition-old(wizard-step) {
+  animation: 250ms cubic-bezier(0.4, 0, 1, 1) both fade-out,
+  250ms cubic-bezier(0.4, 0, 0.2, 1) both slide-to-left;
+}
+::view-transition-new(wizard-step) {
+  animation: 250ms cubic-bezier(0.4, 0, 1, 1) both fade-in,
+  250ms cubic-bezier(0.4, 0, 0.2, 1) both slide-from-right;
+} */
 
 @keyframes spinner {
   0% {
@@ -15,7 +98,14 @@
   }
 }
 
+@property --spin-angle {
+  inherits: false;
+  initial-value: 0deg;
+  syntax: '<angle>';
+}
+
 .wizard-controller {
+  min-width: 320px;
   &.flair-15 {
     h1.MuiTypography-h1 {
       text-shadow: 0px 0px 0 var(--mui-palette-primary-dark),

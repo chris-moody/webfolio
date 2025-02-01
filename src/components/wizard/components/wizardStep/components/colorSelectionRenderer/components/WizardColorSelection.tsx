@@ -18,7 +18,7 @@ export const WizardColorSelection: FC<SelectionRendererProps> = ({
   }, [dispatch, onSelect, next])
 
   return (
-    <div className="wizard-color-select">
+    <div className="content wizard-color-select">
       <ColorPicker defaultColor={defaultColor} onSelect={selectionHandler} />
     </div>
   )

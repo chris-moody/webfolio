@@ -60,6 +60,7 @@ export const FancyNavButton: FC<FancyNavButtonProps> = ({
       <Box
         to={to}
         component={NavLink}
+        viewTransition
         className={classNames(styles.button, className, { disabled: props.disabled })}
         {...props}
       >
@@ -77,7 +78,7 @@ export const FancyNavButton: FC<FancyNavButtonProps> = ({
   }
 
   return (
-    <Button component={NavLink} to={to} className={className} {...props}>
+    <Button viewTransition component={NavLink} to={to} className={className} {...props}>
       {children}
     </Button>
   )

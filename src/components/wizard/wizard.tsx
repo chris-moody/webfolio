@@ -1,6 +1,13 @@
 import { FC, useEffect, useRef } from 'react'
 import { WizardStepConfig } from './components/wizardStep/WizardStep'
-import { Box, BoxProps, IconButton, Stack, useTheme } from '@mui/material'
+import {
+  Box,
+  BoxProps,
+  IconButton,
+  Stack,
+  styled,
+  useTheme,
+} from '@mui/material'
 import classNames from 'classnames'
 import CloseIcon from '@mui/icons-material/Close'
 import gsap from 'gsap'
@@ -9,12 +16,14 @@ import { useGSAP } from '@gsap/react'
 import { WizardResult } from './wizard.types'
 import { WizardDot } from './components/WizardDot'
 import { FancyText } from '../fancyText/FancyText'
-import { wizardOff, wizardOn } from './wizard.transitions'
 import { useWizard } from '@/data/wizards'
 import { NavLink, Outlet, useNavigate, useParams } from 'react-router'
 import { FancyNavButton } from '../fancyButton/FancyButton'
 import { useAppSelector } from '@/redux/hooks'
-import { selectWizardSelection, selectWizardStep } from '@/redux/slices/wizard/wizard.selector'
+import {
+  selectWizardSelection,
+  selectWizardStep,
+} from '@/redux/slices/wizard/wizard.selector'
 gsap.registerPlugin(useGSAP, TextPlugin)
 
 export interface WizardConfig {
@@ -37,6 +46,22 @@ export interface WizardConfig {
 }
 
 export type WizardProps = Omit<BoxProps, 'id'>
+
+const StyledWizard = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  position: 'absolute',
+  overflow: 'hidden',
+  width: '100%',
+  height: '100%',
+  top: 0,
+  left: 0,
+  padding: theme.spacing(2),
+  viewTransitionName: 'wizard',
+  '> h1': {
+    viewTransitionName: 'wizard-title',
+  },
+}))
 
 export const Wizard: FC<WizardProps> = ({ className, ...props }) => {
   const { wizardId: id = '', stepId } = useParams()
@@ -62,57 +87,13 @@ export const Wizard: FC<WizardProps> = ({ className, ...props }) => {
     if (!stepId) navigate(defaultStep)
   }, [defaultStep, navigate, stepId])
 
-  useGSAP(
-    () => {
-      const target = container.current
-      if (!target) return
-      if (active) {
-        wizardOn({
-          target,
-          stepCount: stepData.length,
-          onComplete: () => {},
-        })
-      }
-    },
-    {
-      dependencies: [active, defaultStep, stepData],
-      scope: container,
-    }
-  )
-
-  useGSAP(
-    () => {
-      const target = container.current
-      if (!target || active) return
-      wizardOff({
-        target,
-        stepCount: stepData.length,
-        onComplete: () => {},
-      })
-    },
-    {
-      dependencies: [active, defaultStep, stepData],
-      scope: container,
-    }
-  )
   const BodyComponent = bodyComponent
   const wizardBody = BodyComponent ? <BodyComponent /> : body
   return (
-    <Box
+    <StyledWizard
       id={`wizard-${id}`}
       ref={container}
       className={classNames('wizard', { active }, className)}
-      sx={{
-        flexDirection: 'column',
-        display: 'flex',
-        position: 'absolute',
-        overflow: 'hidden',
-        width: '100%',
-        height: '100%',
-        top: 0,
-        left: 0,
-        p: 2,
-      }}
       {...props}
     >
       {renderClose && prev && (
@@ -124,7 +105,13 @@ export const Wizard: FC<WizardProps> = ({ className, ...props }) => {
             zIndex: 2,
           }}
         >
-          <NavLink style={{ lineHeight: 0 }} to={"/"+prev}><CloseIcon /></NavLink>
+          <NavLink
+            viewTransition
+            style={{ lineHeight: 0, color: 'inherit !important' }}
+            to={'/' + prev}
+          >
+            <CloseIcon />
+          </NavLink>
         </IconButton>
       )}
       {header && (
@@ -156,7 +143,7 @@ export const Wizard: FC<WizardProps> = ({ className, ...props }) => {
         mb={2}
       >
         <FancyNavButton
-          to={"/"+prev}
+          to={'/' + prev}
           disabled={!prev}
           //onClick={backHandler}
           sx={{ position: 'relative', zIndex: 2 }}
@@ -165,7 +152,12 @@ export const Wizard: FC<WizardProps> = ({ className, ...props }) => {
         </FancyNavButton>
 
         <FancyNavButton
-          to={stepConfig.next  || (next && '/'+next) || (selection.next && '/'+selection.next)|| ""}
+          to={
+            stepConfig.next ||
+            (next && '/' + next) ||
+            (selection.next && '/' + selection.next) ||
+            ''
+          }
           //disabled={!selected && selections.length > 0}
           //onClick={nextHandler}
           sx={{ position: 'relative', zIndex: 2 }}
@@ -174,32 +166,30 @@ export const Wizard: FC<WizardProps> = ({ className, ...props }) => {
         </FancyNavButton>
       </Stack>
 
-      {stepData.length > 1 && (
-        <Stack
-          className="wizard-dots"
-          direction="row"
-          spacing={1}
-          sx={[
-            {
-              zIndex: 1,
-              justifyContent: 'center',
-              width: 'fit-content',
-              mb: 2,
-              mx: 'auto',
-              p: 1,
-              background: 'rgba(255,255,255,.75)',
-              borderRadius: 3,
-              opacity: 0,
-            },
-            theme.applyStyles('dark', { background: 'rgba(0,0,0,.5)' }),
-          ]}
-        >
-          {stepData.map((step) => (
-            <WizardDot key={step.id} id={step.id} />
-          ))}
-        </Stack>
-      )}
-    </Box>
+      <Stack
+        className="wizard-dots"
+        direction="row"
+        spacing={1}
+        sx={[
+          {
+            ...(stepData.length <= 1 && { visibility: 'hidden' }),
+            zIndex: 1,
+            justifyContent: 'center',
+            width: 'fit-content',
+            mb: 2,
+            mx: 'auto',
+            p: 1,
+            background: `rgba(255,255,255, ${stepData?.length > 1 ? 0.75 : 0})`,
+            borderRadius: 3,
+          },
+          theme.applyStyles('dark', {
+            background: `rgba(0,0,0, ${stepData?.length > 1 ? 0.5 : 0})`,
+          }),
+        ]}
+      >
+        {stepData.map((step) => <WizardDot key={step.id} id={step.id} />)}
+      </Stack>
+    </StyledWizard>
   )
 }
 
