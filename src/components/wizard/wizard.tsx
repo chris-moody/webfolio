@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef } from 'react'
+import { FC, useEffect, useMemo, useRef } from 'react'
 import { WizardStepConfig } from './components/wizardStep/WizardStep'
 import {
   Box,
@@ -79,6 +79,14 @@ export const Wizard: FC<WizardProps> = ({ className, ...props }) => {
     bodyComponent,
   } = useWizard(id)
 
+  const { stepPrev } = useMemo(() => {
+    const index = stepData.findIndex((step) => step.id === stepId)
+    return {
+      stepNext: stepData[index + 1]?.id || '',
+      stepPrev: stepData[index - 1]?.id || '',
+    }
+  }, [stepData, stepId])
+
   const theme = useTheme()
   const container = useRef<HTMLDivElement>(undefined)
   const navigate = useNavigate()
@@ -102,7 +110,7 @@ export const Wizard: FC<WizardProps> = ({ className, ...props }) => {
             position: 'absolute',
             top: theme.spacing(1),
             right: theme.spacing(1),
-            zIndex: 2,
+            zIndex: 10,
           }}
         >
           <NavLink
@@ -137,15 +145,15 @@ export const Wizard: FC<WizardProps> = ({ className, ...props }) => {
 
       <Stack
         className="nav"
-        direction={{ xs: 'column-reverse', md: 'row' }}
+        direction='row'
         spacing={2}
         justifyContent="center"
         my={1}
       >
         <FancyNavButton
-          to={'/' + prev}
+          to={stepPrev ||'/' + prev}
           disabled={!prev}
-          sx={{ position: 'relative', zIndex: 2 }}
+          sx={{ position: 'relative', zIndex: 2, flex: { xs: .5, md: 'unset' } }}
         >
           Back
         </FancyNavButton>
@@ -157,9 +165,7 @@ export const Wizard: FC<WizardProps> = ({ className, ...props }) => {
             (selection.next && '/' + selection.next) ||
             ''
           }
-          //disabled={!selected && selections.length > 0}
-          //onClick={nextHandler}
-          sx={{ position: 'relative', zIndex: 2 }}
+          sx={{ position: 'relative', zIndex: 2, flex: { xs: .5, md: 'unset' } }}
         >
           Next
         </FancyNavButton>
