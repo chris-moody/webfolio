@@ -13,19 +13,18 @@ import { selectThemeFlair } from '@/redux/slices/theme/theme.selector'
 import { setFlair } from '@/redux/slices/theme/theme.reducer'
 
 export const FlairSelectionRenderer: FC<SelectionRendererProps> = ({
-  onSelect,
   selections,
-  selected,
 }) => {
   const flair = useAppSelector(selectThemeFlair)
-  const [current, setCurrent] = useState<WizardResult | null | undefined>(selected)
+  const f = flair.toString()
+  const [current, setCurrent] = useState<WizardResult | null | undefined>({ id: f, value: f, next: '' })
   const dispatch = useAppDispatch()
 
   const selectHandler = useCallback(
     (result: WizardResult) => () => {
-      onSelect(result)()
+      dispatch(setFlair(parseInt(result.value) || 1))
     },
-    [onSelect]
+    [dispatch]
   )
 
   useEffect(() => {
@@ -36,12 +35,7 @@ export const FlairSelectionRenderer: FC<SelectionRendererProps> = ({
       }
       return prev
     })
-  }, [flair, current])
-
-  useEffect(() => {
-    setCurrent(selected)
-    dispatch(setFlair(parseInt(selected?.id as string) || 1))
-  }, [dispatch, selected])
+  }, [flair])
 
   return (
     <Box className="wizard-step-content">

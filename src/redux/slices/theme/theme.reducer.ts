@@ -7,7 +7,7 @@ interface ThemeState {
 }
 
 const initialState: ThemeState = {
-  flair: 0,
+  flair: 1,
   color: '#256ee0',
   mode: 'light',
 };
