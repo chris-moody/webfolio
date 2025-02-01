@@ -10,6 +10,7 @@ export type WizardDotProps = Omit<BoxProps, 'onClick' | 'id'> & {
 
 const StyledLink = styled(NavLink)(({ theme }) => ({
   '&.active': {
+    pointerEvents: 'none',
     '.dot': {
       backgroundColor: theme.palette.primary.main,
     }
@@ -35,6 +36,7 @@ export const WizardDot: FC<WizardDotProps> = ({
         classNames(`wizard-dot`, { active: isActive }, className)
       }
       onClick={clickHandler}
+      viewTransition
     >
       <Box
       className="dot"

@@ -29,6 +29,7 @@ export const CirclePacking: FC<CirclePackingProps> = ({
 
   return (
     <Box
+      className='content'
       component='svg'
       width={graph.width}
       height={graph.height}
