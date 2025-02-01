@@ -17,6 +17,7 @@ export const WizardColorSchemeSwitch: FC = () => {
   }
   return (
     <Box
+      className="content"
       sx={[
         {
           display: 'flex',
