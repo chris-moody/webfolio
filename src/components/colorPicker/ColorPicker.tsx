@@ -19,11 +19,12 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({ defaultColor = '#aabbc
   return (
     <Box bgcolor={color} sx={{
       borderRadius: 3,
-      p: 2,
+      p: 0,
       '.react-colorful': {
         width: '80%',
         mx: 'auto',
         mb: 2,
+        height: 100,
         borderRadius: 3,
       },
       'input': {

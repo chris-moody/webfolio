@@ -39,7 +39,7 @@ function Main() {
 export default App
 /* 
 
-TODO create component wrapper to handle timing with animation and mount/unmount
+TODO back button should always go to prev slide if available, then wizard
 TODO animated doodads
 TODO Flair and pinback interaction
 TODO add color mode to setting modal

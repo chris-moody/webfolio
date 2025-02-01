@@ -52,7 +52,7 @@ const StyledWizard = styled(Box)(({ theme }) => ({
   flexDirection: 'column',
   position: 'absolute',
   overflow: 'hidden',
-  width: '100%',
+  width: `100%`,
   height: '100%',
   top: 0,
   left: 0,
@@ -137,15 +137,14 @@ export const Wizard: FC<WizardProps> = ({ className, ...props }) => {
 
       <Stack
         className="nav"
-        direction={{ xs: 'column', md: 'row' }}
+        direction={{ xs: 'column-reverse', md: 'row' }}
         spacing={2}
         justifyContent="center"
-        mb={2}
+        my={1}
       >
         <FancyNavButton
           to={'/' + prev}
           disabled={!prev}
-          //onClick={backHandler}
           sx={{ position: 'relative', zIndex: 2 }}
         >
           Back
