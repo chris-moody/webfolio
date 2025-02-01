@@ -8,13 +8,11 @@ export interface SelectionRendererProps {
   selections?: WizardSelection[]
   selected?: WizardResult | null
   onSelect: (value: WizardResult) => () => void
-  //next: string
 }
 export const DefaultSelectionRenderer: FC<SelectionRendererProps> = ({
   selections = [],
   selected,
   onSelect,
-  //next,
 }) => {
   if (selections.length < 1) return null
 
@@ -33,7 +31,7 @@ export const DefaultSelectionRenderer: FC<SelectionRendererProps> = ({
         const active = selected?.id === selection.id
         return (
           <FancyButton
-            className={classNames({ active })}
+            className={classNames('content', { active })}
             key={selection.id}
             variant="text"
             sx={{

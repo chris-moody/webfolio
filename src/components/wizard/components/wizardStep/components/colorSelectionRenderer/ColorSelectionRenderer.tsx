@@ -6,10 +6,9 @@ import { WizardColorSchemeSwitch } from './components/WizardColorSchemeSwitch'
 
 export const ColorSelectionRenderer: FC<SelectionRendererProps> = ({
   onSelect,
-  next
 }) => (
   <Box className="wizard-step-content">
     <WizardColorSchemeSwitch />
-    <WizardColorSelection next={next} onSelect={onSelect} />
+    <WizardColorSelection onSelect={onSelect} />
   </Box>
 )

@@ -39,9 +39,7 @@ function Main() {
 export default App
 /* 
 
-TODO NAV,
-TODO deep linking, create component wrapper to handle timing with animation and mount/unmount
-TODO pictures and media Youtube beta pics and trailer
+TODO create component wrapper to handle timing with animation and mount/unmount
 TODO animated doodads
 TODO Flair and pinback interaction
 TODO add color mode to setting modal

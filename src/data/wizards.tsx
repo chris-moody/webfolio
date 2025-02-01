@@ -158,7 +158,7 @@ const wizards: Record<string, WizardConfig> = {
             highcharts, AG Grid, and D3 to name a few.
           </>
         ),
-        media: <TechMarquees />,
+        unwrappedMedia: <TechMarquees />,
       },
       {
         id: '4',
