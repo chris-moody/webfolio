@@ -1,7 +1,18 @@
-import { Box, IconButton, Link, styled, Toolbar, Typography, useTheme } from '@mui/material'
+import {
+  Box,
+  IconButton,
+  Link,
+  styled,
+  Toolbar,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material'
 import { FC } from 'react'
 import FileDownloadIcon from '@mui/icons-material/FileDownload'
 import { FancyText } from '@/components/fancyText/FancyText'
+import AlternateEmailIcon from '@mui/icons-material/AlternateEmail'
+import CallIcon from '@mui/icons-material/Call';
 
 export const StyledResume = styled(Box)(({ theme }) => [
   {
@@ -11,15 +22,36 @@ export const StyledResume = styled(Box)(({ theme }) => [
     padding: theme.spacing(2),
     '.section': {
       marginBottom: theme.spacing(2),
+      ul: {
+        paddingLeft: theme.spacing(2),
+      },
     },
     '.skills': {
-      display: 'table',
+      display: 'flex',
+      flexDirection: 'column',
+      paddingLeft: 0,
       li: {
-        display: 'table-row',
-        span: {
-          display: 'table-cell',
+        listStyle: 'none',
+        '>span': {
+          display: 'block',
           '&:first-of-type': {
-            paddingRight: theme.spacing(2),
+            fontWeight: 'bold',
+          },
+          '&:not(:first-of-type)': {
+            paddingLeft: theme.spacing(1),
+            marginBottom: theme.spacing(1),
+          },
+        },
+      },
+      [theme.breakpoints.up('md')]: {
+        display: 'table',
+        li: {
+          display: 'table-row',
+          span: {
+            display: 'table-cell',
+            '&:first-of-type': {
+              paddingRight: theme.spacing(2),
+            },
           },
         },
       },
@@ -45,6 +77,7 @@ export const StyledResume = styled(Box)(({ theme }) => [
 
 export const ResumeRenderer: FC = () => {
   const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   return (
     <>
       <Toolbar
@@ -64,13 +97,27 @@ export const ResumeRenderer: FC = () => {
         ]}
       >
         <Typography variant="body1" className="info">
-          <Link href="tel:+19172257503">917.225.7503</Link>
-          <Typography mx={1} component="span">&bull;</Typography>
-          <Link target="_blank" href="mailto:chris@moodydigital.com">chris@moodydigital.com</Link>
-          <Typography mx={1} component="span">&bull;</Typography>
-          Cary, NC 27519
+          <Link aria-title="Call Me" title="Call Me" href="tel:+19172257503" mr={{ xs: 2, md: 0 }}>{isMobile ? <IconButton><CallIcon /></IconButton> : "917.225.7503"}</Link>
+          {!isMobile && <Typography mx={2} component="span">
+            &bull;
+          </Typography>}
+          <Link aria-title="Email Me" title="Email Me" target="_blank" href="mailto:chris@moodydigital.com">
+            {isMobile ? <IconButton><AlternateEmailIcon /></IconButton> : "chris@moodydigital.com"}
+          </Link>
+          {!isMobile && (
+            <>
+              <Typography mx={2} component="span">
+                &bull;
+              </Typography>
+              Cary, NC 27519
+            </>
+          )}
         </Typography>
-        <IconButton href="/cmoodyResume.pdf" download title="Take it with you, I don't mind!">
+        <IconButton
+          href="/cmoodyResume.pdf"
+          download
+          title="Take it with you, I don't mind!"
+        >
           <FileDownloadIcon />
         </IconButton>
       </Toolbar>
