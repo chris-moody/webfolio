@@ -21,7 +21,7 @@ export const FancyText: FC<FancyTextProps> = ({
   if (Array.isArray(sx)) {
     styles = sx[0]
   }
-  const { background, ...restSx } = styles || {}
+  const { background: _, ...restSx } = styles || {}
   if (mode === 'threed' || flair === 37) {
     return (
       <Text3d {...fancy} {...props} containerProps={{ sx: restSx }}>

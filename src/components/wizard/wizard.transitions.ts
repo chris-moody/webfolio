@@ -33,7 +33,7 @@ export const wizardOff: WizardTransition = (
 }
 
 export const buildStepOn: WizardTransition = () => {
-  gsap.fromTo('.content', { alpha: 0 }, { alpha: 1, stagger: 0.2, delay: 0.5, duration: 0.5 })
+  gsap.fromTo('.content', { alpha: 0, scrollTop: 0 }, { alpha: 1, stagger: 0.2, delay: 0.5, duration: 0.5, scrollTop: 0 })
 }
 
 export const buildStepOff: WizardTransition = ({ target } = {} as WizardTransitionProps) => {
