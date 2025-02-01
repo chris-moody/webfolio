@@ -114,10 +114,8 @@ export const WizardStep: FC<WizardStepProps> = ({ className, ...props }) => {
           height="inherit"
         >
           {header && (
-            <FancyText
-              variant="h4"
-              fancy={{ depth: 10 }}
-              className="content"
+            <Box
+              className="header content"
               sx={[
                 {
                   position: 'relative',
@@ -126,26 +124,27 @@ export const WizardStep: FC<WizardStepProps> = ({ className, ...props }) => {
                   mb: { xs: 0, md: 2 },
                   mx: 'auto',
                   width: 'fit-content',
-                  ...((body || media) && {
-                    maxHeight: { xs: 150, md: 'unset' },
-                  }),
                   overflow: 'auto',
                   zIndex: 2,
                   background: 'rgba(255,255,255,.75)',
                   borderRadius: 3,
                 },
                 (theme) =>
-                  theme.applyStyles('dark', { background: 'rgba(0,0,0,.75)' }),
+                  theme.applyStyles('dark', {
+                    background: 'rgba(0,0,0,.75)',
+                  }),
               ]}
             >
-              {header}
-            </FancyText>
+              <FancyText variant="h4" fancy={{ depth: 10 }}>
+                {header}
+              </FancyText>
+            </Box>
           )}
           {body && (
             <FancyText
               variant="body1"
               fancy={{ depth: 7 }}
-              className="content"
+              className="body content"
               sx={[
                 {
                   position: 'relative',
@@ -153,7 +152,6 @@ export const WizardStep: FC<WizardStepProps> = ({ className, ...props }) => {
                   mb: 2,
                   mx: 'auto',
                   width: 'fit-content',
-                  maxHeight: { xs: 150, md: 'unset' },
                   zIndex: 2,
                   background: 'rgba(255,255,255,.75)',
                   borderRadius: 3,

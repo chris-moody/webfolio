@@ -42,7 +42,8 @@ import { FC, ReactElement } from 'react'
 const StyledTechMarquees = styled(Box)({
   position: 'relative',
   overflow: 'hidden',
-  flex: 1
+  flex: 1,
+  minHeight: '25vh'
 })
 
 const StyledWrapper = styled(Box)({
