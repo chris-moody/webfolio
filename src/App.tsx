@@ -38,7 +38,7 @@ function Main() {
 }
 export default App
 /* 
-
+TODO Error boundary
 TODO animated doodads
 TODO Flair and pinback interaction
 TODO add color mode to setting modal
