@@ -14,10 +14,26 @@ import betaLaptop from '@/assets/beta/beta_laptop.png'
 import betaLevel from '@/assets/beta/beta_paper_level_design.png'
 import meAtMagens from '@/assets/aboutme/me_at_magens.jpg'
 import { WizardStepConfig } from '@/components/wizard/components/wizardStep/WizardStep'
+import { FancyNavButton } from '@/components/fancyButton/FancyButton'
 
 const wizards: Record<string, WizardConfig> = {
-  settings: {
-    id: 'settings',
+  404: {
+    id: '404',
+    header: '404',
+    defaultStep: 'notfound',
+    showNav: false,
+    stepData: [
+      {
+        id: 'notfound',
+        body: <>I'm not sure what you&rsquo;re trying to do but I've heard that</>,
+        media: (
+          <FancyNavButton to="/home">There&rsquo;s no place like home!</FancyNavButton>
+        )
+      },
+    ],
+  },
+  home: {
+    id: 'home',
     header: 'Welcome!',
     next: 'purpose',
     prev: '',
@@ -53,7 +69,7 @@ const wizards: Record<string, WizardConfig> = {
   purpose: {
     id: 'purpose',
     header: 'State your purpose',
-    prev: 'settings',
+    prev: 'home',
     defaultStep: 'why',
     stepData: [
       {
@@ -421,11 +437,11 @@ const wizards: Record<string, WizardConfig> = {
   },
 }
 
-export const useWizard = (id: string = 'settings') => {
+export const useWizard = (id: string = 'home') => {
   return wizards[id]
 }
 
-export const useWizardStep = (id: string, stepId: string) => {
+export const useWizardStep = (id: string = 'home', stepId: string) => {
   return (
     useWizard(id).stepData?.find((step) => {
       return step.id === stepId
