@@ -4,6 +4,7 @@ import App from './App'
 import { createBrowserRouter, RouterProvider } from 'react-router'
 import Wizard from './components/wizard/Wizard'
 import WizardStep from './components/wizard/components/wizardStep/WizardStep'
+import { Redirect } from './components/routing/Redirect'
 
 const router = createBrowserRouter([
   {
@@ -15,12 +16,8 @@ const router = createBrowserRouter([
         element: <Wizard />,
       },
       {
-        path: '404',
-        element: <div>404</div>,
-      },
-      {
         path: '*',
-        element: <div>404</div>,
+        element: <Redirect to="/404/notfound" />,
       },
       {
         path: ':wizardId',
