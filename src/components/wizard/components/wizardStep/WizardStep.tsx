@@ -100,9 +100,9 @@ export const WizardStep: FC<WizardStepProps> = ({ className, ...props }) => {
     [dispatch]
   )
 
-  if (!stepConfig || !stepConfig.id) {
+  /* if (!stepConfig || !stepConfig.id) {
     return <Redirect to="/404/notfound" />
-  }
+  } */
 
   const SelectionRenderer = selectionRenderer || DefaultSelectionRenderer
   return (
