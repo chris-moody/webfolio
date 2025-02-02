@@ -88,17 +88,17 @@ export const Wizard: FC<WizardProps> = ({ className, ...props }) => {
     bodyComponent,
   } = wizardData || {}
   const wizardId = useMemo(() => wizardData?.id, [wizardData])
+  const stepIndex = stepData.findIndex((step) => step.id === stepId)
   const { stepPrev } = useMemo(() => {
-    const index = stepData.findIndex((step) => step.id === stepId)
     return {
-      stepNext: stepData[index + 1]?.id || '',
-      stepPrev: stepData[index - 1]?.id || '',
+      stepNext: stepData[stepIndex + 1]?.id || '',
+      stepPrev: stepData[stepIndex - 1]?.id || '',
     }
-  }, [stepData, stepId])
+  }, [stepData, stepIndex])
 
   useEffect(() => {
-    if (wizardId && !stepId && defaultStep) navigate('/'+wizardId+'/'+defaultStep)
-  }, [defaultStep, id, navigate, stepId, wizardId])
+    if (wizardId && (stepIndex < 0) && defaultStep) navigate('/'+wizardId+'/'+defaultStep)
+  }, [defaultStep, id, navigate, stepIndex, wizardId])
 
   if (!wizardData || !wizardData.id) {
     return <Redirect to="/404/notfound" />
