@@ -125,7 +125,7 @@ export const TechMarquees: FC = () => {
     { id: 'webpack', src: webpack },
   ])
   return (
-    <StyledTechMarquees>
+    <StyledTechMarquees className="content">
       <StyledWrapper>
         <Marquee speed={0.5} overflow="hidden">
           {tools}
