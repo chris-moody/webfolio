@@ -36,6 +36,7 @@ export interface WizardConfig {
   renderClose?: boolean
   header?: React.ReactNode
   body?: React.ReactNode
+  showNav?: boolean
   bodyComponent?: FC
   defaultStep?: string
   i?: (
@@ -65,7 +66,7 @@ const StyledWizard = styled(Box)(({ theme }) => ({
 }))
 
 export const Wizard: FC<WizardProps> = ({ className, ...props }) => {
-  const { wizardId: id = '', stepId } = useParams()
+  const { wizardId: id = 'home', stepId } = useParams()
   const stepConfig = useAppSelector(selectWizardStep)
   const selection = useAppSelector(selectWizardSelection)
 
@@ -73,8 +74,9 @@ export const Wizard: FC<WizardProps> = ({ className, ...props }) => {
   const container = useRef<HTMLDivElement>(undefined)
   const navigate = useNavigate()
   
-  const wizardData = useWizard(id) || {}
+  const wizardData = useWizard(id)
   const {
+    showNav = true,
     active = true,
     defaultStep = '',
     renderClose = true,
@@ -84,8 +86,8 @@ export const Wizard: FC<WizardProps> = ({ className, ...props }) => {
     next,
     prev = next,
     bodyComponent,
-  } = wizardData
-
+  } = wizardData || {}
+  const wizardId = useMemo(() => wizardData?.id, [wizardData])
   const { stepPrev } = useMemo(() => {
     const index = stepData.findIndex((step) => step.id === stepId)
     return {
@@ -95,13 +97,11 @@ export const Wizard: FC<WizardProps> = ({ className, ...props }) => {
   }, [stepData, stepId])
 
   useEffect(() => {
-    if (!stepId && defaultStep) navigate(defaultStep)
-  }, [defaultStep, navigate, stepId])
+    if (wizardId && !stepId && defaultStep) navigate('/'+wizardId+'/'+defaultStep)
+  }, [defaultStep, id, navigate, stepId, wizardId])
 
-
-  console.log('wizardData', wizardData)
   if (!wizardData || !wizardData.id) {
-    return <Redirect to="/404" />
+    return <Redirect to="/404/notfound" />
   }
 
   const BodyComponent = bodyComponent
@@ -152,7 +152,7 @@ export const Wizard: FC<WizardProps> = ({ className, ...props }) => {
         <Outlet />
       </Box>
 
-      <Stack
+      {(showNav) && <Stack
         className="nav"
         direction='row'
         spacing={2}
@@ -178,7 +178,7 @@ export const Wizard: FC<WizardProps> = ({ className, ...props }) => {
         >
           Next
         </FancyNavButton>
-      </Stack>
+      </Stack>}
 
       <Stack
         className="wizard-dots"

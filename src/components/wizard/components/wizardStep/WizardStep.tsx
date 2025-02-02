@@ -14,6 +14,7 @@ import { setSelection, setStep } from '@/redux/slices/wizard/wizard.reducer'
 import { selectWizardSelection } from '@/redux/slices/wizard/wizard.selector'
 import { buildStepOn } from '../../wizard.transitions'
 import { useGSAP } from '@gsap/react'
+import { Redirect } from '@/components/routing/Redirect'
 
 export interface WizardStepConfig {
   next?: string
@@ -51,7 +52,7 @@ const StyledWizardStep = styled(Box)(({ theme }) => ({
 
 export const WizardStep: FC<WizardStepProps> = ({ className, ...props }) => {
   const dispatch = useAppDispatch()
-  const { wizardId = '', stepId: id = '' } = useParams()
+  const { wizardId = 'home', stepId: id = '' } = useParams()
   const stepConfig = useWizardStep(wizardId, id)
   const {
     selections = [],
@@ -98,6 +99,10 @@ export const WizardStep: FC<WizardStepProps> = ({ className, ...props }) => {
     },
     [dispatch]
   )
+
+  if (!stepConfig || !stepConfig.id) {
+    return <Redirect to="/404/notfound" />
+  }
 
   const SelectionRenderer = selectionRenderer || DefaultSelectionRenderer
   return (
