@@ -61,9 +61,9 @@ const wizards: Record<string, WizardConfig> = {
         header: 'Why are you here?',
         selections: [
           {
-            id: 'professional',
+            id: 'about',
             label: 'Who is Chris Moody?',
-            next: 'professional',
+            next: 'about',
           },
           { id: 'storytime', label: 'Tell me a story', next: 'storytime' },
           { id: 'resume', label: 'Show me the resume!', next: 'resume' },
@@ -89,8 +89,8 @@ const wizards: Record<string, WizardConfig> = {
     ],
   },
 
-  professional: {
-    id: 'professional',
+  about: {
+    id: 'about',
     next: 'purpose',
     defaultStep: '0',
     header: 'About me',
