@@ -15,6 +15,14 @@ const router = createBrowserRouter([
         element: <Wizard />,
       },
       {
+        path: '404',
+        element: <div>404</div>,
+      },
+      {
+        path: '*',
+        element: <div>404</div>,
+      },
+      {
         path: ':wizardId',
         element: <Wizard />,
         children: [

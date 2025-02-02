@@ -24,6 +24,7 @@ import {
   selectWizardSelection,
   selectWizardStep,
 } from '@/redux/slices/wizard/wizard.selector'
+import { Redirect } from '../routing/Redirect'
 gsap.registerPlugin(useGSAP, TextPlugin)
 
 export interface WizardConfig {
@@ -67,6 +68,12 @@ export const Wizard: FC<WizardProps> = ({ className, ...props }) => {
   const { wizardId: id = '', stepId } = useParams()
   const stepConfig = useAppSelector(selectWizardStep)
   const selection = useAppSelector(selectWizardSelection)
+
+  const theme = useTheme()
+  const container = useRef<HTMLDivElement>(undefined)
+  const navigate = useNavigate()
+  
+  const wizardData = useWizard(id) || {}
   const {
     active = true,
     defaultStep = '',
@@ -77,7 +84,7 @@ export const Wizard: FC<WizardProps> = ({ className, ...props }) => {
     next,
     prev = next,
     bodyComponent,
-  } = useWizard(id)
+  } = wizardData
 
   const { stepPrev } = useMemo(() => {
     const index = stepData.findIndex((step) => step.id === stepId)
@@ -87,13 +94,15 @@ export const Wizard: FC<WizardProps> = ({ className, ...props }) => {
     }
   }, [stepData, stepId])
 
-  const theme = useTheme()
-  const container = useRef<HTMLDivElement>(undefined)
-  const navigate = useNavigate()
-
   useEffect(() => {
-    if (!stepId) navigate(defaultStep)
+    if (!stepId && defaultStep) navigate(defaultStep)
   }, [defaultStep, navigate, stepId])
+
+
+  console.log('wizardData', wizardData)
+  if (!wizardData || !wizardData.id) {
+    return <Redirect to="/404" />
+  }
 
   const BodyComponent = bodyComponent
   const wizardBody = BodyComponent ? <BodyComponent /> : body
