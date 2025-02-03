@@ -25,10 +25,14 @@ const wizards: Record<string, WizardConfig> = {
     stepData: [
       {
         id: 'notfound',
-        body: <>I'm not sure what you&rsquo;re trying to do but I've heard that</>,
+        body: (
+          <>I'm not sure what you&rsquo;re trying to do but I've heard that</>
+        ),
         media: (
-          <FancyNavButton to="/home">There&rsquo;s no place like home!</FancyNavButton>
-        )
+          <FancyNavButton to="/">
+            There&rsquo;s no place like home!
+          </FancyNavButton>
+        ),
       },
     ],
   },
@@ -192,13 +196,13 @@ const wizards: Record<string, WizardConfig> = {
           <>
             Outside of work I am a husband and father of 3 awesome kids. I used
             to play more video games than I do now, and anime is my favorite
-            type of media to watch. I enjoy traveling but most of it has been
-            to the caribbean. I think I really just might actually belong there.
+            type of media to watch. I enjoy traveling but most of it has been to
+            the caribbean. I think I really just might actually belong there.
           </>
         ),
         media: (
           <Image
-            style={{ maxWidth: '600px' }}
+            style={{ maxWidth: '600px', height: '100%', objectFit: 'contain' }}
             src={meAtMagens}
             alt="Chris Moody at Magen's Bay"
           />
@@ -364,6 +368,8 @@ const wizards: Record<string, WizardConfig> = {
           'I ran a small video game company between 2011 and 2017. My partners and I had a blast designing, animating and coding an ed-tech game centered around a cute little robot named Beta. Beta could manipulate his world and objects in it via a runtime scripting language we called CodePop!',
         media: (
           <Youtube
+            height="100%"
+            margin="0 auto"
             videoId="rYybYqu00hk"
             videoTitle="Callbacks and Collisions 1: Adding a callback"
           />
@@ -376,7 +382,7 @@ const wizards: Record<string, WizardConfig> = {
           'CodePop sported an event model, conditional statements, loops, and simple custom functions. We ran classes, camps and conference events where we showed attendees how to protoype a simple game on paper and then bring it to life using Beta!',
         media: (
           <Image
-            style={{ maxWidth: '600px' }}
+            style={{ maxWidth: '600px', height: '100%', objectFit: 'contain' }}
             src={betaLevel}
             alt="Paper prototype"
           />
@@ -389,7 +395,7 @@ const wizards: Record<string, WizardConfig> = {
           'Most of our students had never coded before, but left the events having successfully designed and programmed their own video games. The genuine joy of discovery coupled with the undeniable educational benefits of critical and creative thinking made Beta a one of a kind experience.',
         media: (
           <Image
-            style={{ maxWidth: '650px' }}
+            style={{ maxWidth: '650px', height: '100%', objectFit: 'contain' }}
             src={betaClass}
             alt="Beta classroom"
           />
@@ -402,7 +408,7 @@ const wizards: Record<string, WizardConfig> = {
           'All students received a BetaNet account with which they could continue to play and iterate on their games, make new ones, or experience what other creators were coming up with.',
         media: (
           <Image
-            style={{ maxWidth: '650px' }}
+            style={{ maxWidth: '650px', height: '100%', objectFit: 'contain', margin: '0 auto' }}
             src={betaLaptop}
             alt="Beta the game"
           />
@@ -430,7 +436,12 @@ const wizards: Record<string, WizardConfig> = {
           </>
         ),
         media: (
-          <Youtube videoId="fqbfMO7PFts" videoTitle="Beta the game trailer" />
+          <Youtube
+            height="100%"
+            margin="0 auto"
+            videoId="fqbfMO7PFts"
+            videoTitle="Beta the game trailer"
+          />
         ),
       },
     ],
