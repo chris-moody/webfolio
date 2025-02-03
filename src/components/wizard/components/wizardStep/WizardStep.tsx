@@ -14,7 +14,6 @@ import { setSelection, setStep } from '@/redux/slices/wizard/wizard.reducer'
 import { selectWizardSelection } from '@/redux/slices/wizard/wizard.selector'
 import { buildStepOn } from '../../wizard.transitions'
 import { useGSAP } from '@gsap/react'
-import { Redirect } from '@/components/routing/Redirect'
 
 export interface WizardStepConfig {
   next?: string
@@ -168,7 +167,7 @@ export const WizardStep: FC<WizardStepProps> = ({ className, ...props }) => {
               {body}
             </FancyText>
           )}
-          {media && <Box className="content">{media}</Box>}
+          {media && <Box className="content" height="50%">{media}</Box>}
           {unwrappedMedia}
         </Stack>
       )}
