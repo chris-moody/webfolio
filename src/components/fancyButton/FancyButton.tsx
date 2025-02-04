@@ -85,7 +85,7 @@ const FancyStyles = ({ theme }) => `
   .face {
     display: block;
     position: relative;
-    padding: 8px 24px;
+    padding: 8px 16px;
     border-radius: 12px;
     background: ${theme.palette.primary.main};
     will-change: transform;
@@ -94,8 +94,6 @@ const FancyStyles = ({ theme }) => `
   }
 `
 export const StyledFancyButton = styled('button')(FancyStyles);
-
-export const StyledFancyLink = styled(NavLink)<NavLinkProps>(FancyStyles);
 
 export const FancyButton: FC<ButtonProps> = ({
   className,
@@ -132,8 +130,12 @@ export const FancyButton: FC<ButtonProps> = ({
   )
 }
 
-type FancyNavButtonProps = ButtonProps & {
+
+export const StyledFancyLink = styled(NavLink)<NavLinkProps>(FancyStyles);
+
+type FancyNavButtonProps = NavLinkProps & {
   to: string
+  disabled?: boolean
 }
 export const FancyNavButton: FC<FancyNavButtonProps> = ({
   className,

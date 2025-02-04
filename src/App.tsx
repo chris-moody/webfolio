@@ -41,7 +41,6 @@ function Main() {
 }
 export default App
 /* 
-TODO Error boundary
 TODO animated doodads
   TODO FLAIR rainbow text, bouncing letters, that drop confetti. Light on fire?
   TODO about/1 react flow chart showing socket setup with animation?
