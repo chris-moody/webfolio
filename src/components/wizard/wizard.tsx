@@ -12,6 +12,7 @@ import classNames from 'classnames'
 import CloseIcon from '@mui/icons-material/Close'
 import gsap from 'gsap'
 import { TextPlugin } from 'gsap/TextPlugin'
+import { MotionPathPlugin } from 'gsap/MotionPathPlugin'
 import { useGSAP } from '@gsap/react'
 import { WizardResult } from './wizard.types'
 import { WizardDot } from './components/WizardDot'
@@ -25,7 +26,7 @@ import {
   selectWizardStep,
 } from '@/redux/slices/wizard/wizard.selector'
 import { Redirect } from '../routing/Redirect'
-gsap.registerPlugin(useGSAP, TextPlugin)
+gsap.registerPlugin(useGSAP, TextPlugin, MotionPathPlugin)
 
 export interface WizardConfig {
   id: string

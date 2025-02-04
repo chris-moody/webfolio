@@ -15,6 +15,7 @@ import betaLevel from '@/assets/beta/beta_paper_level_design.png'
 import meAtMagens from '@/assets/aboutme/me_at_magens.jpg'
 import { WizardStepConfig } from '@/components/wizard/components/wizardStep/WizardStep'
 import { FancyNavButton } from '@/components/fancyButton/FancyButton'
+import { SocketFlow } from '@/components/socketFlow/SocketFlow'
 
 const wizards: Record<string, WizardConfig> = {
   404: {
@@ -157,7 +158,7 @@ const wizards: Record<string, WizardConfig> = {
             multiple game screens.
           </>
         ),
-        media: <>interactive remote media animation</>,
+        media: <SocketFlow />,
       },
       {
         id: '2',

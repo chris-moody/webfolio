@@ -17,6 +17,7 @@
     "@gsap/react": "^2.1.1",
     "@mui/icons-material": "^6.1.10",
     "@reduxjs/toolkit": "^2.4.0",
+    "@xyflow/react": "^12.4.2",
     "circlepacker": "^2.1.0",
     "classnames": "^2.5.1",
     "color-2-name": "^1.4.4",
