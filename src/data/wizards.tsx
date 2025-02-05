@@ -16,6 +16,7 @@ import { WizardStepConfig } from '@/components/wizard/components/wizardStep/Wiza
 import { FancyNavButton } from '@/components/fancyButton/FancyButton'
 import { SocketFlow } from '@/components/socketFlow/SocketFlow'
 import { FlairText } from '@/components/flairText/FlairText'
+import { PixiWrapper } from '@/components/pixiWrapper/PixiWrapper'
 
 const wizards: Record<string, WizardConfig> = {
   404: {
@@ -172,7 +173,7 @@ const wizards: Record<string, WizardConfig> = {
             much time and everything in between. Nothing scares me.
           </>
         ),
-        media: <>FEARLESS PIXI DISPLACEMENT FILTER</>,
+        media: <PixiWrapper />,
       },
       {
         id: '3',
