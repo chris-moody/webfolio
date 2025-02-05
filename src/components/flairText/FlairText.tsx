@@ -83,7 +83,7 @@ const FlairWrapper = styled(Box)({
   height: '100%',
   overflow: 'hidden',
   pointerEvents: 'none',
-  zIndex: 100,
+  zIndex: 300,
 })
 
 export interface FlairTextProps {

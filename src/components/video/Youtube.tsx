@@ -3,6 +3,7 @@ import { FC } from 'react'
 
 export const StyledWrapper = styled(Box)({
   aspectRatio: '16 / 9',
+  height: '90%'
 })
 
 export interface YoutubeProps extends BoxProps {
