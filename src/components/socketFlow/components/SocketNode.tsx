@@ -33,8 +33,8 @@ export const SocketNode = ({
   id,
   data,
 }: NodeProps<SocketNodeProps>) => {
-  const color = data.color || '#ff0073'
   const theme = useTheme()
+  const color = data.color || theme.palette.primary.main
   return (
     <Box
       id={id}
@@ -114,7 +114,7 @@ export const SocketNode = ({
         }}
       />
 
-      <Typography variant="h3" color={theme.palette.common.black}>{data.label}</Typography>
+      <Typography variant="h4" color={theme.palette.common.black}>{data.label}</Typography>
     </Box>
   )
 }

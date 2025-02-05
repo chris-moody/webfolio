@@ -168,7 +168,7 @@ export const WizardStep: FC<WizardStepProps> = ({ className, ...props }) => {
               {body}
             </FancyText>
           )}
-          {media && <Box className="content" height="100%">{media}</Box>}
+          {media && <Box className="content" height="50%">{media}</Box>}
           {unwrappedMedia}
         </Stack>
       )}
