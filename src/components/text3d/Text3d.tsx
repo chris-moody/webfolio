@@ -41,7 +41,11 @@ const LayeredText = styled(Typography)(({ theme }) => [
     transformStyle: 'preserve-3d',
     textShadow: '0 0 4px rgba(255,255,255, 0.25)',
     color: theme.palette.text.primary,
+    userSelect: 'none',
+    pointerEvents: 'none',
     '&:first-of-type': {
+      userSelect: 'auto',
+      pointerEvents: 'all',
       textShadow: 'none',
     },
     '&:last-of-type': {

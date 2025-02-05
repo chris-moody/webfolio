@@ -42,8 +42,6 @@ function Main() {
 export default App
 /* 
 TODO animated doodads
-  TODO FLAIR rainbow text, bouncing letters, that drop confetti. Light on fire?
-  TODO about/1 react flow chart showing socket setup with animation?
   TODO about/2 pixi displacement map filter
 TODO Flair and pinback interaction
 TODO add color mode to setting modal
@@ -51,5 +49,5 @@ TODO add content on select, ie: "Me? I know who I am! I'm a dude playing a dude 
 TODO 3d text cross fade is no good
 TODO alt transitions depnding on flair
 TODO fix images on small screens
-TODO dark/light mode icons
+TODO dark/light mode tech icons
 */
