@@ -128,6 +128,7 @@ export const WizardStep: FC<WizardStepProps> = ({ className, ...props }) => {
                   mb: { xs: 0, md: 2 },
                   mx: 'auto',
                   width: 'fit-content',
+                  maxHeight: (media || unwrappedMedia) ? '50%' : 'auto',
                   overflow: 'auto',
                   zIndex: 2,
                   background: 'rgba(255,255,255,.75)',
