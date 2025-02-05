@@ -54,7 +54,7 @@ export const FlairGif: FC<FlairGifProps> = ({
           clipPath: `circle(${clipR} at ${clipX} ${clipY})`,
         }}
       />
-      <TypeWriter mt={flair === 37 ? 6 : 12} variant="h3" duration={.5} text="Wooooo!" />
+      <TypeWriter bgcolor='primary.main' borderRadius={2} p={1} mt={flair === 37 ? 6 : 12} variant="h3" duration={.5} text="Wooooo!" />
     </StyledBox>
   )
 }
