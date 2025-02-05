@@ -2,7 +2,6 @@ import { FlairSelectionRenderer } from '@/components/wizard/components/wizardSte
 import { ColorSelectionRenderer } from '@/components/wizard/components/wizardStep/components/colorSelectionRenderer/ColorSelectionRenderer'
 import { WizardConfig } from '@/components/wizard/Wizard'
 import { ResumeRenderer } from '@/components/wizard/components/resumeRenderer/ResumeRenderer'
-import { Text3d } from '@/components/text3d/Text3d'
 import { Link } from '@mui/material'
 import { Image } from '@/components/image/Image'
 import { Youtube } from '@/components/video/Youtube'
@@ -16,6 +15,7 @@ import meAtMagens from '@/assets/aboutme/me_at_magens.jpg'
 import { WizardStepConfig } from '@/components/wizard/components/wizardStep/WizardStep'
 import { FancyNavButton } from '@/components/fancyButton/FancyButton'
 import { SocketFlow } from '@/components/socketFlow/SocketFlow'
+import { FlairText } from '@/components/flairText/FlairText'
 
 const wizards: Record<string, WizardConfig> = {
   404: {
@@ -226,52 +226,46 @@ const wizards: Record<string, WizardConfig> = {
       {
         id: '0',
         next: '1',
-        header:
-          'A long time ago I was working on an app at a digital agency in NYC.',
+        header: (
+          <>
+            A long time ago I was working on an app at a digital agency in NYC.
+            I had built the user interface based on PSDs provided by the
+            creative team, and it was ready for review. The producer and art
+            director(AD) came over to my desk, and the AD gave confirming grunts
+            as I went over the programmed project screens.
+          </>
+        ),
       },
       {
         id: '1',
         next: '2',
-        header:
-          'I had built the user interface based on PSDs provided by the creative team, and it was ready for review.',
+        header: (
+          <>
+            When I was done, he said, &ldquo;This looks awesome, great work! One
+            thing though, could we add some <em>flair</em> to the
+            buttons?&rdquo;
+            <br /> &ldquo;Sure,&rdquo; I replied as I noticed the producer
+            rolling her eyes. &ldquo;What did you have in mind?&rdquo;
+            <br /> &ldquo;You know, uh Pop! Pizazz!&rdquo; He drummed his fingers his lips for a brief pause while he searched for new a word, &ldquo;Flair!&rdquo;
+          </>
+        ),
       },
       {
         id: '2',
         next: '3',
-        header:
-          'The Art director came over to my desk, and he gave confirming grunts as I went over the layout.',
+        header: (
+          <>
+            Realizing that further conversation would be counter-productive, I
+            delivered my warmest smile and said &ldquo;You got it!&rdquo; They left and I got to work. A little while later, I summoned them back over so the AD could click the new button. It was something like this:
+          </>
+        ),
+        media: <FlairText text="Click Me!" />
       },
       {
         id: '3',
-        next: '4',
-        header:
-          'When I was done, he said “This looks awesome, great work! One thing though, could we add some flair to the buttons?”',
-      },
-      {
-        id: '4',
-        next: '5',
-        header: '“Sure,” I replied. “What did you have in mind?”',
-      },
-      {
-        id: '5',
-        next: '6',
-        header:
-          '“You know! Pop! Pizazz!” He paused briefly while he searched for new a word, “Flair!”',
-      },
-      {
-        id: '6',
-        next: '7',
-        header:
-          'Realizing that further conversation would be counter-productive, I smiled and said “You got it!”',
-      },
-      {
-        id: '7',
         header: (
           <>
-            And then I added some{' '}
-            <Text3d variant="h1" fontFamily="Rammetto One">
-              Flair!
-            </Text3d>
+            The art director was not pleased. It turns out that 16-time WWE Heavyweight Champion Ric Flair was <strong><em>not</em></strong> the kind of flair he was looking for 🙃. The producer struggled to contain her laughter, and the AD and I had a wonderful conversation about shimmers, shines, and glows.
           </>
         ),
       },
@@ -409,7 +403,12 @@ const wizards: Record<string, WizardConfig> = {
           'All students received a BetaNet account with which they could continue to play and iterate on their games, make new ones, or experience what other creators were coming up with.',
         media: (
           <Image
-            style={{ maxWidth: '650px', height: '100%', objectFit: 'contain', margin: '0 auto' }}
+            style={{
+              maxWidth: '650px',
+              height: '100%',
+              objectFit: 'contain',
+              margin: '0 auto',
+            }}
             src={betaLaptop}
             alt="Beta the game"
           />
