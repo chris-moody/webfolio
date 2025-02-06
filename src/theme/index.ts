@@ -277,6 +277,17 @@ declare module '@mui/material/styles' {
   interface TypographyVariantsOptions {
     threed?: React.CSSProperties;
   }
+
+  interface ThemeOptions {
+    colorSchemes?: {
+      dark: ThemeOptions;
+      light: ThemeOptions;
+    }
+  }
+
+  interface TypeBackground {
+    defaultChannel: string;
+  }
 }
 
 // Update the Typography's variant prop options

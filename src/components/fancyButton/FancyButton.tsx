@@ -1,5 +1,5 @@
-import { Button, ButtonProps, styled, Typography, useTheme } from '@mui/material'
-import { FC } from 'react'
+import { Button, ButtonProps, styled, SxProps, Theme, Typography, useTheme } from '@mui/material'
+import { FC, ReactNode } from 'react'
 import './fancyButton.scss'
 import classNames from 'classnames'
 import { useAppSelector } from '@/redux/hooks'
@@ -7,7 +7,7 @@ import { selectThemeFlair } from '@/redux/slices/theme/theme.selector'
 import { NavLink, NavLinkProps } from 'react-router'
 
 
-const FancyStyles = ({ theme }) => `
+const FancyStyles = ({ theme }: { theme: Theme }) => `
   position: relative;
   border: none;
   text-decoration: none;
@@ -133,9 +133,12 @@ export const FancyButton: FC<ButtonProps> = ({
 
 export const StyledFancyLink = styled(NavLink)<NavLinkProps>(FancyStyles);
 
-type FancyNavButtonProps = NavLinkProps & {
+type FancyNavButtonProps = Omit<NavLinkProps, "children"> & {
   to: string
   disabled?: boolean
+  sx?: SxProps
+  children?: ReactNode
+  className?: string
 }
 export const FancyNavButton: FC<FancyNavButtonProps> = ({
   className,
@@ -168,7 +171,7 @@ export const FancyNavButton: FC<FancyNavButtonProps> = ({
   }
 
   return (
-    <Button viewTransition component={NavLink} to={to} className={className} {...props}>
+    <Button viewTransition component={NavLink} to={to} className={className}>
       {children}
     </Button>
   )
