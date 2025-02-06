@@ -4,6 +4,8 @@ import {
   useNodesState,
   Background,
   ReactFlowInstance,
+  Node,
+  Edge,
 } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
 import { SocketEdge } from './components/SocketEdge'
@@ -12,7 +14,7 @@ import { useRef, useState } from 'react'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
 
-const initialNodes = [
+const initialNodes: Node[] = [
   {
     id: 'r1',
     position: { x: 16, y: 16 },
@@ -38,7 +40,7 @@ const initialNodes = [
     type: 'socketNode',
   },
 ]
-const initialEdges = [
+const initialEdges: Edge[] = [
   {
     id: 'r1-s1',
     source: 'r1',
