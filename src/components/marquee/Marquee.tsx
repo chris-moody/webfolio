@@ -6,12 +6,12 @@ import { horizontalLoop } from '@/utils/gsap.helpers'
 export interface MarqueeProps extends BoxProps {
   speed?: number,
   reversed?: boolean,
+  overflow?: 'hidden' | 'visible' | 'scroll' | 'auto' | 'inherit' | 'initial' | 'unset'
 }
 
 const StyledMarquee = styled(Box)<MarqueeProps>`
   display: flex;
   position: relative;
-  overflow: ${(props) => props.overflow || 'hidden'};
   .item {
     display: flex;
   }
@@ -21,6 +21,7 @@ export const Marquee: React.FC<MarqueeProps> = ({
   speed = 1,
   reversed = false,
   children,
+  overflow = 'hidden',
   ...props
 }) => {
   const container = useRef<HTMLDivElement>(null)
@@ -35,7 +36,7 @@ export const Marquee: React.FC<MarqueeProps> = ({
   )
 
   return (
-    <StyledMarquee ref={container} {...props}>
+    <StyledMarquee ref={container} {...props} sx={{ overflow }}>
       {children}
       {children}
     </StyledMarquee>

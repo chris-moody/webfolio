@@ -7,15 +7,14 @@ import { selectThemeColor } from '@/redux/slices/theme/theme.selector'
 
 export const WizardColorSelection: FC<SelectionRendererProps> = ({
   onSelect,
-  next,
 }) => {
   const defaultColor = useAppSelector(selectThemeColor)
   const dispatch = useAppDispatch()
   
   const selectionHandler = useCallback((color: string) => {
-    onSelect({ id: 'color', next, value: color })()
+    onSelect({ id: 'color', next: '', value: color })()
     dispatch(setColor(color))
-  }, [dispatch, onSelect, next])
+  }, [dispatch, onSelect])
 
   return (
     <div className="content wizard-color-select">

@@ -23,6 +23,27 @@ export default tseslint.config(
         'warn',
         { allowConstantExport: true },
       ],
+      '@typescript-eslint/naming-convention': [
+        'error',
+        {
+          selector: ['parameter', 'variable'],
+          leadingUnderscore: 'require',
+          modifiers: ['unused'],
+        },
+        {
+          selector: ['parameter', 'variable'],
+          leadingUnderscore: 'allowDouble',
+        },
+      ],
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          args: 'all',
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
+        },
+      ],
     },
-  },
+  }
 )
