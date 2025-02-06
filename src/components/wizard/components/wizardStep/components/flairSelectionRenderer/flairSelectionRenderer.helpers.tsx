@@ -7,7 +7,7 @@ import rollsafe from '@/assets/pins/rollsafe.png'
 import palmtree from '@/assets/pins/palmtree.png'
 import mario from '@/assets/pins/mario.png'
 import xenomorph from '@/assets/pins/xenomorph.png'
-import vote from '@/assets/pins/vote.png'
+import stewie from '@/assets/pins/stewie.png'
 import butterbot from '@/assets/pins/butterbot.png'
 import ssf2t from '@/assets/pins/ssf2t.png'
 import resistanceisfutile from '@/assets/pins/resistanceisfutile.png'
@@ -20,19 +20,19 @@ import luffy from '@/assets/pins/luffy.png'
 import radioshack from '@/assets/pins/radioshack.png'
 import thumbsup from '@/assets/pins/thumbsup.png'
 import uchiha from '@/assets/pins/uchiha.png'
-import kingofthehill from '@/assets/pins/kingofthehill.png'
+import nightblood from '@/assets/pins/nightblood.png'
 import highground from '@/assets/pins/highground.png'
 import imdoingmypart from '@/assets/pins/imdoingmypart.png'
 import lukevsvader from '@/assets/pins/lukevsvader.png'
 import triforce from '@/assets/pins/triforce.png'
 import blockbuster from '@/assets/pins/blockbuster.png'
-import byefelisha from '@/assets/pins/byefelisha.png'
-import gonewiththewind from '@/assets/pins/gonewiththewind.png'
+import hyperion from '@/assets/pins/hyperion.png'
+import vegeta from '@/assets/pins/vegeta.png'
 import protoman from '@/assets/pins/protoman.png'
 import rebel from '@/assets/pins/rebel.png'
-import wutang from '@/assets/pins/wutang.png'
+import predator from '@/assets/pins/predator.png'
 import hanshotfirst from '@/assets/pins/hanshotfirst.png'
-import garfield from '@/assets/pins/garfield.png'
+import spidey from '@/assets/pins/spidey.png'
 import stevenuniverse from '@/assets/pins/stevenuniverse.png'
 import kansas from '@/assets/pins/kansas.png'
 import { Node } from './components/circlePacking.types'
@@ -44,20 +44,20 @@ export type PinData = Node & {
 
 export const getPinData = (): PinData[] => [
   { name: 'kansas', group: 'one', background: kansas },
-  { name: 'garfield', group: 'one', background: garfield },
+  { name: 'spidey', group: 'one', background: spidey },
   { name: 'hanshotfirst', group: 'one', background: hanshotfirst },
-  { name: 'wutang', group: 'one', background: wutang },
+  { name: 'predator', group: 'one', background: predator },
   { name: 'rebel', group: 'one', background: rebel },
   { name: 'protoman', group: 'one', background: protoman },
-  { name: 'gonewiththewind', group: 'one', background: gonewiththewind },
-  { name: 'byefelisha', group: 'one', background: byefelisha },
+  { name: 'vegeta', group: 'one', background: vegeta },
+  { name: 'hyperion', group: 'one', background: hyperion },
   { name: 'blockbuster', group: 'one', background: blockbuster },
   { name: 'triforce', group: 'one', background: triforce },
   { name: 'lukevsvader', group: 'one', background: lukevsvader },
   { name: 'imdoingmypart', group: 'one', background: imdoingmypart },
   { name: 'stevenuniverse', group: 'one', background: stevenuniverse },
   { name: 'highground', group: 'one', background: highground },
-  { name: 'kingofthehill', group: 'one', background: kingofthehill },
+  { name: 'nightblood', group: 'one', background: nightblood },
   { name: 'uchiha', group: 'one', background: uchiha },
   { name: 'thumbsup', group: 'one', background: thumbsup },
   { name: 'radioshack', group: 'one', background: radioshack },
@@ -70,7 +70,7 @@ export const getPinData = (): PinData[] => [
   { name: 'resistanceisfutile', group: 'one', background: resistanceisfutile },
   { name: 'superstreetfighter', group: 'one', background: ssf2t },
   { name: 'butterbot', group: 'one', background: butterbot },
-  { name: 'democracy', group: 'one', background: vote },
+  { name: 'stewie', group: 'one', background: stewie },
   { name: 'xenomorph', group: 'one', background: xenomorph },
   { name: 'mariobros3', group: 'one', background: mario },
   { name: 'palmtree', group: 'one', background: palmtree },
