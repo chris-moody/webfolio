@@ -2,7 +2,7 @@ import { FlairSelectionRenderer } from '@/components/wizard/components/wizardSte
 import { ColorSelectionRenderer } from '@/components/wizard/components/wizardStep/components/colorSelectionRenderer/ColorSelectionRenderer'
 import { WizardConfig } from '@/components/wizard/Wizard'
 import { ResumeRenderer } from '@/components/wizard/components/resumeRenderer/ResumeRenderer'
-import { Link } from '@mui/material'
+import { Link, Stack } from '@mui/material'
 import { Image } from '@/components/image/Image'
 import { Youtube } from '@/components/video/Youtube'
 import { TypeWriter } from '@/components/typeWriter/TypeWriter'
@@ -16,7 +16,7 @@ import { WizardStepConfig } from '@/components/wizard/components/wizardStep/Wiza
 import { FancyNavButton } from '@/components/fancyButton/FancyButton'
 import { SocketFlow } from '@/components/socketFlow/SocketFlow'
 import { FlairText } from '@/components/flairText/FlairText'
-import { PixiWrapper } from '@/components/pixiWrapper/PixiWrapper'
+import { WaterText } from '@/containers/waterText/WaterText'
 
 const wizards: Record<string, WizardConfig> = {
   404: {
@@ -173,7 +173,7 @@ const wizards: Record<string, WizardConfig> = {
             much time and everything in between. Nothing scares me.
           </>
         ),
-        media: <PixiWrapper />,
+        media: <WaterText value="I AM FEARLESS" />,
       },
       {
         id: '3',
@@ -247,7 +247,7 @@ const wizards: Record<string, WizardConfig> = {
             buttons?&rdquo;
             <br /> &ldquo;Sure,&rdquo; I replied as I noticed the producer
             rolling her eyes. &ldquo;What did you have in mind?&rdquo;
-            <br /> &ldquo;You know, uh Pop! Pizazz!&rdquo; He drummed his fingers his lips for a brief pause while he searched for new a word, &ldquo;Flair!&rdquo;
+            <br /> &ldquo;You know, uh Pop! Pizzazz!&rdquo; He drummed his fingers his lips for a brief pause while he searched for new a word, &ldquo;Flair!&rdquo;
           </>
         ),
       },
@@ -260,7 +260,7 @@ const wizards: Record<string, WizardConfig> = {
             delivered my warmest smile and said &ldquo;You got it!&rdquo; They left and I got to work. A little while later, I summoned them back over so the AD could click the new button. It was something like this:
           </>
         ),
-        media: <FlairText text="Click Me!" />
+        unwrappedMedia: <Stack className="content" height="50%" justifyContent="center"><FlairText text=">>Click Me!<<" /></Stack>,
       },
       {
         id: '3',
@@ -283,11 +283,10 @@ const wizards: Record<string, WizardConfig> = {
         next: '1',
         header: (
           <>
-            This one time at a digital agency in NYC, our team landed a
-            pharmaceutical client that had recently gained new leadership in the
+            One of our pharmaceutical clients had recently gained new leadership in the
             form of a transplant from a big American beer brand. This guy was
             used to seeing flashy and exciting things, and was unwilling to
-            accept that pharma had to be boring.
+            accept the idea that pharma branding had to be&nbsp;boring.
           </>
         ),
       },
@@ -296,13 +295,12 @@ const wizards: Record<string, WizardConfig> = {
         next: '2',
         header: (
           <>
-            Major pressure was placed on the creative team to keep the concept
+            Major pressure was placed on the design team to keep the concept
             exciting, which in turn meant that it was even more important that
-            the final product delivered that same energy. Even if they were just
-            banner advertisments! The engineering manager warned me that this
+            the final product delivered that same energy. Even if it was just
+            banner campaign! Before offering me the project, engineering manager warned me that this
             account was pushing the creative concepts to the limit. She was not
-            confident that we could deliver what they wanted given the tight
-            timeframe.
+            confident that we could deliver what they wanted given the tight&nbsp;timeframe.
           </>
         ),
       },
@@ -316,7 +314,7 @@ const wizards: Record<string, WizardConfig> = {
             ridiculous 40kb size limit, there wasn't going to be any room to
             load in a fancy framework that could animate smoke. But once I had
             the designs I understood the assignment, and decided that the best
-            way to animate the design was to leverage WebGL to create a particle
+            way to bring life to the concept was to leverage WebGL to create a particle
             emitter.
           </>
         ),
@@ -339,9 +337,8 @@ const wizards: Record<string, WizardConfig> = {
         header: (
           <>
             “I need you to make it bad,” she said to me in hushed tones. I
-            couldn&rsquo;t believe what I was hearing, but she was serious. I
-            refactored the particle emitter to emit img tags and stipped out the
-            WebGL code. I had to cut down the particle limit to almost a quarter
+            couldn&rsquo;t believe what I was hearing, but she was serious. So I stripped out the
+            WebGL code and refactored the emitter to use img tags instead. I had to cut down the pool size to almost a quarter
             of what it was to get half the framerate. <br />
             <br />
             It was gross, and then it got approved by a client who never got to
