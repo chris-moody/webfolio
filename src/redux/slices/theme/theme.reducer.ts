@@ -7,9 +7,9 @@ interface ThemeState {
 }
 
 const initialState: ThemeState = {
-  flair: 1,
-  color: '#256ee0',
-  mode: 'light',
+  flair: parseInt(localStorage.getItem("flair") || '1'),
+  color: localStorage.getItem("color") || '#256ee0',
+  mode: localStorage.getItem("mode") || 'light',
 };
 
 const themeSlice = createSlice({
@@ -17,13 +17,16 @@ const themeSlice = createSlice({
   initialState,
   reducers: {
     setFlair(state, action: PayloadAction<number>) {
-      state.flair = action.payload;
+      state.flair = action.payload
+      localStorage.setItem("flair", action.payload.toString())
     },
     setColor(state, action: PayloadAction<string>) {
-      state.color = action.payload;
+      state.color = action.payload
+      localStorage.setItem("color", action.payload.toString())
     },
     setMode(state, action: PayloadAction<string>) {
-      state.mode = action.payload;
+      state.mode = action.payload
+      localStorage.setItem("mode", action.payload.toString())
     },
   },
 });

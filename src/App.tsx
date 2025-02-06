@@ -42,13 +42,13 @@ function Main() {
 export default App
 /* 
 TODO animated doodads
-  TODO about/2 pixi displacement map filter
+TODO add stars to flair button
 TODO Flair and pinback interaction
 TODO add color mode to setting modal
 TODO add content on select, ie: "Me? I know who I am! I'm a dude playing a dude disguised as another dude!"
 TODO 3d text cross fade is no good
 TODO alt transitions depnding on flair
-TODO fix images on small screens
 TODO dark/light mode tech icons
 TODO over 9000 easter egg
+TODO generalize the PixiWrapper
 */
