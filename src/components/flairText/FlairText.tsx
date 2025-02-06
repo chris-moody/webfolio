@@ -16,7 +16,7 @@ const flairs = [
       clipR: '25%',
       clipX: '45%',
       clipY: '45%',
-      width: '200px',
+      width: '250px',
     },
     duration: 1.6,
   },
@@ -35,7 +35,7 @@ const flairs = [
     flair: {
       id: 'woo5',
       src: woo5,
-      clipR: '45%',
+      clipR: '40%',
       clipX: '55%',
       clipY: '50%',
       width: '150px',
@@ -49,7 +49,7 @@ const flairs = [
       clipR: '25%',
       clipX: '65%',
       clipY: '40%',
-      width: '200px',
+      width: '250px',
     },
     duration: 1.8,
   },
@@ -60,9 +60,12 @@ const StyledButton = styled('button')(({ theme }) => ({
   background: theme.palette.primary.main,
   cursor: 'pointer',
   padding: theme.spacing(0.5, 4),
-  margin: theme.spacing(1, 0),
+  width: 'fit-content',
+  margin: '0 auto',
   border: 'none',
   outline: 0,
+  borderRadius: theme.shape.borderRadius,
+  boxShadow: theme.shadows[3],
 }))
 
 const StyledText = styled(Typography)({

@@ -27,8 +27,8 @@ export const TypeWriter: FC<TypeWriterProps> = ({
       if (!container.current) return
 
       const textTarget: TweenTarget<number> = { val: 0 }
-      const t2 = gsap.timeline({ repeat: -1, yoyo: true })
-      t2.to(textTarget, {
+      const tmln = gsap.timeline({ repeat: -1, yoyo: true })
+      tmln.to(textTarget, {
         val: text.length,
         duration,
         ease: `steps(${text.length})`,

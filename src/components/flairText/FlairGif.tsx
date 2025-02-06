@@ -40,11 +40,19 @@ export const FlairGif: FC<FlairGifProps> = ({
   return (
     <StyledBox
       sx={{
-        transform: `translate(${Math.random() * 80}vw, ${
-          Math.random() * 80
-        }vh)`,
+        transform: `translate(min(${Math.random() * 80}vw, max(0px, calc(100vw - ${width}))),
+        min(${Math.random() * 80}vh, max(0px, calc(100vh - ${width}))))`,
       }}
     >
+      <TypeWriter
+        bgcolor="primary.main"
+        borderRadius={2}
+        p={1}
+        mt={flair === 37 ? 6 : 12}
+        variant="h3"
+        duration={0.5}
+        text="Wooooo!!!"
+      />
       <img
         id={id}
         src={src}
@@ -52,9 +60,9 @@ export const FlairGif: FC<FlairGifProps> = ({
         height={height}
         style={{
           clipPath: `circle(${clipR} at ${clipX} ${clipY})`,
+          zIndex: 2,
         }}
       />
-      <TypeWriter bgcolor='primary.main' borderRadius={2} p={1} mt={flair === 37 ? 6 : 12} variant="h3" duration={.5} text="Wooooo!" />
     </StyledBox>
   )
 }
