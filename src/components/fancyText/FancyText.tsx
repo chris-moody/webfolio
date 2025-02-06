@@ -1,5 +1,5 @@
 import { Typography, TypographyProps } from '@mui/material'
-import { FC } from 'react'
+import { CSSProperties, FC } from 'react'
 import { Text3d, ThreeDProps } from '../text3d/Text3d'
 import { useAppSelector } from '@/redux/hooks'
 import { selectThemeFlair } from '@/redux/slices/theme/theme.selector'
@@ -21,7 +21,7 @@ export const FancyText: FC<FancyTextProps> = ({
   if (Array.isArray(sx)) {
     styles = sx[0]
   }
-  const { background: _, ...restSx } = styles || {}
+  const { background: _, ...restSx } = (styles || {}) as CSSProperties
   if (mode === 'threed' || flair === 37) {
     return (
       <Text3d {...fancy} {...props} containerProps={{ sx: restSx }}>
