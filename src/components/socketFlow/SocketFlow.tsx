@@ -82,8 +82,8 @@ const initialEdges: Edge[] = [
 export const SocketFlow = () => {
   const container = useRef(null)
   const [instance, setInstance] = useState<ReactFlowInstance>()
-  const [nodes, , onNodesChange] = useNodesState(initialNodes)
-  const [edges, , onEdgesChange] = useEdgesState(initialEdges)
+  const [nodes] = useNodesState(initialNodes)
+  const [edges] = useEdgesState(initialEdges)
 
   const onInit = (instance: ReactFlowInstance) => {
     setInstance(instance)
@@ -139,14 +139,16 @@ export const SocketFlow = () => {
       onInit={onInit}
       nodes={nodes}
       edges={edges}
-      onNodesChange={onNodesChange}
-      onEdgesChange={onEdgesChange}
       edgeTypes={{
         socketEdge: SocketEdge,
       }}
       nodeTypes={{
         socketNode: SocketNode,
       }}
+      panOnDrag={false}
+      zoomOnScroll={false}
+      zoomOnPinch={false}
+      zoomOnDoubleClick={false}
     >
       <Background />
     </ReactFlow>
