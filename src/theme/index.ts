@@ -83,13 +83,15 @@ export const useDynamicTheme = (
                 style: ({ theme }) => [
                   {
                     background: 'rgba(255,255,255,0.75)',
+                    color: theme.palette.getContrastText('rgba(255,255,255,0.75)'),
                     '&.active, &:hover, &:focus, &:focus-visible': {
                       background: theme.palette.primary.main,
-                      color: theme.palette.text.primary,
+                      color: theme.palette.getContrastText(theme.palette.primary.main),
                     },
                   },
                   theme.applyStyles('dark', {
                     background: 'rgba(0,0,0,.75)',
+                    color: theme.palette.getContrastText('rgba(0,0,0,0.75)'),
                     transition: theme.transitions.create(['transform'], {
                       duration: theme.transitions.duration.standard,
                     }),
@@ -157,7 +159,7 @@ export const useDynamicTheme = (
                 style: ({ theme }) => [
                   {
                     background: theme.palette.primary.main,
-                    color: theme.palette.text.primary,
+                    color: theme.palette.getContrastText(theme.palette.primary.main),
                     '&.active, &:hover, &:focus, &:focus-visible': {
                       background: theme.palette.primary.light,
                       boxShadow: `inset 0 0 0 2px ${theme.palette.text.primary}`,
@@ -165,6 +167,7 @@ export const useDynamicTheme = (
                   },
                   theme.applyStyles('dark', {
                     background: theme.palette.primary.dark,
+                    color: theme.palette.getContrastText(theme.palette.primary.dark),
                     '&.active, &:hover, &:focus, &:focus-visible': {
                       background: theme.palette.primary.main,
                     },
@@ -218,7 +221,7 @@ export const useDynamicTheme = (
                   {
                     backgroundImage: `repeating-linear-gradient(150deg, ${theme.palette.primary.light}, ${theme.palette.primary.main}, ${theme.palette.primary.light} 10%)`,
                     backgroundSize: '400% 400%',
-                    color: theme.palette.text.primary,
+                    color: theme.palette.getContrastText(theme.palette.primary.main),
                     transition: theme.transitions.create(
                       ['background', 'transform'],
                       {

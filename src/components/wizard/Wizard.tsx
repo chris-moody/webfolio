@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo, useRef } from 'react'
+import { FC, useCallback, useEffect, useMemo } from 'react'
 import { WizardStepConfig } from './components/wizardStep/WizardStep'
 import {
   Box,
@@ -26,6 +26,7 @@ import {
   selectWizardStep,
 } from '@/redux/slices/wizard/wizard.selector'
 import { Redirect } from '../routing/Redirect'
+import { useSwipeable } from 'react-swipeable'
 gsap.registerPlugin(useGSAP, TextPlugin, MotionPathPlugin)
 
 export interface WizardConfig {
@@ -72,9 +73,8 @@ export const Wizard: FC<WizardProps> = ({ className, ...props }) => {
   const selection = useAppSelector(selectWizardSelection)
 
   const theme = useTheme()
-  const container = useRef<HTMLDivElement>(undefined)
   const navigate = useNavigate()
-  
+
   const wizardData = useWizard(id)
   const {
     showNav = true,
@@ -96,23 +96,48 @@ export const Wizard: FC<WizardProps> = ({ className, ...props }) => {
       stepPrev: stepData[stepIndex - 1]?.id || '',
     }
   }, [stepData, stepIndex])
+  const prevLink = useMemo(() => stepPrev || '/' + prev, [prev, stepPrev])
+  const nextLink = useMemo(
+    () =>
+      stepConfig.next ||
+      (next && '/' + next) ||
+      (selection.next && '/' + selection.next) ||
+      '',
+    [next, selection, stepConfig]
+  )
 
   useEffect(() => {
-    if (wizardId && (stepIndex < 0) && defaultStep) navigate('/'+wizardId+'/'+defaultStep)
+    if (wizardId && stepIndex < 0 && defaultStep)
+      navigate('/' + wizardId + '/' + defaultStep)
   }, [defaultStep, id, navigate, stepIndex, wizardId])
 
   if (!wizardData || !wizardData.id) {
     return <Redirect to="/404/notfound" />
   }
 
+  const onPrev = useCallback(() => {
+    if (prevLink) navigate(prevLink)
+  }, [prevLink])
+
+  const onNext = useCallback(() => {
+    if (nextLink) navigate(nextLink)
+  }, [nextLink])
+
+  const handlers = useSwipeable({
+    onSwipedLeft: onNext,
+    onSwipedRight: onPrev,
+    swipeDuration: 450,
+    preventScrollOnSwipe: true,
+    trackMouse: true,
+  })
   const BodyComponent = bodyComponent
   const wizardBody = BodyComponent ? <BodyComponent /> : body
   return (
     <StyledWizard
       id={`wizard-${id}`}
-      ref={container}
       className={classNames('wizard', { active }, className)}
       {...props}
+      {...handlers}
     >
       {renderClose && prev && (
         <IconButton
@@ -153,33 +178,38 @@ export const Wizard: FC<WizardProps> = ({ className, ...props }) => {
         <Outlet />
       </Box>
 
-      {(showNav) && <Stack
-        className="nav"
-        direction='row'
-        spacing={2}
-        justifyContent="center"
-        my={1}
-      >
-        <FancyNavButton
-          to={stepPrev ||'/' + prev}
-          disabled={!prev}
-          sx={{ position: 'relative', zIndex: 2, flex: { xs: .5, md: 'unset' } }}
+      {showNav && (
+        <Stack
+          className="nav"
+          direction="row"
+          spacing={2}
+          justifyContent="center"
+          my={1}
         >
-          Back
-        </FancyNavButton>
+          <FancyNavButton
+            to={prevLink}
+            disabled={!prev}
+            sx={{
+              position: 'relative',
+              zIndex: 2,
+              flex: { xs: 0.5, md: 'unset' },
+            }}
+          >
+            Back
+          </FancyNavButton>
 
-        <FancyNavButton
-          to={
-            stepConfig.next ||
-            (next && '/' + next) ||
-            (selection.next && '/' + selection.next) ||
-            ''
-          }
-          sx={{ position: 'relative', zIndex: 2, flex: { xs: .5, md: 'unset' } }}
-        >
-          Next
-        </FancyNavButton>
-      </Stack>}
+          <FancyNavButton
+            to={nextLink}
+            sx={{
+              position: 'relative',
+              zIndex: 2,
+              flex: { xs: 0.5, md: 'unset' },
+            }}
+          >
+            Next
+          </FancyNavButton>
+        </Stack>
+      )}
 
       <Stack
         className="wizard-dots"
@@ -202,7 +232,9 @@ export const Wizard: FC<WizardProps> = ({ className, ...props }) => {
           }),
         ]}
       >
-        {stepData.map((step) => <WizardDot key={step.id} id={step.id} />)}
+        {stepData.map((step) => (
+          <WizardDot key={step.id} id={step.id} />
+        ))}
       </Stack>
     </StyledWizard>
   )

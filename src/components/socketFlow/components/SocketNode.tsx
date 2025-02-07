@@ -114,7 +114,7 @@ export const SocketNode = ({
         }}
       />
 
-      <Typography variant="h4" color={theme.palette.common.black}>{data.label}</Typography>
+      <Typography variant="h4" color={theme.palette.getContrastText(color)}>{data.label}</Typography>
     </Box>
   )
 }
