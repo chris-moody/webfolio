@@ -200,8 +200,7 @@ export const ResumeRenderer: FC = () => {
             Metabolon, Research Triangle Park, NC
           </Typography>
           <Typography variant="body1" className="roles">
-            Principal Software Development Engineer, 12/2021-Present; Senior
-            Software Engineer, 08/2017-12/2021, Remote off-site
+            Principal Software Development Engineer, 08/2017-Present, Remote off-site
           </Typography>
           <Typography variant="body1" component="ul">
             <Typography variant="body1" component="li">
