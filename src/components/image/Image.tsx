@@ -4,6 +4,7 @@ import { FC, ImgHTMLAttributes } from "react"
 export const StyledImage = styled('img')({
   width: '100%',
   height: 'auto',
+  margin: '0 auto'
 })
 
 export type ImageProps = ImgHTMLAttributes<HTMLImageElement>
