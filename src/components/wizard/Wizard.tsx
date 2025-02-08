@@ -96,14 +96,15 @@ export const Wizard: FC<WizardProps> = ({ className, ...props }) => {
       stepPrev: stepData[stepIndex - 1]?.id || '',
     }
   }, [stepData, stepIndex])
-  const prevLink = useMemo(() => stepPrev || '/' + prev, [prev, stepPrev])
+  const prevLink = useMemo(() => stepPrev || prev ? '/' + prev : null, [prev, stepPrev])
   const nextLink = useMemo(
     () =>
+      !showNav ? null :
       stepConfig.next ||
       (next && '/' + next) ||
       (selection.next && '/' + selection.next) ||
       '',
-    [next, selection, stepConfig]
+    [next, selection, stepConfig, showNav]
   )
 
   useEffect(() => {
@@ -175,7 +176,7 @@ export const Wizard: FC<WizardProps> = ({ className, ...props }) => {
           flex: 1,
         }}
       >
-        <Outlet />
+        <Outlet context={stepConfig.next ? '/'+wizardId+'/'+stepConfig.next : '/'+next} />
       </Box>
 
       {showNav && (
@@ -188,7 +189,7 @@ export const Wizard: FC<WizardProps> = ({ className, ...props }) => {
         >
           <FancyNavButton
             to={prevLink}
-            disabled={!prev}
+            disabled={!prevLink}
             sx={{
               position: 'relative',
               zIndex: 2,

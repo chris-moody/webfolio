@@ -133,8 +133,8 @@ export const FancyButton: FC<ButtonProps> = ({
 
 export const StyledFancyLink = styled(NavLink)<NavLinkProps>(FancyStyles);
 
-type FancyNavButtonProps = Omit<NavLinkProps, "children"> & {
-  to: string
+type FancyNavButtonProps = Omit<NavLinkProps, "children" | "to"> & {
+  to: string | null
   disabled?: boolean
   sx?: SxProps
   children?: ReactNode
@@ -143,12 +143,22 @@ type FancyNavButtonProps = Omit<NavLinkProps, "children"> & {
 export const FancyNavButton: FC<FancyNavButtonProps> = ({
   className,
   children,
-  to,
+  to = null,
   ...props
 }) => {
   const flair = useAppSelector(selectThemeFlair)
   const theme = useTheme()
 
+  if (!to) {
+    return (
+      <FancyButton
+        className={className}
+        {...(props as ButtonProps)}
+      >
+        {children}
+      </FancyButton>
+    )
+  }
   if (flair === 37) {
     return (
       <StyledFancyLink
@@ -171,7 +181,7 @@ export const FancyNavButton: FC<FancyNavButtonProps> = ({
   }
 
   return (
-    <Button viewTransition component={NavLink} to={to} className={className}>
+    <Button viewTransition component={NavLink} to={to} className={className} {...(props as ButtonProps)}>
       {children}
     </Button>
   )

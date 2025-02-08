@@ -30,7 +30,8 @@ export const Marquee: React.FC<MarqueeProps> = ({
     () => {
       if (!container.current) return
 
-      horizontalLoop('.item', { speed, reversed, repeat: -1 })
+      const tl = horizontalLoop('.item', { speed, reversed, repeat: -1 })
+      return () => tl.kill()
     },
     { dependencies: [speed], scope: container }
   )

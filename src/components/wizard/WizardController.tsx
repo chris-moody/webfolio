@@ -1,36 +1,71 @@
 import { FC } from 'react'
-import { Box, BoxProps, styled, Typography, useTheme } from '@mui/material'
+import { Box, BoxProps, styled, Typography, useMediaQuery, useTheme } from '@mui/material'
 import classNames from 'classnames'
 import { useAppSelector } from '@/redux/hooks'
 import { selectThemeFlair } from '@/redux/slices/theme/theme.selector'
 import './wizardController.scss'
 import { NavMenu } from '../navMenu/NavMenu'
+import { useResize } from '@/hooks/resize.hook'
 
 const StyledController = styled(Box)(({ theme }) => ({
-  background: theme.palette.background.default
+  position: 'absolute',
+  width: '100vw',
+  height: '100%',
+
+  '.controller-content': {
+    background: theme.palette.background.default,
+    width: '100%',
+    height: '100%',
+    overflow: 'hidden',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+  },
+  ['@media screen and (min-width: 320px) and (max-width: 992px) and (orientation: landscape)']:
+    {
+      '.controller-content': {
+        transform: 'rotate(-90deg)',
+        transformOrigin: 'left top',
+        overflowX: 'hidden',
+        position: 'absolute',
+        top: '100%',
+        left: 0,
+      },
+    },
 }))
 const WizardController: FC<BoxProps> = ({ children }) => {
   const theme = useTheme()
   const flair = useAppSelector(selectThemeFlair)
-
+  const [monitor, size] = useResize()
+  const isFlipped = useMediaQuery('@media screen and (min-width: 320px) and (max-width: 992px) and (orientation: landscape)')
   return (
-    <StyledController
-      className={classNames('wizard-controller', `flair-${flair}`)}
-    >
-      <NavMenu />
-      {children}
-      <Typography
-        variant="caption"
-        component="p"
+    <StyledController className="wizard-controller">
+      {monitor}
+      <Box 
+        className={classNames('controller-content', `flair-${flair}`)}
         sx={{
-          position: 'absolute',
-          bottom: theme.spacing(1),
-          width: '100%',
-          mx: 'auto',
+          ...(isFlipped &&
+            {
+              width: `${size.height}px !important`,
+              height: `${size.width}px !important`,
+            }),
         }}
       >
-        &copy; 2025 Christopher C. Moody
-      </Typography>
+        <NavMenu />
+        {children}
+        <Typography
+          variant="caption"
+          component="p"
+          sx={{
+            position: 'absolute',
+            bottom: theme.spacing(1),
+            width: '100%',
+            mx: 'auto',
+          }}
+        >
+          &copy; 2025 Christopher C. Moody
+        </Typography>
+      </Box>
     </StyledController>
   )
 }

@@ -2,8 +2,12 @@ import { Box, BoxProps, styled } from '@mui/material'
 import { FC } from 'react'
 
 export const StyledWrapper = styled(Box)({
+  margin: '0 auto',
   aspectRatio: '16 / 9',
-  height: '90%'
+  height: 'auto',
+  maxHeight: '90%',
+  width: '100%',
+  maxWidth: '768px',
 })
 
 export interface YoutubeProps extends BoxProps {
