@@ -1,41 +1,80 @@
-import balance from '@/assets/pins/balance.png'
-import batman from '@/assets/pins/batman.png'
-import xmen from '@/assets/pins/xmen.png'
-import jake from '@/assets/pins/jake.png'
-import nocryinginbaseball from '@/assets/pins/nocryinginbaseball.png'
-import rollsafe from '@/assets/pins/rollsafe.png'
-import palmtree from '@/assets/pins/palmtree.png'
-import mario from '@/assets/pins/mario.png'
-import xenomorph from '@/assets/pins/xenomorph.png'
-import stewie from '@/assets/pins/stewie.png'
-import butterbot from '@/assets/pins/butterbot.png'
-import ssf2t from '@/assets/pins/ssf2t.png'
-import resistanceisfutile from '@/assets/pins/resistanceisfutile.png'
-import inigo from '@/assets/pins/inigo.png'
-import greenranger from '@/assets/pins/greenranger.png'
-import breakingbad from '@/assets/pins/breakingbad.png'
-import ecko from '@/assets/pins/ecko.png'
-import scouts from '@/assets/pins/scouts.png'
-import luffy from '@/assets/pins/luffy.png'
-import radioshack from '@/assets/pins/radioshack.png'
-import thumbsup from '@/assets/pins/thumbsup.png'
-import uchiha from '@/assets/pins/uchiha.png'
-import nightblood from '@/assets/pins/nightblood.png'
-import highground from '@/assets/pins/highground.png'
-import imdoingmypart from '@/assets/pins/imdoingmypart.png'
-import lukevsvader from '@/assets/pins/lukevsvader.png'
-import triforce from '@/assets/pins/triforce.png'
-import blockbuster from '@/assets/pins/blockbuster.png'
-import hyperion from '@/assets/pins/hyperion.png'
-import vegeta from '@/assets/pins/vegeta.png'
-import protoman from '@/assets/pins/protoman.png'
-import rebel from '@/assets/pins/rebel.png'
-import predator from '@/assets/pins/predator.png'
-import hanshotfirst from '@/assets/pins/hanshotfirst.png'
-import spidey from '@/assets/pins/spidey.png'
-import stevenuniverse from '@/assets/pins/stevenuniverse.png'
-import kansas from '@/assets/pins/kansas.png'
+import { preload } from 'react-dom'
 import { Node } from './components/circlePacking.types'
+
+const balance = '/pins/balance.png'
+const batman = '/pins/batman.png'
+const xmen = '/pins/xmen.png'
+const jake = '/pins/jake.png'
+const nocryinginbaseball = '/pins/nocryinginbaseball.png'
+const rollsafe = '/pins/rollsafe.png'
+const palmtree = '/pins/palmtree.png'
+const mario = '/pins/mario.png'
+const xenomorph = '/pins/xenomorph.png'
+const stewie = '/pins/stewie.png'
+const butterbot = '/pins/butterbot.png'
+const ssf2t = '/pins/ssf2t.png'
+const resistanceisfutile = '/pins/resistanceisfutile.png'
+const inigo = '/pins/inigo.png'
+const greenranger = '/pins/greenranger.png'
+const breakingbad = '/pins/breakingbad.png'
+const ecko = '/pins/ecko.png'
+const scouts = '/pins/scouts.png'
+const luffy = '/pins/luffy.png'
+const radioshack = '/pins/radioshack.png'
+const thumbsup = '/pins/thumbsup.png'
+const uchiha = '/pins/uchiha.png'
+const nightblood = '/pins/nightblood.png'
+const highground = '/pins/highground.png'
+const imdoingmypart = '/pins/imdoingmypart.png'
+const lukevsvader = '/pins/lukevsvader.png'
+const triforce = '/pins/triforce.png'
+const blockbuster = '/pins/blockbuster.png'
+const hyperion = '/pins/hyperion.png'
+const vegeta = '/pins/vegeta.png'
+const protoman = '/pins/protoman.png'
+const rebel = '/pins/rebel.png'
+const predator = '/pins/predator.png'
+const hanshotfirst = '/pins/hanshotfirst.png'
+const spidey = '/pins/spidey.png'
+const stevenuniverse = '/pins/stevenuniverse.png'
+const kansas = '/pins/kansas.png'
+preload(balance, { as: 'image' })
+preload(batman, { as: 'image' })
+preload(xmen, { as: 'image' })
+preload(jake, { as: 'image' })
+preload(nocryinginbaseball, { as: 'image' })
+preload(rollsafe, { as: 'image' })
+preload(palmtree, { as: 'image' })
+preload(mario, { as: 'image' })
+preload(xenomorph, { as: 'image' })
+preload(stewie, { as: 'image' })
+preload(butterbot, { as: 'image' })
+preload(ssf2t, { as: 'image' })
+preload(resistanceisfutile, { as: 'image' })
+preload(inigo, { as: 'image' })
+preload(greenranger, { as: 'image' })
+preload(breakingbad, { as: 'image' })
+preload(ecko, { as: 'image' })
+preload(scouts, { as: 'image' })
+preload(luffy, { as: 'image' })
+preload(radioshack, { as: 'image' })
+preload(thumbsup, { as: 'image' })
+preload(uchiha, { as: 'image' })
+preload(nightblood, { as: 'image' })
+preload(highground, { as: 'image' })
+preload(imdoingmypart, { as: 'image' })
+preload(lukevsvader, { as: 'image' })
+preload(triforce, { as: 'image' })
+preload(blockbuster, { as: 'image' })
+preload(hyperion, { as: 'image' })
+preload(vegeta, { as: 'image' })
+preload(protoman, { as: 'image' })
+preload(rebel, { as: 'image' })
+preload(predator, { as: 'image' })
+preload(hanshotfirst, { as: 'image' })
+preload(spidey, { as: 'image' })
+preload(stevenuniverse, { as: 'image' })
+preload(kansas, { as: 'image' })
 
 export type PinData = Node & {
   background?: string

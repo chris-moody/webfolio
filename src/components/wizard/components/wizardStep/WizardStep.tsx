@@ -1,5 +1,5 @@
 import { FC, useCallback, useRef, ReactNode, useEffect } from 'react'
-import { Box, BoxProps, Stack, styled } from '@mui/material'
+import { Box, BoxProps, Stack, styled, useTheme } from '@mui/material'
 import classNames from 'classnames'
 import { WizardResult, WizardSelection } from '../../wizard.types'
 import {
@@ -8,18 +8,24 @@ import {
 } from './components/DefaultSelectionRenderer'
 import { FancyText } from '@/components/fancyText/FancyText'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
-import { useParams } from 'react-router'
+import { useOutletContext, useParams } from 'react-router'
 import { useWizardStep } from '@/data/wizards'
 import { setSelection, setStep } from '@/redux/slices/wizard/wizard.reducer'
 import { selectWizardSelection } from '@/redux/slices/wizard/wizard.selector'
 import { buildStepOn } from '../../wizard.transitions'
 import { useGSAP } from '@gsap/react'
+import { FancyNavButton } from '@/components/fancyButton/FancyButton'
+
+export interface WizardOutetContext {
+  nextLink?: string
+}
 
 export interface WizardStepConfig {
   next?: string
   id: string
   selections?: WizardSelection[]
   header?: ReactNode
+  headerNext?: string
   body?: ReactNode
   media?: ReactNode
   unwrappedMedia?: ReactNode
@@ -27,7 +33,9 @@ export interface WizardStepConfig {
   selectionRenderer?: FC<SelectionRendererProps>
 }
 
-export type WizardStepProps = Omit<BoxProps, 'onSelect' | 'id'>
+export type WizardStepProps = Omit<BoxProps, 'onSelect' | 'id'> & {
+  nextLink?: string
+}
 
 const StyledWizardStep = styled(Box)(({ theme }) => ({
   position: 'absolute',
@@ -38,6 +46,11 @@ const StyledWizardStep = styled(Box)(({ theme }) => ({
   margin: '0 auto',
   width: '100%',
   viewTransitionName: `wizard-step`,
+  '.header-actions': {
+    position: 'relative',
+    display: 'flex',
+    flexDirection: 'row-reverse',
+  },
   [theme.breakpoints.up('md')]: {
     maxWidth: 768,
   },
@@ -51,11 +64,13 @@ const StyledWizardStep = styled(Box)(({ theme }) => ({
 
 export const WizardStep: FC<WizardStepProps> = ({ className, ...props }) => {
   const dispatch = useAppDispatch()
+  const theme = useTheme()
   const { wizardId = 'home', stepId: id = '' } = useParams()
   const stepConfig = useWizardStep(wizardId, id)
   const {
     selections = [],
     header,
+    headerNext,
     body,
     media,
     unwrappedMedia,
@@ -63,6 +78,7 @@ export const WizardStep: FC<WizardStepProps> = ({ className, ...props }) => {
     active = true,
     next = '',
   } = stepConfig
+  const nextLink = useOutletContext<string>()
 
   const container = useRef<HTMLDivElement>(undefined)
   const selection = useAppSelector(selectWizardSelection)
@@ -99,10 +115,6 @@ export const WizardStep: FC<WizardStepProps> = ({ className, ...props }) => {
     [dispatch]
   )
 
-  /* if (!stepConfig || !stepConfig.id) {
-    return <Redirect to="/404/notfound" />
-  } */
-
   const SelectionRenderer = selectionRenderer || DefaultSelectionRenderer
   return (
     <StyledWizardStep
@@ -122,17 +134,19 @@ export const WizardStep: FC<WizardStepProps> = ({ className, ...props }) => {
               className="header content"
               sx={[
                 {
-                  position: 'relative',
-                  p: 2,
+                  p: theme.spacing(2),
                   mt: { xs: 0, md: 2, lg: 4 },
                   mb: { xs: 0, md: 2 },
                   mx: 'auto',
                   width: 'fit-content',
-                  maxHeight: (media || unwrappedMedia) ? '50%' : 'auto',
-                  overflow: 'auto',
+                  maxHeight: media || unwrappedMedia ? '50%' : 'auto',
                   zIndex: 2,
-                  background: 'rgba(255,255,255,.75)',
+                  position: 'relative',
                   borderRadius: 3,
+                  overflow: 'auto',
+                  WebkitOverflowScrolling: 'touch',
+                  overflowScrolling: 'touch',
+                  background: 'rgba(255,255,255,.75)',
                 },
                 (theme) =>
                   theme.applyStyles('dark', {
@@ -140,8 +154,18 @@ export const WizardStep: FC<WizardStepProps> = ({ className, ...props }) => {
                   }),
               ]}
             >
-              <FancyText variant="h4" fancy={{ depth: 10 }}>
-                {header}
+              <FancyText
+                component="div"
+                variant="h4"
+                fancy={{ depth: 10 }}
+                position={'relative'}
+              >
+                {header}{' '}
+                {headerNext && nextLink && (
+                  <Box className="header-actions">
+                    <FancyNavButton to={nextLink}>{headerNext}</FancyNavButton>
+                  </Box>
+                )}
               </FancyText>
             </Box>
           )}
@@ -168,7 +192,16 @@ export const WizardStep: FC<WizardStepProps> = ({ className, ...props }) => {
               {body}
             </FancyText>
           )}
-          {media && <Box className="content" height="50%">{media}</Box>}
+          {media && (
+            <Stack
+              justifyContent="center"
+              alignContent="center"
+              className="content"
+              height="50%"
+            >
+              {media}
+            </Stack>
+          )}
           {unwrappedMedia}
         </Stack>
       )}

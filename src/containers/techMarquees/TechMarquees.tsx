@@ -1,49 +1,85 @@
-import { Marquee } from '@/components/marquee/Marquee'
+import { FC, ReactElement } from 'react'
+import { preload } from 'react-dom'
 import { Box, styled } from '@mui/material'
+import { Marquee } from '@/components/marquee/Marquee'
 import { Image, ImageProps } from '@/components/image/Image'
 
-import aws from '@/assets/tech_icons/aws.svg'
-import canva from '@/assets/tech_icons/canva.svg'
-import confluence from '@/assets/tech_icons/confluence.png'
-import copilot from '@/assets/tech_icons/copilot.png'
-import css from '@/assets/tech_icons/css.svg'
-import cytoscape from '@/assets/tech_icons/cytoscape.svg'
-import d3 from '@/assets/tech_icons/d3.png'
-import dexie from '@/assets/tech_icons/dexiejs.svg'
-import dynamoDb from '@/assets/tech_icons/dynamoDb.png'
-import figma from '@/assets/tech_icons/figma.png'
-import git from '@/assets/tech_icons/git.png'
-import gsap from '@/assets/tech_icons/gsap.svg'
-import highcharts from '@/assets/tech_icons/highcharts.png'
-import html from '@/assets/tech_icons/html.svg'
-import jira from '@/assets/tech_icons/jira.png'
-import js from '@/assets/tech_icons/js.svg'
-import miro from '@/assets/tech_icons/miro.svg'
-import mongoDb from '@/assets/tech_icons/mongoDb.svg'
-import mui from '@/assets/tech_icons/mui.png'
-import nextjs from '@/assets/tech_icons/nextjs.svg'
-import node from '@/assets/tech_icons/node.svg'
-import pixijs from '@/assets/tech_icons/pixijs.png'
-import postgresql from '@/assets/tech_icons/postgresql.png'
-import react_router from '@/assets/tech_icons/react-router.svg'
-import wouter from '@/assets/tech_icons/wouter.svg'
-import react from '@/assets/tech_icons/react.svg'
-import redux from '@/assets/tech_icons/redux.png'
-import sass from '@/assets/tech_icons/sass.png'
-import socketIO from '@/assets/tech_icons/socketIO.png'
-import styledComponents from '@/assets/tech_icons/styled-components.png'
-import typescript from '@/assets/tech_icons/typescript.webp'
-import vite from '@/assets/tech_icons/vite.svg'
-import vscode from '@/assets/tech_icons/vscode.svg'
-import webpack from '@/assets/tech_icons/webpack.png'
-import webstorm from '@/assets/tech_icons/webstorm.png'
-import { FC, ReactElement } from 'react'
+const aws = '/tech_icons/aws.svg'
+const canva = '/tech_icons/canva.svg'
+const confluence = '/tech_icons/confluence.png'
+const copilot = '/tech_icons/copilot.png'
+const css = '/tech_icons/css.svg'
+const cytoscape = '/tech_icons/cytoscape.svg'
+const d3 = '/tech_icons/d3.png'
+const dexie = '/tech_icons/dexiejs.svg'
+const dynamoDb = '/tech_icons/dynamoDb.png'
+const figma = '/tech_icons/figma.png'
+const git = '/tech_icons/git.png'
+const gsap = '/tech_icons/gsap.svg'
+const highcharts = '/tech_icons/highcharts.png'
+const html = '/tech_icons/html.svg'
+const jira = '/tech_icons/jira.png'
+const js = '/tech_icons/js.svg'
+const miro = '/tech_icons/miro.svg'
+const mongoDb = '/tech_icons/mongoDb.svg'
+const mui = '/tech_icons/mui.png'
+const nextjs = '/tech_icons/nextjs.svg'
+const node = '/tech_icons/node.svg'
+const pixijs = '/tech_icons/pixijs.png'
+const postgresql = '/tech_icons/postgresql.png'
+const react_router = '/tech_icons/react-router.svg'
+const wouter = '/tech_icons/wouter.svg'
+const react = '/tech_icons/react.svg'
+const redux = '/tech_icons/redux.png'
+const sass = '/tech_icons/sass.png'
+const socketIO = '/tech_icons/socketIO.png'
+const styledComponents = '/tech_icons/styled-components.png'
+const typescript = '/tech_icons/typescript.webp'
+const vite = '/tech_icons/vite.svg'
+const vscode = '/tech_icons/vscode.svg'
+const webpack = '/tech_icons/webpack.png'
+const webstorm = '/tech_icons/webstorm.png'
+preload(aws, { as: 'image' })
+preload(canva, { as: 'image' })
+preload(confluence, { as: 'image' })
+preload(copilot, { as: 'image' })
+preload(css, { as: 'image' })
+preload(cytoscape, { as: 'image' })
+preload(d3, { as: 'image' })
+preload(dexie, { as: 'image' })
+preload(dynamoDb, { as: 'image' })
+preload(figma, { as: 'image' })
+preload(git, { as: 'image' })
+preload(gsap, { as: 'image' })
+preload(highcharts, { as: 'image' })
+preload(html, { as: 'image' })
+preload(jira, { as: 'image' })
+preload(js, { as: 'image' })
+preload(miro, { as: 'image' })
+preload(mongoDb, { as: 'image' })
+preload(mui, { as: 'image' })
+preload(nextjs, { as: 'image' })
+preload(node, { as: 'image' })
+preload(pixijs, { as: 'image' })
+preload(postgresql, { as: 'image' })
+preload(react_router, { as: 'image' })
+preload(wouter, { as: 'image' })
+preload(react, { as: 'image' })
+preload(redux, { as: 'image' })
+preload(sass, { as: 'image' })
+preload(socketIO, { as: 'image' })
+preload(styledComponents, { as: 'image' })
+preload(typescript, { as: 'image' })
+preload(vite, { as: 'image' })
+preload(vscode, { as: 'image' })
+preload(webpack, { as: 'image' })
+preload(webstorm, { as: 'image' })
 
 const StyledTechMarquees = styled(Box)({
   position: 'relative',
   overflow: 'hidden',
   flex: 1,
-  minHeight: '25vh'
+  minHeight: '25vh',
 })
 
 const StyledWrapper = styled(Box)({

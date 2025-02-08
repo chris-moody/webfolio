@@ -41,6 +41,9 @@ function Main() {
 }
 export default App
 /* 
+TODO add scroll indicator, immprove header display
+TODO add global nav
+TODO investigate marquee instablity
 TODO animated doodads
 TODO add stars to flair button
 TODO Flair and pinback interaction
