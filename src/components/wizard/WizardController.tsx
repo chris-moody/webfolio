@@ -11,6 +11,8 @@ const StyledController = styled(Box)(({ theme }) => ({
   position: 'absolute',
   width: '100vw',
   height: '100%',
+  top: 0,
+  left: 0,
 
   '.controller-content': {
     background: theme.palette.background.default,
