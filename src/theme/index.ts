@@ -72,6 +72,9 @@ export const useDynamicTheme = (
         textDecoration: 'underline',
         textDecorationColor: themeZero.palette.primary.main,
       },
+      h4: {
+        lineHeight: 1.1,
+      },
     },
     components: {
       MuiButton: {
@@ -147,6 +150,9 @@ export const useDynamicTheme = (
       h1: {
         fontWeight: 400
       },
+      h4: {
+        lineHeight: 1.1,
+      },
       fontFamily: 'Fira Sans',
     },
     components: {
@@ -202,6 +208,9 @@ export const useDynamicTheme = (
       h1: {
         fontFamily: 'Rammetto One',
         fontWeight: 400
+      },
+      h4: {
+        lineHeight: 1.1,
       },
       threed: {
         fontSize: baseTheme.typography.h1.fontSize,

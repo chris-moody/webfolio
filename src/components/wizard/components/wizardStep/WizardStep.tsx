@@ -15,6 +15,7 @@ import { selectWizardSelection } from '@/redux/slices/wizard/wizard.selector'
 import { buildStepOn } from '../../wizard.transitions'
 import { useGSAP } from '@gsap/react'
 import { FancyNavButton } from '@/components/fancyButton/FancyButton'
+import { TextDisplay } from '@/components/textDisplay/TextDisplay'
 
 export interface WizardOutetContext {
   nextLink?: string
@@ -130,29 +131,11 @@ export const WizardStep: FC<WizardStepProps> = ({ className, ...props }) => {
           height="inherit"
         >
           {header && (
-            <Box
-              className="header content"
-              sx={[
-                {
-                  p: theme.spacing(2),
-                  mt: { xs: 0, md: 2, lg: 4 },
-                  mb: { xs: 0, md: 2 },
-                  mx: 'auto',
-                  width: 'fit-content',
-                  maxHeight: media || unwrappedMedia ? '50%' : 'auto',
-                  zIndex: 2,
-                  position: 'relative',
-                  borderRadius: 3,
-                  overflow: 'auto',
-                  WebkitOverflowScrolling: 'touch',
-                  overflowScrolling: 'touch',
-                  background: 'rgba(255,255,255,.75)',
-                },
-                (theme) =>
-                  theme.applyStyles('dark', {
-                    background: 'rgba(0,0,0,.75)',
-                  }),
-              ]}
+            <TextDisplay
+              className='header content'
+              sx={{
+                maxHeight: media || unwrappedMedia ? '50%' : 'auto',
+              }}
             >
               <FancyText
                 component="div"
@@ -167,7 +150,7 @@ export const WizardStep: FC<WizardStepProps> = ({ className, ...props }) => {
                   </Box>
                 )}
               </FancyText>
-            </Box>
+            </TextDisplay>
           )}
           {body && (
             <FancyText
@@ -215,3 +198,44 @@ export const WizardStep: FC<WizardStepProps> = ({ className, ...props }) => {
 }
 
 export default WizardStep
+/* 
+
+             <Box
+              className="header content"
+              sx={[
+                {
+                  p: theme.spacing(2),
+                  mt: { xs: 0, md: 2, lg: 4 },
+                  mb: { xs: 0, md: 2 },
+                  mx: 'auto',
+                  width: 'fit-content',
+                  maxHeight: media || unwrappedMedia ? '50%' : 'auto',
+                  zIndex: 2,
+                  position: 'relative',
+                  borderRadius: 3,
+                  overflow: 'auto',
+                  WebkitOverflowScrolling: 'touch',
+                  overflowScrolling: 'touch',
+                  background: 'rgba(255,255,255,.75)',
+                },
+                (theme) =>
+                  theme.applyStyles('dark', {
+                    background: 'rgba(0,0,0,.75)',
+                  }),
+              ]}
+            >
+              <FancyText
+                component="div"
+                variant="h4"
+                fancy={{ depth: 10 }}
+                position={'relative'}
+              >
+                {header}{' '}
+                {headerNext && nextLink && (
+                  <Box className="header-actions">
+                    <FancyNavButton to={nextLink}>{headerNext}</FancyNavButton>
+                  </Box>
+                )}
+              </FancyText>
+            </Box>
+             */
