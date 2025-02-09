@@ -41,7 +41,6 @@ function Main() {
 }
 export default App
 /* 
-TODO add scroll indicator, immprove header display
 TODO add global nav
 TODO DONE FOR NOW :)
 

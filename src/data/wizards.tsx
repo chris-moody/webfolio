@@ -325,7 +325,7 @@ const wizards: Record<string, WizardConfig> = {
         next: '3',
         header: (
           <>
-            Her fears were not unfounded. Between high quality background
+            Her fears were well-founded. Between high quality background
             images, a live text requirement with a non-websafe font, and the
             ridiculous 40kb size limit, there wasn't going to be any room to
             load in a fancy framework that could animate smoke. But once I had
