@@ -1,5 +1,5 @@
 import { FC, useCallback, useRef, ReactNode, useEffect } from 'react'
-import { Box, BoxProps, Stack, styled, useTheme } from '@mui/material'
+import { Box, BoxProps, Stack, styled } from '@mui/material'
 import classNames from 'classnames'
 import { WizardResult, WizardSelection } from '../../wizard.types'
 import {
@@ -65,7 +65,6 @@ const StyledWizardStep = styled(Box)(({ theme }) => ({
 
 export const WizardStep: FC<WizardStepProps> = ({ className, ...props }) => {
   const dispatch = useAppDispatch()
-  const theme = useTheme()
   const { wizardId = 'home', stepId: id = '' } = useParams()
   const stepConfig = useWizardStep(wizardId, id)
   const {
