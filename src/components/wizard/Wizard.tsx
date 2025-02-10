@@ -96,7 +96,7 @@ export const Wizard: FC<WizardProps> = ({ className, ...props }) => {
       stepPrev: stepData[stepIndex - 1]?.id || '',
     }
   }, [stepData, stepIndex])
-  const prevLink = useMemo(() => stepPrev || prev ? '/' + prev : null, [prev, stepPrev])
+  const prevLink = useMemo(() => stepPrev || (prev ? '/' + prev : null), [prev, stepPrev])
   const nextLink = useMemo(
     () =>
       !showNav ? null :
