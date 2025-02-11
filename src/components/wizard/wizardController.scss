@@ -80,7 +80,7 @@ $slideDistance: 300px;
 }
 @keyframes wizard-step-exit {
   100% {
-    transform: scale(0);
+    transform: scale(.7);
     opacity: 0;
   }
 }
@@ -94,10 +94,10 @@ $slideDistance: 300px;
 */
 ::view-transition-new(wizard-step) {
   animation-name: none; //1s wizard-step-enter;
-  animation-duration: 0.5s;
+  animation-duration: 0.3s;
 }
 ::view-transition-old(wizard-step) {
-  animation: 0.5s cubic-bezier(0.1, 0, 0.25, 0.5) wizard-step-exit;
+  animation: 0.3s cubic-bezier(0.1, 0, 0.25, 0.5) wizard-step-exit;
 }
 
 /*
@@ -163,7 +163,8 @@ $slideDistance: 300px;
   .wizard-controller {
     .controller-content {
       &.flair-15 {
-        h1.MuiTypography-h1 {
+        h1.MuiTypography-h1,
+        .nav-item-link:hover {
           text-shadow: 0px 0px 8px var(--mui-palette-primary-light),
             2px 2px 8px var(--mui-palette-primary-light),
             -2px -2px 8px var(--mui-palette-primary-light);
@@ -176,7 +177,7 @@ $slideDistance: 300px;
           var(--mui-palette-primary-dark) 10deg 20deg,
           var(--mui-palette-grey-800) 20deg 30deg
         );
-        animation: spinner 300s linear infinite;
+        animation: spinner 250s linear infinite;
       }
     }
   }

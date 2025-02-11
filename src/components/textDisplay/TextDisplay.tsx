@@ -1,3 +1,4 @@
+import { useResize } from '@/hooks/resize.hook'
 import { Box, BoxProps, styled } from '@mui/material'
 import { FC, useEffect, useRef, useState } from 'react'
 
@@ -62,6 +63,7 @@ export const TextDisplay: FC<TextDisplayProps> = ({
   ...props
 }) => {
   const textRef = useRef<HTMLDivElement>(null)
+  const [monitor, size] = useResize()
   const [isOverflowing, setIsOverflowing] = useState(false)
 
   useEffect(() => {
@@ -69,12 +71,13 @@ export const TextDisplay: FC<TextDisplayProps> = ({
     if (current) {
       setIsOverflowing(current.scrollHeight > current.clientHeight)
     }
-  }, [children])
+  }, [size])
 
   return (
     <StyledWrapper {...props}>
       <StyledText ref={textRef} className="text">{children}</StyledText>
       {isOverflowing && <StyledShadow />}
+      {monitor}
     </StyledWrapper>
   )
 }

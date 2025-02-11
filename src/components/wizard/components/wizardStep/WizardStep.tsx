@@ -48,6 +48,7 @@ const StyledWizardStep = styled(Box)(({ theme }) => ({
   width: '100%',
   viewTransitionName: `wizard-step`,
   '.header-actions': {
+    paddingTop: theme.spacing(1),
     position: 'relative',
     display: 'flex',
     flexDirection: 'row-reverse',

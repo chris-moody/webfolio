@@ -9,6 +9,8 @@ import { FC, useState } from 'react'
 import { NavData } from '../navigation.types'
 import { NavLink } from 'react-router'
 import { FancyText } from '@/components/fancyText/FancyText'
+import { selectThemeFlair } from '@/redux/slices/theme/theme.selector'
+import { useAppSelector } from '@/redux/hooks'
 
 const StyledListItem = styled(ListItem)(({ theme }) => ({
   display: 'flex',
@@ -20,6 +22,19 @@ const StyledListItem = styled(ListItem)(({ theme }) => ({
     '&:hover': {
       textDecoration: 'underline',
       textDecorationColor: theme.palette.primary.main,
+    },
+    '&.flair-15': {
+      '&:hover': {
+        textDecoration: 'none',
+        textShadow: `0px 0px 8px var(--mui-palette-primary-light),
+            2px 2px 8px var(--mui-palette-primary-light),
+            -2px -2px 8px var(--mui-palette-primary-light)`
+      }
+    },
+    '&.flair-37': {
+      '&:hover h4': {
+        color: theme.palette.primary.main,
+      }
     }
   },
   ['.hit']: {
@@ -33,8 +48,8 @@ const StyledListItem = styled(ListItem)(({ theme }) => ({
   '.indicator': {
     pointerEvents: 'none',
   },
-  '.nav-item': {
-    marginLeft: theme.spacing(.5),
+  '+.nav-collapse .nav-item-link': {
+    paddingLeft: theme.spacing(2),
   }
 }))
 
@@ -45,6 +60,7 @@ export interface NavItemProps {
 export const NavItem: FC<NavItemProps> = ({ data }) => {
   const [open, setOpen] = useState<boolean>(false)
   const { name, path, children } = data
+  const flair = useAppSelector(selectThemeFlair)
 
   const onClick = () => {
     setOpen((prevOpen) => !prevOpen)
@@ -52,16 +68,16 @@ export const NavItem: FC<NavItemProps> = ({ data }) => {
 
   return (
     <>
-      <StyledListItem className="nav-item">
+      <StyledListItem className={`nav-item`}>
         <Box onClick={onClick} className="hit" />
-        <NavLink to={path}>
-          <FancyText variant="h4">{name}</FancyText>
+        <NavLink to={path} className={`nav-item-link flair-${flair}`} >
+          <FancyText className={`nav-item-link-text`} variant="h4">{name}</FancyText>
         </NavLink>
         {children && <FancyText className="indicator" variant="h4">{open ? '-' : '+'}</FancyText>}
       </StyledListItem>
       {children && (
-        <Collapse in={open} timeout="auto">
-          <List component="div" disablePadding>
+        <Collapse className="nav-collapse" in={open} timeout="auto">
+          <List className="nav-list" component="div" disablePadding>
             {children.map((childData) => (
               <NavItem key={childData.name} data={childData} />
             ))}

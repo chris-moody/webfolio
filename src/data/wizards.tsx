@@ -75,7 +75,7 @@ const wizards: Record<string, WizardConfig> = {
   },
   purpose: {
     id: 'purpose',
-    header: 'State your purpose',
+    header: 'State Your Purpose',
     prev: 'home',
     defaultStep: 'why',
     showNav: false,
@@ -120,7 +120,7 @@ const wizards: Record<string, WizardConfig> = {
     id: 'about',
     next: 'purpose',
     defaultStep: '0',
-    header: 'About me',
+    header: 'About Me',
     stepData: [
       {
         id: '0',
@@ -232,7 +232,7 @@ const wizards: Record<string, WizardConfig> = {
     id: 'fun',
     next: 'storytime',
     defaultStep: '0',
-    header: 'Flair',
+    header: 'Add Some Flair',
     stepData: [
       {
         id: '0',
@@ -290,7 +290,7 @@ const wizards: Record<string, WizardConfig> = {
     id: 'work',
     next: 'storytime',
     defaultStep: '0',
-    header: 'Make it bad',
+    header: 'Make it Bad',
     stepData: [
       {
         id: '0',
@@ -370,7 +370,7 @@ const wizards: Record<string, WizardConfig> = {
   beta: {
     id: 'beta',
     next: 'storytime',
-    header: 'Beta the game',
+    header: 'Beta the Game',
     defaultStep: '0',
     stepData: [
       {

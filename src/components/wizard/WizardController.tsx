@@ -8,6 +8,7 @@ import { NavMenu } from '../navMenu/NavMenu'
 import { useResize } from '@/hooks/resize.hook'
 import { FolioNav } from '@/containers/folioNav/FolioNav'
 
+const landscapeQuery = '@media only screen and (min-width: 320px) and (max-width: 992px) and (orientation: landscape)'
 const StyledController = styled(Box)(({ theme }) => ({
   position: 'absolute',
   width: '100vw',
@@ -24,7 +25,7 @@ const StyledController = styled(Box)(({ theme }) => ({
     top: 0,
     left: 0,
   },
-  ['@media screen and (min-width: 320px) and (max-width: 992px) and (orientation: landscape)']:
+  [landscapeQuery]:
     {
       '.controller-content': {
         transform: 'rotate(-90deg)',
@@ -40,7 +41,7 @@ const WizardController: FC<BoxProps> = ({ children }) => {
   const theme = useTheme()
   const flair = useAppSelector(selectThemeFlair)
   const [monitor, size] = useResize()
-  const isFlipped = useMediaQuery('@media screen and (min-width: 320px) and (max-width: 992px) and (orientation: landscape)')
+  const isFlipped = useMediaQuery(landscapeQuery)
   return (
     <StyledController className="wizard-controller">
       {monitor}
