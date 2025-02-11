@@ -13,6 +13,7 @@ import { SocketNode } from './components/SocketNode'
 import { useRef, useState } from 'react'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
+import { useTheme } from '@mui/material'
 
 const initialNodes: Node[] = [
   {
@@ -80,6 +81,7 @@ const initialEdges: Edge[] = [
 ]
 
 export const SocketFlow = () => {
+  const theme = useTheme()
   const container = useRef(null)
   const [instance, setInstance] = useState<ReactFlowInstance>()
   const [nodes] = useNodesState(initialNodes)
@@ -103,30 +105,61 @@ export const SocketFlow = () => {
       const duration = 0
       gsap.to('#s1', {
         duration,
-        backgroundColor: 'yellow',
+        backgroundColor: '#FFFF00',
+        repeat: -1,
+        delay: 2,
+        repeatDelay: 2,
+      })
+      gsap.to('#s1 .label', {
+        duration,
+        color: theme.palette.getContrastText('#FFFF00'),
         repeat: -1,
         delay: 2,
         repeatDelay: 2,
       })
       gsap.to('#s1', {
         duration,
-        backgroundColor: 'cyan',
+        backgroundColor: '#00FFFF',
+        color: theme.palette.getContrastText('#00FFFF'),
         repeat: -1,
         delay: 3,
         repeatDelay: 2,
       })
-      gsap.to('#s2', {
+      gsap.to('#s1 .label', {
         duration,
-        backgroundColor: 'magenta',
+        color: theme.palette.getContrastText('#00FFFF'),
         repeat: -1,
         delay: 2,
         repeatDelay: 2,
       })
       gsap.to('#s2', {
         duration,
-        backgroundColor: 'orange',
+        backgroundColor: '#FF00FF',
+        color: theme.palette.getContrastText('#FF00FF'),
+        repeat: -1,
+        delay: 2,
+        repeatDelay: 2,
+      })
+      gsap.to('#s2 .label', {
+        duration,
+        color: theme.palette.getContrastText('#FF00FF'),
+        repeat: -1,
+        delay: 2,
+        repeatDelay: 2,
+      })
+      gsap.to('#s2', {
+        duration,
+        backgroundColor: '#ff8800',
+        color: theme.palette.getContrastText('#ff8800'),
         repeat: -1,
         delay: 3,
+        repeatDelay: 2,
+      })
+      gsap.to('#s2 .label', {
+        duration,
+        color: theme.palette.getContrastText('#ff8800'),
+        repeat: -1,
+        delay: 2,
         repeatDelay: 2,
       })
     },
