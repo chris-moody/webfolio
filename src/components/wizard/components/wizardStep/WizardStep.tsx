@@ -126,7 +126,7 @@ export const WizardStep: FC<WizardStepProps> = ({ className, ...props }) => {
       {(header || body || media || unwrappedMedia) && (
         <Stack
           flex={selectionRenderer || selections.length > 0 ? 0.4 : 1}
-          justifyContent="center"
+          justifyContent="space-around"
           height="inherit"
         >
           {header && (
