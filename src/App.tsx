@@ -41,8 +41,7 @@ function Main() {
 }
 export default App
 /* 
-TODO add global nav
-TODO DONE FOR NOW :)
+
 
 /* Backlog
 TODO add commitizen

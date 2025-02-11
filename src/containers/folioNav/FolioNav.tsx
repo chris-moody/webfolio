@@ -28,15 +28,15 @@ const navItems = [
     path: '/storytime',
     children: [
       {
-        name: 'Adding Flair',
+        name: 'Add Some Flair',
         path: '/fun',
       },
       {
-        name: 'Make it bad',
+        name: 'Make it Bad',
         path: '/work',
       },
       {
-        name: 'Beta',
+        name: 'Beta the Game',
         path: '/beta',
       },
     ],
