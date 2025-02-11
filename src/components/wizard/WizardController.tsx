@@ -6,6 +6,7 @@ import { selectThemeFlair } from '@/redux/slices/theme/theme.selector'
 import './wizardController.scss'
 import { NavMenu } from '../navMenu/NavMenu'
 import { useResize } from '@/hooks/resize.hook'
+import { FolioNav } from '@/containers/folioNav/FolioNav'
 
 const StyledController = styled(Box)(({ theme }) => ({
   position: 'absolute',
@@ -52,7 +53,8 @@ const WizardController: FC<BoxProps> = ({ children }) => {
               height: `${size.width}px !important`,
             }),
         }}
-      >
+      > 
+        <FolioNav />
         <NavMenu />
         {children}
         <Typography

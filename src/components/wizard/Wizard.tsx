@@ -80,7 +80,7 @@ export const Wizard: FC<WizardProps> = ({ className, ...props }) => {
     showNav = true,
     active = true,
     defaultStep = '',
-    renderClose = true,
+    renderClose = false,
     stepData = [],
     header,
     body,
