@@ -140,7 +140,6 @@ export const Text3d: FC<Text3dProps> = ({
       className={classNames("container", className)}
       {...containerProps}
     >
-      <HiddenText {...props}>{children}</HiddenText>
       {Array.from({ length: layers }).map((_, n) => {
         return (
           <LayeredText
@@ -178,6 +177,7 @@ export const Text3d: FC<Text3dProps> = ({
           </LayeredText>
         )
       })}
+      <HiddenText {...props}>{children}</HiddenText>
     </Container>
   )
 }

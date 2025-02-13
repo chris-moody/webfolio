@@ -10,13 +10,13 @@ import {
 } from '@mui/material'
 import classNames from 'classnames'
 import { FC, useCallback, useState } from 'react'
-import InfoIcon from '@mui/icons-material/Info'
+import InfoIcon from '@mui/icons-material/Settings'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { selectThemeFlair } from '@/redux/slices/theme/theme.selector'
 import { setFlair } from '@/redux/slices/theme/theme.reducer'
 import { FancyButton } from '../fancyButton/FancyButton'
 
-export const NavMenu: FC = () => {
+export const SettingsDialog: FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const dispatch = useAppDispatch()
   const flair = useAppSelector(selectThemeFlair)
