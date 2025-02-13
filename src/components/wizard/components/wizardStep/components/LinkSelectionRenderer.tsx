@@ -28,6 +28,7 @@ export const LinkSelectionRenderer: FC<SelectionRendererProps> = ({
       {selections.map((selection) => {
         return (
           <FancyNavButton
+            aria-label={selection.label}
             className={classNames('content')}
             key={selection.id}
             sx={{

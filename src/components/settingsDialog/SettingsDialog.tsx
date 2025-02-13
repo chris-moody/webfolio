@@ -44,7 +44,7 @@ export const SettingsDialog: FC = () => {
         zIndex: 1000,
       }}
     >
-      <IconButton onClick={handleClick}>
+      <IconButton aria-label="Settings" onClick={handleClick}>
         <InfoIcon />
       </IconButton>
       <Dialog open={isOpen} onClose={handleClose}>

@@ -35,7 +35,7 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({ defaultColor = '#aabbc
         {closest(color)?.name || 'Unknown Color'}
       </Typography>
       <HexColorPicker color={color} onChange={handleColorChange} />
-      <HexColorInput prefixed color={color} onChange={handleColorChange} />
+      <HexColorInput aria-label="Color" prefixed color={color} onChange={handleColorChange} />
     </Box>
   )
 }
