@@ -85,13 +85,6 @@ $slideDistance: 300px;
   }
 }
 
-/* ::view-transition-old(wizard-title) {
-  animation: 250ms both fade-out;
-}
-::view-transition-new(wizard-title) {
-  animation: 250ms both fade-out;
-}
-*/
 ::view-transition-new(wizard-step) {
   animation-name: none; //1s wizard-step-enter;
   animation-duration: 0.3s;
@@ -100,33 +93,7 @@ $slideDistance: 300px;
   animation: 0.3s cubic-bezier(0.1, 0, 0.25, 0.5) wizard-step-exit;
 }
 
-/*
-::view-transition-old(wizard-step) {
-  animation: 250ms cubic-bezier(0.4, 0, 1, 1) both fade-out,
-  250ms cubic-bezier(0.4, 0, 0.2, 1) both slide-to-left;
-}
-::view-transition-new(wizard-step) {
-  animation: 250ms cubic-bezier(0.4, 0, 1, 1) both fade-in,
-  250ms cubic-bezier(0.4, 0, 0.2, 1) both slide-from-right;
-} */
-
-@keyframes spinner {
-  0% {
-    --spin-angle: 0deg;
-  }
-  100% {
-    --spin-angle: 360deg;
-  }
-}
-
-@property --spin-angle {
-  inherits: false;
-  initial-value: 0deg;
-  syntax: '<angle>';
-}
-
 .wizard-controller {
-  min-width: 320px;
   .controller-content {
     &.flair-15 {
       h1.MuiTypography-h1 {
@@ -147,15 +114,6 @@ $slideDistance: 300px;
           14px 14px 0 var(--mui-palette-primary-light);
       }
     }
-    &.flair-37 {
-      background: repeating-conic-gradient(
-        from var(--spin-angle),
-        var(--mui-palette-primary-main) 0deg 10deg,
-        var(--mui-palette-primary-light) 10deg 20deg,
-        var(--mui-palette-grey-100) 20deg 30deg
-      );
-      animation: spinner 300s linear infinite;
-    }
   }
 }
 
@@ -169,15 +127,6 @@ $slideDistance: 300px;
             2px 2px 8px var(--mui-palette-primary-light),
             -2px -2px 8px var(--mui-palette-primary-light);
         }
-      }
-      &.flair-37 {
-        background: repeating-conic-gradient(
-          from var(--spin-angle),
-          var(--mui-palette-primary-main) 0deg 10deg,
-          var(--mui-palette-primary-dark) 10deg 20deg,
-          var(--mui-palette-grey-800) 20deg 30deg
-        );
-        animation: spinner 250s linear infinite;
       }
     }
   }
