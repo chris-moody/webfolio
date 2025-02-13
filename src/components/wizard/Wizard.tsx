@@ -150,6 +150,7 @@ export const Wizard: FC<WizardProps> = ({ className, ...props }) => {
           }}
         >
           <NavLink
+            aria-label="Close"
             viewTransition
             style={{ lineHeight: 0, color: 'inherit !important' }}
             to={'/' + prev}
@@ -188,6 +189,7 @@ export const Wizard: FC<WizardProps> = ({ className, ...props }) => {
           my={1}
         >
           <FancyNavButton
+            aria-label='Back'
             to={prevLink}
             disabled={!prevLink}
             sx={{
@@ -200,6 +202,7 @@ export const Wizard: FC<WizardProps> = ({ className, ...props }) => {
           </FancyNavButton>
 
           <FancyNavButton
+            aria-label='Next'
             to={nextLink}
             sx={{
               position: 'relative',
@@ -215,7 +218,7 @@ export const Wizard: FC<WizardProps> = ({ className, ...props }) => {
       <Stack
         className="wizard-dots"
         direction="row"
-        spacing={1}
+        spacing={0}
         sx={[
           {
             ...(stepData.length <= 1 && { visibility: 'hidden' }),
@@ -224,7 +227,7 @@ export const Wizard: FC<WizardProps> = ({ className, ...props }) => {
             width: 'fit-content',
             mb: 2,
             mx: 'auto',
-            p: 1,
+            p: 0.25,
             background: `rgba(255,255,255, ${stepData?.length > 1 ? 0.75 : 0})`,
             borderRadius: 3,
           },

@@ -27,7 +27,7 @@ export const Navigation: FC<NavigationProps> = ({ data }) => {
 
   return (
     <>
-      <IconButton sx={{ position: 'absolute', top: 0, left: 0, zIndex: 100 }} onClick={onClick}>
+      <IconButton aria-label="Navigation" sx={{ position: 'absolute', top: 0, left: 0, zIndex: 100 }} onClick={onClick}>
         <MenuIcon />
       </IconButton>
       <Drawer
