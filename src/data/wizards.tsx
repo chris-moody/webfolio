@@ -32,7 +32,7 @@ const wizards: Record<string, WizardConfig> = {
           <>I'm not sure what you&rsquo;re trying to do but I've heard that</>
         ),
         media: (
-          <FancyNavButton to="/">
+          <FancyNavButton aria-label='Home' to="/">
             There&rsquo;s no place like home!
           </FancyNavButton>
         ),
