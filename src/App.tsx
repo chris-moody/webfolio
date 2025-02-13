@@ -55,5 +55,4 @@ TODO 3d text cross fade is no good
 TODO alt transitions depnding on flair
 TODO dark/light mode tech icons
 TODO over 9000 easter egg
-TODO generalize the PixiWrapper
 */

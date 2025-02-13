@@ -11,6 +11,7 @@ import { NavLink } from 'react-router'
 import { FancyText } from '@/components/fancyText/FancyText'
 import { selectThemeFlair } from '@/redux/slices/theme/theme.selector'
 import { useAppSelector } from '@/redux/hooks'
+import classNames from 'classnames'
 
 const StyledListItem = styled(ListItem)(({ theme }) => ({
   display: 'flex',
@@ -22,6 +23,11 @@ const StyledListItem = styled(ListItem)(({ theme }) => ({
     '&:hover': {
       textDecoration: 'underline',
       textDecorationColor: theme.palette.primary.main,
+    },
+    '&.hit': {
+      position : 'relative',
+      width: '100%',
+      height: '100%'
     },
     '&.flair-15': {
       '&:hover': {
@@ -37,7 +43,7 @@ const StyledListItem = styled(ListItem)(({ theme }) => ({
       }
     }
   },
-  ['.hit']: {
+  '.hit': {
     position: 'absolute',
     right: 0,
     left: 0,
@@ -70,7 +76,7 @@ export const NavItem: FC<NavItemProps> = ({ data }) => {
     <>
       <StyledListItem className={`nav-item`}>
         <Box onClick={onClick} className="hit" />
-        <NavLink to={path} className={`nav-item-link flair-${flair}`} >
+        <NavLink to={path} className={classNames(`nav-item-link flair-${flair}`, { hit: !children?.length })} >
           <FancyText className={`nav-item-link-text`} variant="h4">{name}</FancyText>
         </NavLink>
         {children && <FancyText className="indicator" variant="h4">{open ? '-' : '+'}</FancyText>}
