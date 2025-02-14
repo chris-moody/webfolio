@@ -50,7 +50,6 @@ TODO animated doodads
 TODO add stars to flair button
 TODO Flair and pinback interaction
 TODO add color mode to setting modal
-TODO add content on select, ie: "Me? I know who I am! I'm a dude playing a dude disguised as another dude!"
 TODO 3d text cross fade is no good
 TODO alt transitions depnding on flair
 TODO dark/light mode tech icons

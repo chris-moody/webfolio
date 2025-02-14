@@ -77,9 +77,9 @@ export const NavItem: FC<NavItemProps> = ({ data }) => {
       <StyledListItem className={`nav-item`}>
         <Box onClick={onClick} className="hit" />
         <NavLink aria-label={name} to={path} className={classNames(`nav-item-link flair-${flair}`, { hit: !children?.length })} >
-          <FancyText className={`nav-item-link-text`} variant="h4">{name}</FancyText>
+          <FancyText fancy={{ depth: 7, renderBorder: false }} className={`nav-item-link-text`} variant="h4">{name}</FancyText>
         </NavLink>
-        {children && <FancyText className="indicator" variant="h4">{open ? '-' : '+'}</FancyText>}
+        {children && <FancyText fancy={{ depth: 7, renderBorder: false }} className="indicator" variant="h4">{open ? '-' : '+'}</FancyText>}
       </StyledListItem>
       {children && (
         <Collapse className="nav-collapse" in={open} timeout="auto">
