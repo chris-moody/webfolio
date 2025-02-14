@@ -1,8 +1,6 @@
 import { Box, styled } from '@mui/material'
 import { FC } from 'react'
 import { TypeWriter } from '../typeWriter/TypeWriter'
-import { useAppSelector } from '@/redux/hooks'
-import { selectThemeFlair } from '@/redux/slices/theme/theme.selector'
 
 const StyledBox = styled(Box)({
   position: 'absolute',
@@ -36,7 +34,6 @@ export const FlairGif: FC<FlairGifProps> = ({
   width = 'auto',
   height = 'auto',
 }) => {
-  const flair = useAppSelector(selectThemeFlair)
   return (
     <StyledBox
       sx={{
@@ -48,7 +45,7 @@ export const FlairGif: FC<FlairGifProps> = ({
         bgcolor="primary.main"
         borderRadius={2}
         p={1}
-        mt={flair === 37 ? 6 : 12}
+        mt={'100px'}
         variant="h3"
         duration={0.5}
         text="Wooooo!!!"
