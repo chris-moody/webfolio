@@ -16,6 +16,11 @@ import classNames from 'classnames'
 const StyledListItem = styled(ListItem)(({ theme }) => ({
   display: 'flex',
   justifyContent: 'space-between',
+  '&:hover': {
+    '.indicator h4:first-of-type': {
+      color: theme.palette.primary.main,
+    }
+  },
   a: {
     position: 'relative',
     textDecoration: 'none',
@@ -38,7 +43,7 @@ const StyledListItem = styled(ListItem)(({ theme }) => ({
       }
     },
     '&.flair-37': {
-      '&:hover h4': {
+      '&:hover h4:first-of-type': {
         color: theme.palette.primary.main,
       }
     }
