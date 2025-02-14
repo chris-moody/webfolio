@@ -175,9 +175,7 @@ const wizards: Record<string, WizardConfig> = {
           <>
             I have had a full and robust set of experiences working in the
             advertising, finance, and biological science industries across
-            startups, agencies, and large corporations. I&rsquo;ve seen projects
-            with no budget and no time, projects with too much budget and too
-            much time and everything in between. Nothing scares me.
+            startups, agencies, and large corporations. I&rsquo;ve pushed through last minute scope changes, squashed montrous bugs, and migrated legacy platforms to new technology stacks. Nothing scares me.
           </>
         ),
         headerNext: 'Next',
@@ -191,7 +189,7 @@ const wizards: Record<string, WizardConfig> = {
             My first language was Java before I dove heavily into AS3 in the
             early 2000s. Transitioning to full time javascript in ES5&rsquo;s
             heyday was a bit of a departure from the typed languages I was
-            accustomed to, but there is fun to be had with closures as well!
+            accustomed to, but there was fun to be had with closures as well!
             Typescript is my happy place these days, and some of my favorite
             tools are React, Vite, and MUI. I am also familiar with a slew of
             other animation and visualization libraries such as gsap,
@@ -269,7 +267,7 @@ const wizards: Record<string, WizardConfig> = {
         header: (
           <>
             Realizing that further conversation would be counter-productive, I
-            delivered my warmest smile and said &ldquo;You got it!&rdquo; They left and I got to work. A little while later, I summoned them back over so the AD could click the new button. It was something like this:
+            delivered my warmest smile and said &ldquo;You got it!&rdquo; The look the producer gave me as they left said that she knew I was up to something. A little while later I invited them back over, and I offered the mouse to the AD so that he could click the new button. It was something like this:
           </>
         ),
         headerNext: 'Next',
@@ -280,7 +278,7 @@ const wizards: Record<string, WizardConfig> = {
         headerNext: 'End',
         header: (
           <>
-            The art director was not pleased. It turns out that 16-time WWE Heavyweight Champion Ric Flair was <strong><em>not</em></strong> the kind of flair he was looking for 🙃. The producer struggled to contain her laughter, and the AD and I had a wonderful conversation about shimmers, shines, and glows.
+            The art director was not pleased. It turns out that 16-time WWE Heavyweight Champion Ric Flair was <strong><em>not</em></strong> the kind of flair he was looking for 🙃. The producer couldn&rsquo;t contain her laughter, and once everyone's emotions flared down we all had a wonderful conversation about shimmers, shines, and glows.
           </>
         ),
       },
@@ -312,10 +310,10 @@ const wizards: Record<string, WizardConfig> = {
           <>
             Major pressure was placed on the design team to keep the concept
             exciting, which in turn meant that it was even more important that
-            the final product delivered that same energy. Even if it was just
-            banner campaign! Before offering me the project, engineering manager warned me that this
+            the final product delivered that same energy. Even if it was just a
+            banner campaign! Before offering me the project, the engineering manager warned me that this
             account was pushing the creative concepts to the limit. She was not
-            confident that we could deliver what they wanted given the tight&nbsp;timeframe.
+            confident that we could deliver what they wanted given the tight&nbsp;time frame.
           </>
         ),
         headerNext: 'Next',
@@ -326,7 +324,7 @@ const wizards: Record<string, WizardConfig> = {
         header: (
           <>
             Her fears were well-founded. Between high quality background
-            images, a live text requirement with a non-websafe font, and the
+            images, a live text requirement with a non-web safe font, and the
             ridiculous 40kb size limit, there wasn't going to be any room to
             load in a fancy framework that could animate smoke. But once I had
             the designs I understood the assignment, and decided that the best
@@ -357,10 +355,10 @@ const wizards: Record<string, WizardConfig> = {
             “I need you to make it bad,” she said to me in hushed tones. I
             couldn&rsquo;t believe what I was hearing, but she was serious. So I stripped out the
             WebGL code and refactored the emitter to use img tags instead. I had to cut down the pool size to almost a quarter
-            of what it was to get half the framerate. <br />
+            of what it was to get half the frame rate. <br />
             <br />
-            It was gross, and then it got approved by a client who never got to
-            see the greatness that was 😭
+            It was gross, and then it received approval from a client who never had the opportunity to
+            see the greatness that almost was 😭
           </>
         ),
         headerNext: 'End',
