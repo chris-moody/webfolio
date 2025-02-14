@@ -140,7 +140,7 @@ export const WizardStep: FC<WizardStepProps> = ({ className, ...props }) => {
               <FancyText
                 component="div"
                 variant="h4"
-                fancy={{ depth: 10 }}
+                fancy={{ depth: 5, renderBorder: false }}
                 position={'relative'}
               >
                 {header}{' '}
@@ -155,7 +155,7 @@ export const WizardStep: FC<WizardStepProps> = ({ className, ...props }) => {
           {body && (
             <FancyText
               variant="body1"
-              fancy={{ depth: 7 }}
+              fancy={{ depth: 4, renderBorder: false }}
               className="body content"
               sx={[
                 {

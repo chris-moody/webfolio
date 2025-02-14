@@ -26,6 +26,14 @@ const Container = styled(Box)({
   position: 'relative',
   display: 'inline-block',
   zIndex: 2,
+  '> span': {
+    width: '100%',
+    height: '100%',
+    top: 0,
+    left: 0,
+    transformStyle: 'preserve-3d',
+    position: 'absolute',
+  },
 })
 
 const HiddenText = styled(Typography)({
@@ -137,46 +145,48 @@ export const Text3d: FC<Text3dProps> = ({
     <Container
       component="div"
       ref={container}
-      className={classNames("container", className)}
+      className={classNames('container', className)}
       {...containerProps}
     >
-      {Array.from({ length: layers }).map((_, n) => {
-        return (
-          <LayeredText
-            key={n}
-            {...props}
-            sx={[
-              {
-                transform: `translateZ(${n * -stepSize}px)`,
-                ...(n === median + 1 && {
-                  WebkitTextStroke: '3px rgba(0, 0, 0, 0.25)',
+      <span>
+        {Array.from({ length: layers }).map((_, n) => {
+          return (
+            <LayeredText
+              key={n}
+              {...props}
+              sx={[
+                {
+                  transform: `translateZ(${n * -stepSize}px)`,
+                  ...(n === median + 1 && {
+                    WebkitTextStroke: '3px rgba(0, 0, 0, 0.25)',
+                  }),
+                  ...(n === median + 2 &&
+                    renderBorder && {
+                      WebkitTextStroke: `15px ${theme.palette.primary.light}`,
+                      textShadow: `6px 0 6px ${theme.palette.primary.dark}, 5px 5px 5px ${theme.palette.primary.dark}, 0 6px 6px ${theme.palette.primary.dark}`,
+                    }),
+                  ...(n === median + 3 &&
+                    renderBorder && {
+                      WebkitTextStroke: `15px ${theme.palette.primary.main}`,
+                    }),
+                },
+                theme.applyStyles('dark', {
+                  ...(n === median + 2 &&
+                    renderBorder && {
+                      WebkitTextStroke: `15px ${theme.palette.common.white}`,
+                    }),
+                  ...(n === median + 3 &&
+                    renderBorder && {
+                      WebkitTextStroke: `15px ${theme.palette.common.white}`,
+                    }),
                 }),
-                ...(n === median + 2 &&
-                  renderBorder && {
-                    WebkitTextStroke: `15px ${theme.palette.primary.light}`,
-                    textShadow: `6px 0 6px ${theme.palette.primary.dark}, 5px 5px 5px ${theme.palette.primary.dark}, 0 6px 6px ${theme.palette.primary.dark}`,
-                  }),
-                ...(n === median + 3 &&
-                  renderBorder && {
-                    WebkitTextStroke: `15px ${theme.palette.primary.main}`,
-                  }),
-              },
-              theme.applyStyles('dark', {
-                ...(n === median + 2 &&
-                  renderBorder && {
-                    WebkitTextStroke: `15px ${theme.palette.common.white}`,
-                  }),
-                ...(n === median + 3 &&
-                  renderBorder && {
-                    WebkitTextStroke: `15px ${theme.palette.common.white}`,
-                  }),
-              }),
-            ]}
-          >
-            {children}
-          </LayeredText>
-        )
-      })}
+              ]}
+            >
+              {children}
+            </LayeredText>
+          )
+        })}
+      </span>
       <HiddenText {...props}>{children}</HiddenText>
     </Container>
   )

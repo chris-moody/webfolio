@@ -39,5 +39,5 @@ export const TypeWriter: FC<TypeWriterProps> = ({
     },
     { dependencies: [text, duration], scope: container }
   )
-  return <FancyText ref={container} {...props} className="text">{prefix}{textValue}</FancyText>
+  return <FancyText fancy={{ depth: 7 }} ref={container} {...props} className="text">{prefix}{textValue}</FancyText>
 }
