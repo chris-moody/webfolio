@@ -46,7 +46,7 @@ const initialEdges: Edge[] = [
     id: 'r1-s1',
     source: 'r1',
     target: 's1',
-    data: { begin: 0, color: 'yellow' },
+    data: { color: 'yellow' },
     type: 'socketEdge',
     sourceHandle: 'source-bot-l',
     targetHandle: 'target-top-l',
@@ -55,7 +55,7 @@ const initialEdges: Edge[] = [
     id: 'r1-s2',
     source: 'r1',
     target: 's2',
-    data: { begin: 0, color: 'magenta' },
+    data: { color: 'magenta' },
     type: 'socketEdge',
     sourceHandle: 'source-bot-r',
     targetHandle: 'target-top-l',
@@ -64,7 +64,7 @@ const initialEdges: Edge[] = [
     id: 'r2-s1',
     source: 'r2',
     target: 's1',
-    data: { begin: 1, color: 'cyan' },
+    data: { color: 'cyan' },
     type: 'socketEdge',
     sourceHandle: 'source-bot-l',
     targetHandle: 'target-top-r',
@@ -73,7 +73,7 @@ const initialEdges: Edge[] = [
     id: 'r2-s2',
     source: 'r2',
     target: 's2',
-    data: { begin: 1, color: 'orange' },
+    data: { color: 'orange' },
     type: 'socketEdge',
     sourceHandle: 'source-bot-r',
     targetHandle: 'target-top-r',
@@ -86,6 +86,7 @@ export const SocketFlow = () => {
   const [instance, setInstance] = useState<ReactFlowInstance>()
   const [nodes] = useNodesState(initialNodes)
   const [edges] = useEdgesState(initialEdges)
+  const tmln = useRef<gsap.core.Timeline>(gsap.timeline({ paused: true }))
 
   const onInit = (instance: ReactFlowInstance) => {
     setInstance(instance)
@@ -95,75 +96,133 @@ export const SocketFlow = () => {
     () => {
       if (!instance) return
 
-      gsap.delayedCall(1, () => instance.fitView({ duration: 1000, minZoom: 0.0875 }))
-    },
-    { dependencies: [instance] }
-  )
+      const duration = 2
+      const tl = tmln.current
 
-  useGSAP(
-    () => {
-      const duration = 0
-      gsap.to('#s1', {
-        duration,
+      tl.set('#r1', {
         backgroundColor: '#FFFF00',
         repeat: -1,
-        delay: 2,
         repeatDelay: 2,
-      })
-      gsap.to('#s1 .label', {
-        duration,
+      }, 0)
+      tl.set('#r1 .label', {
         color: theme.palette.getContrastText('#FFFF00'),
         repeat: -1,
-        delay: 2,
         repeatDelay: 2,
-      })
-      gsap.to('#s1', {
-        duration,
-        backgroundColor: '#00FFFF',
-        color: theme.palette.getContrastText('#00FFFF'),
-        repeat: -1,
-        delay: 3,
-        repeatDelay: 2,
-      })
-      gsap.to('#s1 .label', {
-        duration,
-        color: theme.palette.getContrastText('#00FFFF'),
-        repeat: -1,
-        delay: 2,
-        repeatDelay: 2,
-      })
-      gsap.to('#s2', {
-        duration,
-        backgroundColor: '#FF00FF',
-        color: theme.palette.getContrastText('#FF00FF'),
-        repeat: -1,
-        delay: 2,
-        repeatDelay: 2,
-      })
-      gsap.to('#s2 .label', {
-        duration,
-        color: theme.palette.getContrastText('#FF00FF'),
-        repeat: -1,
-        delay: 2,
-        repeatDelay: 2,
-      })
-      gsap.to('#s2', {
-        duration,
+      }, 0)
+      tl.set('#r2', {
         backgroundColor: '#ff8800',
         color: theme.palette.getContrastText('#ff8800'),
         repeat: -1,
-        delay: 3,
         repeatDelay: 2,
-      })
-      gsap.to('#s2 .label', {
-        duration,
+      }, 0)
+      tl.set('#r2 .label', {
         color: theme.palette.getContrastText('#ff8800'),
         repeat: -1,
-        delay: 2,
         repeatDelay: 2,
-      })
+      }, 0)
+      tl.set('#r1', {
+        backgroundColor: '#FF00FF',
+        color: theme.palette.getContrastText('#FF00FF'),
+        repeat: -1,
+        repeatDelay: 2,
+      }, 1)
+      tl.set('#r1 .label', {
+        color: theme.palette.getContrastText('#FF00FF'),
+        repeat: -1,
+        repeatDelay: 2,
+      }, 1)
+      tl.set('#r2', {
+        backgroundColor: '#00FFFF',
+        color: theme.palette.getContrastText('#00FFFF'),
+        repeat: -1,
+        repeatDelay: 2,
+      }, 1)
+      tl.set('#r2 .label', {
+        color: theme.palette.getContrastText('#00FFFF'),
+        repeat: -1,
+        repeatDelay: 2,
+      }, 1)
+
+      tl.to('#signal-r1-s1', {
+        duration,
+        motionPath: {
+          path: "#r1-s1",
+        },
+        repeat: -1,
+        ease: 'none'
+      }, 0)
+      tl.to('#signal-r1-s2', {
+        duration,
+        motionPath: {
+          path: "#r1-s2",
+        },
+        repeat: -1,
+        ease: 'none'
+      }, 1)
+      tl.to('#signal-r2-s1', {
+        duration,
+        motionPath: {
+          path: "#r2-s1",
+        },
+        repeat: -1,
+        ease: 'none'
+      }, 1)
+      tl.to('#signal-r2-s2', {
+        duration,
+        motionPath: {
+          path: "#r2-s2",
+        },
+        repeat: -1,
+        ease: 'none'
+      }, 0)
+
+      tl.set('#s1', {
+        backgroundColor: '#FFFF00',
+        repeat: -1,
+        repeatDelay: 2,
+      }, 2)
+      tl.set('#s1 .label', {
+        color: theme.palette.getContrastText('#FFFF00'),
+        repeat: -1,
+        repeatDelay: 2,
+      }, 2)
+      tl.set('#s1', {
+        backgroundColor: '#00FFFF',
+        color: theme.palette.getContrastText('#00FFFF'),
+        repeat: -1,
+        repeatDelay: 2,
+      }, 3)
+      tl.set('#s1 .label', {
+        color: theme.palette.getContrastText('#00FFFF'),
+        repeat: -1,
+        repeatDelay: 2,
+      }, 2)
+      tl.set('#s2', {
+        backgroundColor: '#FF00FF',
+        color: theme.palette.getContrastText('#FF00FF'),
+        repeat: -1,
+        repeatDelay: 2,
+      }, 3)
+      tl.set('#s2 .label', {
+        color: theme.palette.getContrastText('#FF00FF'),
+        repeat: -1,
+        repeatDelay: 2,
+      }, 3)
+      tl.set('#s2', {
+        backgroundColor: '#ff8800',
+        color: theme.palette.getContrastText('#ff8800'),
+        repeat: -1,
+        repeatDelay: 2,
+      }, 2)
+      tl.set('#s2 .label', {
+        color: theme.palette.getContrastText('#ff8800'),
+        repeat: -1,
+        repeatDelay: 2,
+      }, 2)
+      tl.play()
+      gsap.delayedCall(1, () => instance.fitView({ duration: 1000, minZoom: 0.0875 }))
     },
-    { dependencies: [], scope: container }
+    { dependencies: [instance], scope: container }
   )
 
   return (
