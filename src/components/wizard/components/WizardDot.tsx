@@ -8,32 +8,23 @@ export type WizardDotProps = Omit<BoxProps, 'onClick' | 'id'> & {
   onClick?: (value: string) => void
 }
 
-const StyledLink = styled(NavLink)(({ theme }) => [
-  {
-
-    padding: theme.spacing(0.75),
+const StyledLink = styled(NavLink)(({ theme }) => ({
+  padding: theme.spacing(0.75),
+  '.dot': {
+    width: theme.spacing(1.5),
+    height: theme.spacing(1.5),
+    borderRadius: '50%',
+    border: '1px solid black',
+    cursor: 'pointer',
+  },
+  '&.active': {
+    pointerEvents: 'none',
     '.dot': {
-      width: theme.spacing(1.5),
-      height: theme.spacing(1.5),
-      borderRadius: '50%',
-      border: '1px solid black',
-      cursor: 'pointer',
-    },
-    '&.active': {
-      pointerEvents: 'none',
-      '.dot': {
-        backgroundColor: theme.palette.primary.main,
-      },
+      backgroundColor: theme.palette.primary.main,
+      borderColor: theme.palette.getContrastText(theme.palette.primary.main),
     },
   },
-  theme.applyStyles('dark', {
-    '&.active': {
-      '.dot': {
-        borderColor: 'white',
-      },
-    },
-  }),
-])
+}))
 export const WizardDot: FC<WizardDotProps> = ({ onClick, className, id }) => {
   const clickHandler = useCallback(() => {
     if (onClick) {
