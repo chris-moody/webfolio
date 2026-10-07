@@ -6,3 +6,5 @@ test-results
 .lighthouseci
 .react-router
 yarn.lock
+src/styles/tokens.generated.css
+src/tokens/generated.ts
