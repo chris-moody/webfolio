@@ -14,6 +14,9 @@ const combos = [
   { flair: 37, colorScheme: 'dark', reducedMotion: 'no-preference' },
 ] as const
 
+// axe on flair-37 pages (layered 3D text) can take several seconds under load.
+test.describe.configure({ timeout: 60_000 })
+
 for (const combo of combos) {
   test.describe(`flair ${combo.flair}, ${combo.colorScheme}, motion ${combo.reducedMotion}`, () => {
     test.use({

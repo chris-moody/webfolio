@@ -2,6 +2,9 @@ import AxeBuilder from '@axe-core/playwright'
 import { expect, test } from '@playwright/test'
 import { routes } from './routes'
 
+// axe on flair-37 pages (layered 3D text) can take several seconds under load.
+test.describe.configure({ timeout: 60_000 })
+
 const colorSchemes = ['light', 'dark'] as const
 
 for (const colorScheme of colorSchemes) {

@@ -92,12 +92,16 @@ $slideDistance: 300px;
   }
 }
 
+// Slide change: the old slide shrinks and fades out, then the new slide's
+// content fades in (GSAP, buildStepOn, after a matching 0.3s delay). The new
+// snapshot is live, so it shows that fade rather than animating itself.
 ::view-transition-new(wizard-step) {
-  animation-name: none; //1s wizard-step-enter;
-  animation-duration: 0.3s;
+  animation: none;
 }
+// `both` holds the old slide hidden once it has faded. Without it the snapshot
+// snapped back to full opacity for the rest of the transition: a visible blink.
 ::view-transition-old(wizard-step) {
-  animation: 0.3s cubic-bezier(0.1, 0, 0.25, 0.5) wizard-step-exit;
+  animation: 0.3s cubic-bezier(0.1, 0, 0.25, 0.5) both wizard-step-exit;
 }
 
 .wizard-controller {

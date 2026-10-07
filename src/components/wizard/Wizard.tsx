@@ -25,6 +25,7 @@ import { selectWizardSelection } from '@/redux/slices/wizard/wizard.selector'
 import { findTourWizard, tourPath } from '@/data/tour.manifest'
 import { NotFound } from '@/components/notFound/NotFound'
 import { useSwipeable } from 'react-swipeable'
+import { useReducedMotion } from '@/motion/motion'
 gsap.registerPlugin(useGSAP, TextPlugin, MotionPathPlugin)
 
 export interface WizardConfig {
@@ -151,11 +152,13 @@ export const Wizard: FC<WizardProps> = ({ className, ...props }) => {
       ?.focus({ preventScroll: true })
   }, [location.key, navigated, slide, wizardId])
 
+  const reduced = useReducedMotion()
+  // Keyboard and swipe navigation get the same transition as clicked links.
   const goTo = useCallback(
     (to: string | null | undefined) => {
-      if (to) navigate(to)
+      if (to) navigate(to, { viewTransition: !reduced })
     },
-    [navigate]
+    [navigate, reduced]
   )
 
   const onKeyDown = (event: KeyboardEvent<HTMLElement>) => {

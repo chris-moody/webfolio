@@ -99,7 +99,30 @@ export const SettingsDialog: FC = () => {
             {flair === 37 && <>Too much? </>}You can adjust your Flair below
             {flair === 1 && <>, a little more can't hurt!</>}!
           </Typography>
-          <FormControl component="fieldset" sx={{ mt: 1 }}>
+        </DialogContent>
+        <DialogActions>
+          <FancyButton
+            className={classNames({ active: flair === 1 })}
+            onClick={handleFlair(1)}
+          >
+            1 piece
+          </FancyButton>
+          <FancyButton
+            className={classNames({ active: flair === 15 })}
+            onClick={handleFlair(15)}
+          >
+            15 pieces
+          </FancyButton>
+          <FancyButton
+            className={classNames({ pressed: flair === 37 })}
+            onClick={handleFlair(37)}
+          >
+            37 pieces
+          </FancyButton>
+        </DialogActions>
+        {/* Motion comes after the flair choice it modifies. */}
+        <DialogContent sx={{ pt: 1 }}>
+          <FormControl component="fieldset">
             <FormLabel component="legend">Motion</FormLabel>
             <RadioGroup
               row
@@ -122,26 +145,6 @@ export const SettingsDialog: FC = () => {
             </RadioGroup>
           </FormControl>
         </DialogContent>
-        <DialogActions>
-          <FancyButton
-            className={classNames({ active: flair === 1 })}
-            onClick={handleFlair(1)}
-          >
-            1 piece
-          </FancyButton>
-          <FancyButton
-            className={classNames({ active: flair === 15 })}
-            onClick={handleFlair(15)}
-          >
-            15 pieces
-          </FancyButton>
-          <FancyButton
-            className={classNames({ pressed: flair === 37 })}
-            onClick={handleFlair(37)}
-          >
-            37 pieces
-          </FancyButton>
-        </DialogActions>
       </Dialog>
     </Box>
   )

@@ -26,6 +26,14 @@ export default defineConfig({
     // MUI's deep imports. Listed so the first tour visit doesn't trigger
     // "optimized dependencies changed, reloading".
     include: [
+      '@mui/material',
+      '@mui/material/styles',
+      '@mui/material/CssBaseline',
+      '@mui/material/InitColorSchemeScript',
+      '@mui/system',
+      '@mui/utils',
+      '@emotion/react',
+      '@emotion/cache',
       '@emotion/serialize',
       '@emotion/sheet',
       '@emotion/styled',
@@ -39,7 +47,12 @@ export default defineConfig({
   ssr: {
     // MUI 6's ESM build uses directory imports, which Node's resolver rejects,
     // so the build-time renderer bundles it instead of importing it from node_modules.
-    noExternal: [/^@mui\//],
+    // Emotion too: left external in dev, its ESM imports resolved the
+    // "development" build while @emotion/styled's require() got the production
+    // build, giving two theme contexts. styled() then saw an empty context and
+    // fell back to MUI's default theme, so every tour page failed to hydrate
+    // under `yarn dev`. Bundling both keeps a single instance.
+    noExternal: [/^@mui\//, /^@emotion\//],
   },
   // The React Router plugin owns the app build; Vitest only needs JSX.
   plugins: [

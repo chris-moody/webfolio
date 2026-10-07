@@ -53,11 +53,19 @@ test('case studies, including drafts, load in dev', async ({ page }) => {
   expect(errors).toEqual([])
 })
 
-test('the tour loads', async ({ page }) => {
-  const errors = trackErrors(page)
-  await page.goto('/tour/about/0')
-  await expect(
-    page.getByRole('heading', { level: 1, name: /about me/i })
-  ).toBeVisible()
-  expect(errors).toEqual([])
-})
+// Hydration warnings arrive after the page looks ready, so these wait for the
+// network to settle before checking. A dev-only Emotion duplication once made
+// every tour page mismatch here while production was clean.
+for (const path of ['/tour/home/flair', '/tour/about/0']) {
+  test(`${path} hydrates without mismatches, including after a reload`, async ({
+    page,
+  }) => {
+    const errors = trackErrors(page)
+    await page.goto(path)
+    await page.waitForLoadState('networkidle')
+    await page.reload()
+    await page.waitForLoadState('networkidle')
+    await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
+    expect(errors).toEqual([])
+  })
+}
