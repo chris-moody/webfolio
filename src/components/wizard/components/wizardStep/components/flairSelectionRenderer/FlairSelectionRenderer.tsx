@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useState } from 'react'
+import { FC, useCallback, useMemo } from 'react'
 import { Box } from '@mui/material'
 import { getPinData } from './flairSelectionRenderer.helpers'
 
@@ -16,8 +16,10 @@ export const FlairSelectionRenderer: FC<SelectionRendererProps> = ({
   selections,
 }) => {
   const flair = useAppSelector(selectThemeFlair)
-  const f = flair.toString()
-  const [current, setCurrent] = useState<WizardResult | null | undefined>({ id: f, value: f, next: '' })
+  const current = useMemo<WizardResult>(() => {
+    const f = flair.toString()
+    return { id: f, value: f, next: '' }
+  }, [flair])
   const dispatch = useAppDispatch()
 
   const selectHandler = useCallback(
@@ -26,16 +28,6 @@ export const FlairSelectionRenderer: FC<SelectionRendererProps> = ({
     },
     [dispatch]
   )
-
-  useEffect(() => {
-    setCurrent((prev) => {
-      if (prev && parseInt(prev.id) !== flair) {
-        const f = flair.toString()
-        return { id: f, value: f, next: prev.next }
-      }
-      return prev
-    })
-  }, [flair])
 
   return (
     <Box className="wizard-step-content">

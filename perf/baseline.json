@@ -1,0 +1,64 @@
+{
+  "capturedAt": "2026-10-06",
+  "source": "https://webfolio.moodydigital.com (production, pre-plan)",
+  "tool": "Lighthouse 13.5.0, mobile, simulated throttling, single run",
+  "build": {
+    "mainChunkKB": 1097.9,
+    "mainChunkGzipKB": 364.5,
+    "cssKB": 75.4,
+    "note": "vite 5 build of develop HEAD (post-D5 rewrite) + resume-as-data"
+  },
+  "assets": {
+    "flairGifsKB": {
+      "woo-1.gif": 996,
+      "woo-4.gif": 632,
+      "woo-5.gif": 2000,
+      "woo-6.gif": 780
+    },
+    "me_at_magens.jpg": 952
+  },
+  "routes": {
+    "/": {
+      "scores": {
+        "performance": 86,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 91,
+        "agentic-browsing": 50
+      },
+      "lcpMs": 3193,
+      "fcpMs": 3193,
+      "cls": 0,
+      "tbtMs": 67,
+      "totalBytes": 5073140
+    },
+    "/about/0": {
+      "scores": {
+        "performance": 87,
+        "accessibility": 98,
+        "best-practices": 100,
+        "seo": 91,
+        "agentic-browsing": 50
+      },
+      "lcpMs": 3166,
+      "fcpMs": 3166,
+      "cls": 0.003,
+      "tbtMs": 0,
+      "totalBytes": 5054183
+    },
+    "/resume": {
+      "scores": {
+        "performance": 87,
+        "accessibility": 87,
+        "best-practices": 100,
+        "seo": 91,
+        "agentic-browsing": 25
+      },
+      "lcpMs": 3134,
+      "fcpMs": 3134,
+      "cls": 0,
+      "tbtMs": 25,
+      "totalBytes": 5073052
+    }
+  }
+}

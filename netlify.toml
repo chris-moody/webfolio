@@ -1,8 +1,31 @@
 [build]
-  command = "yarn build"
-  publish = "dist"
+  # Chromium prints the resume PDF and renders the social card (scripts/postbuild.mjs).
+  command = "yarn playwright install chromium --only-shell && yarn build"
+  publish = "build/client"
 
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+[build.environment]
+  # Hooks are for local commits only.
+  SKIP_INSTALL_SIMPLE_GIT_HOOKS = "1"
+
+# No catch-all rewrite: every page is a prerendered file, unknown paths get
+# 404.html with a real 404 status, and _redirects (generated at build from
+# src/data/tour.manifest.ts) covers the tour root and pre-2026 tour URLs.
+
+# Vite fingerprints everything under /assets, so it can be cached forever.
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), interest-cohort=()"
+    # Report-only. Before enforcing: React Router's inline hydration scripts and
+    # the color-scheme script differ per page, so script-src needs per-route
+    # hashes (generate _headers at build). 'unsafe-inline' styles are for
+    # Emotion (MUI) on tour pages.
+    Content-Security-Policy-Report-Only = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://i.ytimg.com; font-src 'self'; connect-src 'self'; frame-src https://www.youtube-nocookie.com; worker-src 'self' blob:; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"

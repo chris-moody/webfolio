@@ -1,0 +1,6 @@
+/* Tour pages: utilities and tokens without Tailwind's preflight, so MUI's own
+   baseline (CssBaseline) stays in charge of the tour's look. */
+@layer theme, utilities;
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);
+@import './tokens.css';

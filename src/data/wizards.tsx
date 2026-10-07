@@ -1,7 +1,7 @@
 import { FlairSelectionRenderer } from '@/components/wizard/components/wizardStep/components/flairSelectionRenderer/FlairSelectionRenderer'
 import { ColorSelectionRenderer } from '@/components/wizard/components/wizardStep/components/colorSelectionRenderer/ColorSelectionRenderer'
 import { WizardConfig } from '@/components/wizard/Wizard'
-import { ResumeRenderer } from '@/components/wizard/components/resumeRenderer/ResumeRenderer'
+import { TourResume } from '@/components/resume/ResumeView'
 import { Link, Stack } from '@mui/material'
 import { Image } from '@/components/image/Image'
 import { Youtube } from '@/components/video/Youtube'
@@ -13,32 +13,13 @@ import betaLaptop from '@/assets/beta/beta_laptop.png'
 import betaLevel from '@/assets/beta/beta_paper_level_design.png'
 import meAtMagens from '@/assets/aboutme/me_at_magens.jpg'
 import { WizardStepConfig } from '@/components/wizard/components/wizardStep/WizardStep'
-import { FancyNavButton } from '@/components/fancyButton/FancyButton'
 import { SocketFlow } from '@/components/socketFlow/SocketFlow'
 import { FlairText } from '@/components/flairText/FlairText'
 import { WaterText } from '@/containers/waterText/WaterText'
+import { tourPath } from '@/data/tour.manifest'
 import { LinkSelectionRenderer } from '@/components/wizard/components/wizardStep/components/LinkSelectionRenderer'
 
 const wizards: Record<string, WizardConfig> = {
-  404: {
-    id: '404',
-    header: '404',
-    defaultStep: 'notfound',
-    showNav: false,
-    stepData: [
-      {
-        id: 'notfound',
-        body: (
-          <>I'm not sure what you&rsquo;re trying to do but I've heard that</>
-        ),
-        media: (
-          <FancyNavButton aria-label='Home' to="/">
-            There&rsquo;s no place like home!
-          </FancyNavButton>
-        ),
-      },
-    ],
-  },
   home: {
     id: 'home',
     header: 'Welcome!',
@@ -88,10 +69,18 @@ const wizards: Record<string, WizardConfig> = {
           {
             id: 'about',
             label: 'Who is Chris Moody?',
-            next: '/about',
+            next: tourPath('about'),
           },
-          { id: 'storytime', label: 'Tell me a story', next: '/storytime' },
-          { id: 'resume', label: 'Show me the resume!', next: '/resume' },
+          {
+            id: 'storytime',
+            label: 'Tell me a story',
+            next: tourPath('storytime'),
+          },
+          {
+            id: 'resume',
+            label: 'Show me the resume!',
+            next: tourPath('resume'),
+          },
         ],
       },
     ],
@@ -108,9 +97,9 @@ const wizards: Record<string, WizardConfig> = {
         header: 'What kind of story are you looking for?',
         selectionRenderer: LinkSelectionRenderer,
         selections: [
-          { id: 'fun-story', label: 'Fun', next: '/fun' },
-          { id: 'work-story', label: 'Work', next: '/work' },
-          { id: 'project-story', label: 'Project', next: '/beta' },
+          { id: 'fun-story', label: 'Fun', next: tourPath('fun') },
+          { id: 'work-story', label: 'Work', next: tourPath('work') },
+          { id: 'project-story', label: 'Project', next: tourPath('beta') },
         ],
       },
     ],
@@ -175,7 +164,10 @@ const wizards: Record<string, WizardConfig> = {
           <>
             I have had a full and robust set of experiences working in the
             advertising, finance, and biological science industries across
-            startups, agencies, and large corporations. I&rsquo;ve pushed through last minute scope changes, squashed montrous bugs, and migrated legacy platforms to new technology stacks. Nothing scares me.
+            startups, agencies, and large corporations. I&rsquo;ve pushed
+            through last minute scope changes, squashed montrous bugs, and
+            migrated legacy platforms to new technology stacks. Nothing scares
+            me.
           </>
         ),
         headerNext: 'Next',
@@ -224,7 +216,7 @@ const wizards: Record<string, WizardConfig> = {
     id: 'resume',
     next: 'purpose',
     header: 'Resume',
-    bodyComponent: ResumeRenderer,
+    bodyComponent: TourResume,
   },
   fun: {
     id: 'fun',
@@ -256,7 +248,9 @@ const wizards: Record<string, WizardConfig> = {
             buttons?&rdquo;
             <br /> &ldquo;Sure,&rdquo; I replied as I noticed the producer
             rolling her eyes. &ldquo;What did you have in mind?&rdquo;
-            <br /> &ldquo;You know, uh Pop! Pizzazz!&rdquo; He drummed his fingers his lips for a brief pause while he searched for new a word, &ldquo;Flair!&rdquo;
+            <br /> &ldquo;You know, uh Pop! Pizzazz!&rdquo; He drummed his
+            fingers his lips for a brief pause while he searched for new a word,
+            &ldquo;Flair!&rdquo;
           </>
         ),
         headerNext: 'Next',
@@ -267,18 +261,33 @@ const wizards: Record<string, WizardConfig> = {
         header: (
           <>
             Realizing that further conversation would be counter-productive, I
-            delivered my warmest smile and said &ldquo;You got it!&rdquo; The look the producer gave me as they left said that she knew I was up to something. A little while later I invited them back over, and I offered the mouse to the AD so that he could click the new button. It was something like this:
+            delivered my warmest smile and said &ldquo;You got it!&rdquo; The
+            look the producer gave me as they left said that she knew I was up
+            to something. A little while later I invited them back over, and I
+            offered the mouse to the AD so that he could click the new button.
+            It was something like this:
           </>
         ),
         headerNext: 'Next',
-        unwrappedMedia: <Stack className="content" height="50%" justifyContent="center"><FlairText text=">>Click Me!<<" /></Stack>,
+        unwrappedMedia: (
+          <Stack className="content" height="50%" justifyContent="center">
+            <FlairText text=">>Click Me!<<" />
+          </Stack>
+        ),
       },
       {
         id: '3',
         headerNext: 'End',
         header: (
           <>
-            The art director was not pleased. It turns out that 16-time WWE Heavyweight Champion Ric Flair was <strong><em>not</em></strong> the kind of flair he was looking for 🙃. The producer couldn&rsquo;t contain her laughter, and once everyone's emotions flared down we all had a wonderful conversation about shimmers, shines, and glows.
+            The art director was not pleased. It turns out that 16-time WWE
+            Heavyweight Champion Ric Flair was{' '}
+            <strong>
+              <em>not</em>
+            </strong>{' '}
+            the kind of flair he was looking for 🙃. The producer couldn&rsquo;t
+            contain her laughter, and once everyone's emotions flared down we
+            all had a wonderful conversation about shimmers, shines, and glows.
           </>
         ),
       },
@@ -295,9 +304,9 @@ const wizards: Record<string, WizardConfig> = {
         next: '1',
         header: (
           <>
-            One of our pharmaceutical clients had recently gained new leadership in the
-            form of a transplant from a big American beer brand. This guy was
-            used to seeing flashy and exciting things, and was unwilling to
+            One of our pharmaceutical clients had recently gained new leadership
+            in the form of a transplant from a big American beer brand. This guy
+            was used to seeing flashy and exciting things, and was unwilling to
             accept the idea that pharma branding had to be&nbsp;boring.
           </>
         ),
@@ -311,9 +320,10 @@ const wizards: Record<string, WizardConfig> = {
             Major pressure was placed on the design team to keep the concept
             exciting, which in turn meant that it was even more important that
             the final product delivered that same energy. Even if it was just a
-            banner campaign! Before offering me the project, the engineering manager warned me that this
-            account was pushing the creative concepts to the limit. She was not
-            confident that we could deliver what they wanted given the tight&nbsp;time frame.
+            banner campaign! Before offering me the project, the engineering
+            manager warned me that this account was pushing the creative
+            concepts to the limit. She was not confident that we could deliver
+            what they wanted given the tight&nbsp;time frame.
           </>
         ),
         headerNext: 'Next',
@@ -323,12 +333,12 @@ const wizards: Record<string, WizardConfig> = {
         next: '3',
         header: (
           <>
-            Her fears were well-founded. Between high quality background
-            images, a live text requirement with a non-web safe font, and the
-            ridiculous 40kb size limit, there wasn't going to be any room to
-            load in a fancy framework that could animate smoke. But once I had
-            the designs I understood the assignment, and decided that the best
-            way to bring life to the concept was to leverage WebGL to create a particle
+            Her fears were well-founded. Between high quality background images,
+            a live text requirement with a non-web safe font, and the ridiculous
+            40kb size limit, there wasn't going to be any room to load in a
+            fancy framework that could animate smoke. But once I had the designs
+            I understood the assignment, and decided that the best way to bring
+            life to the concept was to leverage WebGL to create a particle
             emitter.
           </>
         ),
@@ -353,12 +363,13 @@ const wizards: Record<string, WizardConfig> = {
         header: (
           <>
             “I need you to make it bad,” she said to me in hushed tones. I
-            couldn&rsquo;t believe what I was hearing, but she was serious. So I stripped out the
-            WebGL code and refactored the emitter to use img tags instead. I had to cut down the pool size to almost a quarter
-            of what it was to get half the frame rate. <br />
+            couldn&rsquo;t believe what I was hearing, but she was serious. So I
+            stripped out the WebGL code and refactored the emitter to use img
+            tags instead. I had to cut down the pool size to almost a quarter of
+            what it was to get half the frame rate. <br />
             <br />
-            It was gross, and then it received approval from a client who never had the opportunity to
-            see the greatness that almost was 😭
+            It was gross, and then it received approval from a client who never
+            had the opportunity to see the greatness that almost was 😭
           </>
         ),
         headerNext: 'End',
@@ -405,7 +416,7 @@ const wizards: Record<string, WizardConfig> = {
         next: '3',
         header:
           'Most of our students had never coded before, but left the events having successfully designed and programmed their own video games. The genuine joy of discovery coupled with the undeniable educational benefits of critical and creative thinking made Beta a one of a kind experience.',
-          headerNext: 'Next',
+        headerNext: 'Next',
         media: (
           <Image
             style={{ maxWidth: '650px', height: '100%', objectFit: 'contain' }}
@@ -419,7 +430,7 @@ const wizards: Record<string, WizardConfig> = {
         next: '4',
         header:
           'All students received a BetaNet account with which they could continue to play and iterate on their games, make new ones, or experience what other creators were coming up with.',
-          headerNext: 'Next',
+        headerNext: 'Next',
         media: (
           <Image
             style={{
@@ -468,13 +479,13 @@ const wizards: Record<string, WizardConfig> = {
   },
 }
 
-export const useWizard = (id: string = 'home') => {
+export const useWizard = (id: string = 'home'): WizardConfig | undefined => {
   return wizards[id]
 }
 
 export const useWizardStep = (id: string = 'home', stepId: string) => {
   return (
-    useWizard(id).stepData?.find((step) => {
+    useWizard(id)?.stepData?.find((step) => {
       return step.id === stepId
     }) || ({} as WizardStepConfig)
   )

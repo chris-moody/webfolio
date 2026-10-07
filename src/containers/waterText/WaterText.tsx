@@ -10,28 +10,26 @@ import {
   Text,
   TextStyle,
 } from 'pixi.js'
-import { useCallback, useState } from 'react'
+import { useCallback, useRef } from 'react'
 
 export interface WaterTextProps {
   value: string
 }
 
 export const WaterText = ({ value }: WaterTextProps) => {
-  const [text, setText] = useState<Text | null>(null)
+  const textRef = useRef<Text | null>(null)
   const theme = useTheme()
 
   const preload = async () => {
     await Assets.load([{ alias: 'noise', src: '/noise.png' }])
   }
 
-  const onResize = useCallback(
-    (app: Application) => {
-      if (!text) return
-      text.x = app.screen.width / 2 - text.width / 2
-      text.y = app.screen.height / 2 - text.height / 2
-    },
-    [text]
-  )
+  const onResize = useCallback((app: Application) => {
+    const text = textRef.current
+    if (!text) return
+    text.x = app.screen.width / 2 - text.width / 2
+    text.y = app.screen.height / 2 - text.height / 2
+  }, [])
 
   const onReady = useCallback(
     (app: Application) => {
@@ -69,7 +67,7 @@ export const WaterText = ({ value }: WaterTextProps) => {
 
       richText.x = app.screen.width / 2 - richText.width / 2
       richText.y = app.screen.height / 2 - richText.height / 2
-      setText(richText)
+      textRef.current = richText
 
       app.stage.addChild(richText)
 

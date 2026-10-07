@@ -25,7 +25,8 @@ import {
   selectWizardSelection,
   selectWizardStep,
 } from '@/redux/slices/wizard/wizard.selector'
-import { Redirect } from '../routing/Redirect'
+import { tourPath } from '@/data/tour.manifest'
+import { NotFound } from '@/components/notFound/NotFound'
 import { useSwipeable } from 'react-swipeable'
 gsap.registerPlugin(useGSAP, TextPlugin, MotionPathPlugin)
 
@@ -96,33 +97,30 @@ export const Wizard: FC<WizardProps> = ({ className, ...props }) => {
       stepPrev: stepData[stepIndex - 1]?.id || '',
     }
   }, [stepData, stepIndex])
-  const prevLink = useMemo(() => stepPrev || (prev ? '/' + prev : null), [prev, stepPrev])
+  const prevLink = useMemo(
+    () => stepPrev || (prev ? tourPath(prev) : null),
+    [prev, stepPrev]
+  )
   const nextLink = useMemo(
     () =>
-      !showNav ? null :
-      stepConfig.next ||
-      (next && '/' + next) ||
-      (selection.next && '/' + selection.next) ||
-      '',
+      !showNav
+        ? null
+        : stepConfig.next || (next && tourPath(next)) || selection.next || '',
     [next, selection, stepConfig, showNav]
   )
 
   useEffect(() => {
     if (wizardId && stepIndex < 0 && defaultStep)
-      navigate('/' + wizardId + '/' + defaultStep)
+      navigate(tourPath(wizardId, defaultStep), { replace: true })
   }, [defaultStep, id, navigate, stepIndex, wizardId])
-
-  if (!wizardData || !wizardData.id) {
-    return <Redirect to="/404/notfound" />
-  }
 
   const onPrev = useCallback(() => {
     if (prevLink) navigate(prevLink)
-  }, [prevLink])
+  }, [navigate, prevLink])
 
   const onNext = useCallback(() => {
     if (nextLink) navigate(nextLink)
-  }, [nextLink])
+  }, [navigate, nextLink])
 
   const handlers = useSwipeable({
     onSwipedLeft: onNext,
@@ -131,6 +129,11 @@ export const Wizard: FC<WizardProps> = ({ className, ...props }) => {
     preventScrollOnSwipe: true,
     trackMouse: true,
   })
+
+  if (!wizardData || !wizardData.id) {
+    return <NotFound />
+  }
+
   const BodyComponent = bodyComponent
   const wizardBody = BodyComponent ? <BodyComponent /> : body
   return (
@@ -153,7 +156,7 @@ export const Wizard: FC<WizardProps> = ({ className, ...props }) => {
             aria-label="Close"
             viewTransition
             style={{ lineHeight: 0, color: 'inherit !important' }}
-            to={'/' + prev}
+            to={tourPath(prev)}
           >
             <CloseIcon />
           </NavLink>
@@ -177,7 +180,15 @@ export const Wizard: FC<WizardProps> = ({ className, ...props }) => {
           flex: 1,
         }}
       >
-        <Outlet context={stepConfig.next ? '/'+wizardId+'/'+stepConfig.next : '/'+next} />
+        <Outlet
+          context={
+            stepConfig.next
+              ? tourPath(wizardId, stepConfig.next)
+              : next
+                ? tourPath(next)
+                : ''
+          }
+        />
       </Box>
 
       {showNav && (
@@ -189,7 +200,7 @@ export const Wizard: FC<WizardProps> = ({ className, ...props }) => {
           my={1}
         >
           <FancyNavButton
-            aria-label='Back'
+            aria-label="Back"
             to={prevLink}
             disabled={!prevLink}
             sx={{
@@ -202,7 +213,7 @@ export const Wizard: FC<WizardProps> = ({ className, ...props }) => {
           </FancyNavButton>
 
           <FancyNavButton
-            aria-label='Next'
+            aria-label="Next"
             to={nextLink}
             sx={{
               position: 'relative',

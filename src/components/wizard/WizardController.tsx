@@ -19,16 +19,15 @@ import { FolioNav } from '@/containers/folioNav/FolioNav'
 
 const landscapeQuery =
   '@media only screen and (min-width: 320px) and (max-width: 992px) and (orientation: landscape)'
-CSS.registerProperty({ name: '--spin-angle', syntax: '<angle>', inherits: false, initialValue: '0deg' })
 const StyledController = styled(Box)(({ theme }) => [
   {
     '@keyframes spinner': {
       '0%': {
-        '--spin-angle': '0deg'
+        '--spin-angle': '0deg',
       },
       '100%': {
-        '--spin-angle': '360deg'
-      }
+        '--spin-angle': '360deg',
+      },
     },
     position: 'absolute',
     minWidth: '320px',
@@ -48,10 +47,10 @@ const StyledController = styled(Box)(({ theme }) => [
       '&.flair-37': {
         background: `repeating-conic-gradient(
         from var(--spin-angle),
-          ${lighten(theme.palette.primary.main, .1)} 0deg 9deg,
-          ${lighten(theme.palette.primary.main, .35)} 9deg 18deg,
-          ${lighten(theme.palette.primary.main, .6)} 18deg 27deg,
-          ${lighten(theme.palette.primary.main, .85)} 27deg 36deg
+          ${lighten(theme.palette.primary.main, 0.1)} 0deg 9deg,
+          ${lighten(theme.palette.primary.main, 0.35)} 9deg 18deg,
+          ${lighten(theme.palette.primary.main, 0.6)} 18deg 27deg,
+          ${lighten(theme.palette.primary.main, 0.85)} 27deg 36deg
       )`,
         animation: 'spinner 300s linear infinite',
       },
@@ -72,12 +71,12 @@ const StyledController = styled(Box)(({ theme }) => [
       '&.flair-37': {
         background: `repeating-conic-gradient(
           from var(--spin-angle),
-          ${darken(theme.palette.primary.main,  .1)} 0deg 9deg,
-          ${darken(theme.palette.primary.main,  .35)} 9deg 18deg,
-          ${darken(theme.palette.primary.main,  .6)} 18deg 27deg,
-          ${darken(theme.palette.primary.main, .85)} 27deg 36deg
+          ${darken(theme.palette.primary.main, 0.1)} 0deg 9deg,
+          ${darken(theme.palette.primary.main, 0.35)} 9deg 18deg,
+          ${darken(theme.palette.primary.main, 0.6)} 18deg 27deg,
+          ${darken(theme.palette.primary.main, 0.85)} 27deg 36deg
         )`,
-      }
+      },
     },
   }),
 ])
@@ -111,7 +110,7 @@ const WizardController: FC<BoxProps> = ({ children }) => {
             mx: 'auto',
           }}
         >
-          &copy; 2025 Christopher C. Moody
+          &copy; {new Date().getFullYear()} Christopher C. Moody
         </Typography>
       </Box>
     </StyledController>

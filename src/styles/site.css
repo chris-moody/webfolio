@@ -1,0 +1,31 @@
+@import 'tailwindcss';
+@import './tokens.css';
+
+@theme {
+  --font-sans:
+    system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-canvas text-fg antialiased;
+  }
+  a {
+    @apply text-accent underline underline-offset-2 hover:text-accent-strong;
+  }
+  :focus-visible {
+    @apply outline-3 outline-offset-2 outline-focus;
+  }
+}
+
+/* The resume PDF is printed from /resume (scripts/build-resume-pdf.mjs).
+   Everything is sized in rem, so this scales the whole page to fit two sheets. */
+@media print {
+  html {
+    font-size: 11px;
+  }
+  body {
+    @apply bg-transparent;
+  }
+}

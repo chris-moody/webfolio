@@ -3,38 +3,48 @@ import globals from 'globals'
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 import tseslint from 'typescript-eslint'
+import { defineConfig, globalIgnores } from 'eslint/config'
 
-export default tseslint.config(
-  { ignores: ['dist'] },
+export default defineConfig(
+  globalIgnores([
+    'dist',
+    'build',
+    'coverage',
+    'playwright-report',
+    'test-results',
+    '.react-router',
+  ]),
   {
-    extends: [js.configs.recommended, ...tseslint.configs.recommended],
     files: ['**/*.{ts,tsx}'],
+    extends: [
+      js.configs.recommended,
+      tseslint.configs.recommended,
+      reactHooks.configs.flat['recommended-latest'],
+      reactRefresh.configs.vite,
+    ],
     languageOptions: {
-      ecmaVersion: 2020,
+      ecmaVersion: 2022,
       globals: globals.browser,
     },
-    plugins: {
-      'react-hooks': reactHooks,
-      'react-refresh': reactRefresh,
-    },
     rules: {
-      ...reactHooks.configs.recommended.rules,
+      // React Router route modules export these alongside the component.
       'react-refresh/only-export-components': [
-        'warn',
-        { allowConstantExport: true },
-      ],
-      '@typescript-eslint/naming-convention': [
         'error',
         {
-          selector: ['parameter', 'variable'],
-          leadingUnderscore: 'require',
-          modifiers: ['unused'],
-        },
-        {
-          selector: ['parameter', 'variable'],
-          leadingUnderscore: 'allowDouble',
+          allowExportNames: [
+            'meta',
+            'links',
+            'headers',
+            'loader',
+            'clientLoader',
+            'action',
+            'clientAction',
+            'handle',
+            'shouldRevalidate',
+          ],
         },
       ],
+      '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/no-unused-vars': [
         'error',
         {

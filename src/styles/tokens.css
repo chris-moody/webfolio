@@ -1,0 +1,47 @@
+/*
+ * Semantic color tokens, light and dark. Phase 3 replaces these hand-written
+ * values with a generated three-tier system (ADR 0002); until then
+ * src/styles/tokens.test.ts checks every declared pair against WCAG AA.
+ *
+ * Mode follows MUI's color-scheme class on <html> (`light` / `dark`), set
+ * before paint by InitColorSchemeScript in root.tsx.
+ */
+:root {
+  --canvas: #f6f7f9;
+  --surface: #ffffff;
+  --fg: #15181e;
+  --fg-muted: #4a505c;
+  --border: #d5d9e0;
+  --accent: #1f5fc7;
+  --accent-strong: #184c9f;
+  --on-accent: #ffffff;
+  --focus: #1f5fc7;
+  color-scheme: light;
+}
+
+:root.dark {
+  --canvas: #0e1116;
+  --surface: #171b22;
+  --fg: #e7eaef;
+  --fg-muted: #a6adb9;
+  --border: #2b313c;
+  --accent: #7ea9f4;
+  --accent-strong: #a7c4f8;
+  --on-accent: #0a1430;
+  --focus: #7ea9f4;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-on-accent: var(--on-accent);
+  --color-focus: var(--focus);
+}
+
+@custom-variant dark (&:where(.dark, .dark *));

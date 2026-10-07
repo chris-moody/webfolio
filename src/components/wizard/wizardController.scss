@@ -1,5 +1,12 @@
 @use 'sass:color';
 
+// Registered so the flair-37 conic background can animate its angle.
+@property --spin-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
 $slideDistance: 300px;
 @keyframes fade-in {
   from {
@@ -80,7 +87,7 @@ $slideDistance: 300px;
 }
 @keyframes wizard-step-exit {
   100% {
-    transform: scale(.7);
+    transform: scale(0.7);
     opacity: 0;
   }
 }
@@ -97,7 +104,8 @@ $slideDistance: 300px;
   .controller-content {
     &.flair-15 {
       h1.MuiTypography-h1 {
-        text-shadow: 0px 0px 0 var(--mui-palette-primary-dark),
+        text-shadow:
+          0px 0px 0 var(--mui-palette-primary-dark),
           1px 1px 0 var(--mui-palette-primary-dark),
           2px 2px 0 var(--mui-palette-primary-dark),
           3px 3px 0 var(--mui-palette-primary-dark),
@@ -123,7 +131,8 @@ $slideDistance: 300px;
       &.flair-15 {
         h1.MuiTypography-h1,
         .nav-item-link:hover {
-          text-shadow: 0px 0px 8px var(--mui-palette-primary-light),
+          text-shadow:
+            0px 0px 8px var(--mui-palette-primary-light),
             2px 2px 8px var(--mui-palette-primary-light),
             -2px -2px 8px var(--mui-palette-primary-light);
         }

@@ -107,8 +107,6 @@ export const WizardStep: FC<WizardStepProps> = ({ className, ...props }) => {
     }
   }, [dispatch, id, next, selections])
 
-  useEffect(() => {})
-
   const selectionHandler = useCallback(
     (value: WizardResult) => () => {
       dispatch(setSelection(value))
@@ -132,7 +130,7 @@ export const WizardStep: FC<WizardStepProps> = ({ className, ...props }) => {
         >
           {header && (
             <TextDisplay
-              className='header content'
+              className="header content"
               sx={{
                 maxHeight: media || unwrappedMedia ? '50%' : 'auto',
               }}
@@ -146,7 +144,9 @@ export const WizardStep: FC<WizardStepProps> = ({ className, ...props }) => {
                 {header}{' '}
                 {headerNext && nextLink && (
                   <Box className="header-actions">
-                    <FancyNavButton aria-label='Next' to={nextLink}>{headerNext}</FancyNavButton>
+                    <FancyNavButton aria-label="Next" to={nextLink}>
+                      {headerNext}
+                    </FancyNavButton>
                   </Box>
                 )}
               </FancyText>

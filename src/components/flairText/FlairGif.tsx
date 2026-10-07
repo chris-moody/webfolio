@@ -1,5 +1,5 @@
 import { Box, styled } from '@mui/material'
-import { FC } from 'react'
+import { FC, useState } from 'react'
 import { TypeWriter } from '../typeWriter/TypeWriter'
 
 const StyledBox = styled(Box)({
@@ -34,11 +34,15 @@ export const FlairGif: FC<FlairGifProps> = ({
   width = 'auto',
   height = 'auto',
 }) => {
+  const [position] = useState(() => ({
+    x: Math.random() * 80,
+    y: Math.random() * 80,
+  }))
   return (
     <StyledBox
       sx={{
-        transform: `translate(min(${Math.random() * 80}vw, max(0px, calc(100vw - ${width}))),
-        min(${Math.random() * 80}vh, max(0px, calc(100vh - ${width}))))`,
+        transform: `translate(min(${position.x}vw, max(0px, calc(100vw - ${width}))),
+        min(${position.y}vh, max(0px, calc(100vh - ${height}))))`,
       }}
     >
       <TypeWriter
@@ -53,6 +57,7 @@ export const FlairGif: FC<FlairGifProps> = ({
       <img
         id={id}
         src={src}
+        alt=""
         width={width}
         height={height}
         style={{

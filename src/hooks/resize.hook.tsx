@@ -11,7 +11,7 @@ export type ResizeConfig = [
   Size,
   () => void,
   React.Dispatch<React.SetStateAction<Size>>,
-  React.RefObject<HTMLDivElement | null>
+  React.RefObject<HTMLDivElement | null>,
 ]
 
 export const useResize: () => ResizeConfig = () => {
@@ -25,23 +25,15 @@ export const useResize: () => ResizeConfig = () => {
       height: ref.current.offsetHeight,
     })
   }, [])
-  const observer = useRef<ResizeObserver>(new ResizeObserver(onResize))
 
+  // The observer is created in the effect so this hook is safe to render
+  // where ResizeObserver doesn't exist (prerendering).
   useEffect(() => {
-    if (!ref.current || !observer.current) return
-    observer.current.observe(ref.current)
+    if (!ref.current) return
+    const observer = new ResizeObserver(onResize)
+    observer.observe(ref.current)
+    return () => observer.disconnect()
+  }, [onResize])
 
-    const obs = observer.current
-    return () => {
-      obs.disconnect()
-    }
-  }, [])
-
-  return [
-    <StyledObserver ref={ref} key={0} />,
-    size,
-    onResize,
-    setSize,
-    ref,
-  ]
+  return [<StyledObserver ref={ref} key={0} />, size, onResize, setSize, ref]
 }

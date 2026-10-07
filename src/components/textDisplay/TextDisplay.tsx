@@ -40,10 +40,9 @@ const StyledText = styled(Box)(({ theme }) => ({
   [theme.breakpoints.up('lg')]: {
     margin: theme.spacing(4, 'auto'),
   },
-
 }))
 
-const StyledShadow = styled(Box)<TextDisplayProps>(({ theme  }) => ([
+const StyledShadow = styled(Box)<TextDisplayProps>(({ theme }) => [
   {
     position: 'absolute',
     bottom: 0,
@@ -55,11 +54,11 @@ const StyledShadow = styled(Box)<TextDisplayProps>(({ theme  }) => ([
   theme.applyStyles('dark', {
     background: `linear-gradient(transparent 0%, black 75%)`,
   }),
-]))
+])
 
 export const TextDisplay: FC<TextDisplayProps> = ({
   children,
-  shadowColor,
+  shadowColor: _shadowColor,
   ...props
 }) => {
   const textRef = useRef<HTMLDivElement>(null)
@@ -75,7 +74,9 @@ export const TextDisplay: FC<TextDisplayProps> = ({
 
   return (
     <StyledWrapper {...props}>
-      <StyledText ref={textRef} className="text">{children}</StyledText>
+      <StyledText ref={textRef} className="text">
+        {children}
+      </StyledText>
       {isOverflowing && <StyledShadow />}
       {monitor}
     </StyledWrapper>

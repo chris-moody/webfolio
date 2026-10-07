@@ -148,3 +148,12 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Test and audit output
+.lighthouseci
+playwright-report
+test-results
+coverage
+.react-router
+build
+perf/route-weights.json

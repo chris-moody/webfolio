@@ -111,8 +111,18 @@ export const FlairText: FC<FlairTextProps> = ({ text = '' }) => {
 
       const delta = 360 / targets.length
       targets.forEach((el, i) => {
-        tl.fromTo(el, { top: 0 }, { duration: 0.5, top: -10, yoyo: true, repeat: 1 }, i * 0.1)
-        tl.fromTo(el, { rotateY: 0 }, { duration: 1, rotateY: '+=360' }, i * 0.1)
+        tl.fromTo(
+          el,
+          { top: 0 },
+          { duration: 0.5, top: -10, yoyo: true, repeat: 1 },
+          i * 0.1
+        )
+        tl.fromTo(
+          el,
+          { rotateY: 0 },
+          { duration: 1, rotateY: '+=360' },
+          i * 0.1
+        )
         gsap.fromTo(
           el,
           { color: `hsl(${i * delta}, 100%, 50%)` },
@@ -130,8 +140,9 @@ export const FlairText: FC<FlairTextProps> = ({ text = '' }) => {
 
   useGSAP(
     () => {
-      if (flairId === -1) return
-      gsap.delayedCall(flairs[flairId].duration, () => setFlairId(-1))
+      const flair = flairs[flairId]
+      if (!flair) return
+      gsap.delayedCall(flair.duration, () => setFlairId(-1))
     },
     { dependencies: [flairId] }
   )
@@ -150,14 +161,14 @@ export const FlairText: FC<FlairTextProps> = ({ text = '' }) => {
 
   return (
     <>
-    <FlairWrapper>
-      {flairs.map(
-        (entry, index) =>
-          flairId === index && (
-            <FlairGif key={entry.flair.id} {...entry.flair} />
-          )
-      )}
-    </FlairWrapper>
+      <FlairWrapper>
+        {flairs.map(
+          (entry, index) =>
+            flairId === index && (
+              <FlairGif key={entry.flair.id} {...entry.flair} />
+            )
+        )}
+      </FlairWrapper>
       <StyledButton
         ref={container}
         onClick={onClick}

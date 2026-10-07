@@ -58,7 +58,7 @@ export const SettingsDialog: FC = () => {
             it. Checkout of the source code&#32;
             <Link
               target="_blank"
-              href="https://github.com/chris-moody/webfolio/tree/develop"
+              href="https://github.com/chris-moody/webfolio"
             >
               here!
             </Link>
