@@ -209,9 +209,9 @@ export default function Colophon({ loaderData }: Route.ComponentProps) {
         </h2>
         <p className="mt-3 max-w-prose text-fg-muted">
           The home page on {baseline.capturedAt} (before the rework) against
-          today. The “before” run was against the live site over HTTP/2; “after”
-          runs on a local HTTP/1.1 server, which Lighthouse scores more harshly,
-          so the improvement is understated.
+          today. The “before” run was against the live site; “after” runs on a
+          local HTTP/2 server with the same simulated mobile throttling, but
+          without the CDN.
         </p>
         <ScrollRegion label="Home page before and after" className="mt-3">
           <table className={table}>

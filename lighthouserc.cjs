@@ -1,48 +1,50 @@
-// Lighthouse CI. Phase 0 assertions are a regression floor; Phase 4 raises
-// them to the published targets (100s on content routes, LCP ≤ 1.5 s) and
-// points collection at Netlify deploy previews.
+// Lighthouse CI against the prerendered build, served over HTTP/2 + TLS by
+// scripts/serve-h2.mjs, as Netlify serves it. Lighthouse's simulator models
+// the protocol it observes: over a local HTTP/1.1 server it queued requests
+// on six connections and scored the tour about 7 points below production.
 //
-// The local server speaks HTTP/1.1, and Lighthouse's simulator models its
-// six-connections-per-origin limit, so FCP here runs ~0.5 s slower than the
-// same build on Netlify (HTTP/2). Thresholds are set against the local
-// numbers, so they hold (with margin) on Netlify too.
+// Still local, not Netlify deploy previews (that needs a Netlify token in CI):
+// no CDN, and Brotli/gzip from a Node server.
 module.exports = {
   ci: {
     collect: {
-      startServerCommand: 'yarn serve:dist',
+      startServerCommand: 'node scripts/serve-h2.mjs --port 4443',
       startServerReadyPattern: 'Accepting connections',
+      // The server's certificate is self-signed.
+      settings: { chromeFlags: '--ignore-certificate-errors' },
       url: [
-        'http://localhost:4173/',
-        'http://localhost:4173/resume',
-        'http://localhost:4173/lab/tape',
-        'http://localhost:4173/system',
-        'http://localhost:4173/tour/about/0',
-        'http://localhost:4173/tour/about/4',
+        'https://localhost:4443/',
+        'https://localhost:4443/resume',
+        'https://localhost:4443/lab/tape',
+        'https://localhost:4443/system',
+        'https://localhost:4443/tour/about/0',
+        'https://localhost:4443/tour/about/4',
       ],
       numberOfRuns: 5,
     },
     assert: {
       assertMatrix: [
         {
-          // Content routes: prerendered, Tailwind only. Measured 2026-10-06:
-          // 98 / 100 / 100 / 100 on the local server.
-          matchingUrlPattern: 'localhost:4173/(resume|system)?$',
+          // Content routes: prerendered, Tailwind only. Measured 2026-10-07:
+          // 100 / 100 / 100 / 100, LCP 1.4–1.5 s.
+          matchingUrlPattern: 'localhost:4443/(resume|system)?$',
           aggregationMethod: 'median-run',
           assertions: {
-            'categories:performance': ['error', { minScore: 0.95 }],
+            'categories:performance': ['error', { minScore: 0.97 }],
             'categories:accessibility': ['error', { minScore: 1 }],
             'categories:best-practices': ['error', { minScore: 1 }],
             'categories:seo': ['error', { minScore: 1 }],
-            'largest-contentful-paint': ['error', { maxNumericValue: 2500 }],
+            'largest-contentful-paint': ['error', { maxNumericValue: 2000 }],
             'cumulative-layout-shift': ['error', { maxNumericValue: 0.02 }],
           },
         },
         {
-          // Tape streams data continuously; layout must stay stable while it does.
-          matchingUrlPattern: 'localhost:4173/lab/tape$',
+          // Tape streams data continuously; layout must stay stable while it
+          // does. Measured 98–99.
+          matchingUrlPattern: 'localhost:4443/lab/tape$',
           aggregationMethod: 'median-run',
           assertions: {
-            'categories:performance': ['error', { minScore: 0.9 }],
+            'categories:performance': ['error', { minScore: 0.95 }],
             'categories:accessibility': ['error', { minScore: 1 }],
             'categories:best-practices': ['error', { minScore: 1 }],
             'categories:seo': ['error', { minScore: 1 }],
@@ -51,12 +53,12 @@ module.exports = {
           },
         },
         {
-          // The tour: MUI + GSAP shell, with Pixi/React Flow/d3/marquees split per
-          // slide (Phase 4). Measured 85–87 locally; first paint is the limit.
-          matchingUrlPattern: 'localhost:4173/tour/',
+          // The tour: MUI shell, with GSAP, Pixi, React Flow, d3, and the
+          // marquees loaded per slide or after paint. Measured 96–97.
+          matchingUrlPattern: 'localhost:4443/tour/',
           aggregationMethod: 'median-run',
           assertions: {
-            'categories:performance': ['error', { minScore: 0.8 }],
+            'categories:performance': ['error', { minScore: 0.9 }],
             'categories:accessibility': ['error', { minScore: 1 }],
             'categories:best-practices': ['error', { minScore: 1 }],
             'categories:seo': ['error', { minScore: 1 }],

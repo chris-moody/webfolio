@@ -21,4 +21,4 @@ Field Core Web Vitals go to a Netlify Function backed by Netlify Blobs.
 ## Consequences
 
 - Field metrics need a small function instead of a built-in product (Vercel Speed Insights).
-- Local Lighthouse runs use an HTTP/1.1 server and score below the HTTP/2 CDN. The CI floor accounts for this until LHCI targets deploy previews (Phase 4).
+- Local Lighthouse runs use an HTTP/2 + Brotli server (`scripts/serve-h2.mjs`) so the simulator models the same protocol as the CDN. An HTTP/1.1 server scored the tour about 7 points lower. Deploy previews would also include the CDN; that needs a Netlify token in CI.

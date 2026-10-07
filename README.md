@@ -53,15 +53,15 @@ yarn tokens      # regenerate token CSS/constants after editing src/tokens/
 
 Every pull request runs these in CI ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)):
 
-| Gate                | Command                     | Budget                                                                                                                                                |
-| ------------------- | --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Types               | `yarn typecheck`            | 0 errors, no `.js` sources                                                                                                                            |
-| Lint                | `yarn lint`                 | 0 warnings, including React Compiler–era hooks rules                                                                                                  |
-| Unit                | `yarn test`                 | Vitest + Testing Library, including WCAG AA contrast for every token pair                                                                             |
-| Resume history      | `yarn check:resume-history` | ≤ 1 commit touches `src/content/resume/` (ADR 0005)                                                                                                   |
-| Route budgets       | `yarn size`                 | Gzipped JS/CSS each prerendered page loads: ≤ 120 kB JS on content routes ([`scripts/check-budgets.mjs`](scripts/check-budgets.mjs))                  |
-| E2E + accessibility | `yarn e2e`                  | Content is in the HTML without JS; pages hydrate; unknown URLs return 404; 0 axe WCAG 2.2 AA violations in light and dark mode, on desktop and mobile |
-| Lighthouse          | `yarn lhci`                 | Median of 5 mobile runs. Content routes: Performance ≥ 95, the rest 100, LCP ≤ 2.5 s. `/lab/tape` ≥ 90. Tour ≥ 80, the rest 100                       |
+| Gate                | Command                     | Budget                                                                                                                                                                           |
+| ------------------- | --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Types               | `yarn typecheck`            | 0 errors, no `.js` sources                                                                                                                                                       |
+| Lint                | `yarn lint`                 | 0 warnings, including React Compiler–era hooks rules                                                                                                                             |
+| Unit                | `yarn test`                 | Vitest + Testing Library, including WCAG AA contrast for every token pair                                                                                                        |
+| Resume history      | `yarn check:resume-history` | ≤ 1 commit touches `src/content/resume/` (ADR 0005)                                                                                                                              |
+| Route budgets       | `yarn size`                 | Gzipped JS/CSS each prerendered page loads: ≤ 120 kB JS on content routes ([`scripts/check-budgets.mjs`](scripts/check-budgets.mjs))                                             |
+| E2E + accessibility | `yarn e2e`                  | Content is in the HTML without JS; pages hydrate; unknown URLs return 404; 0 axe WCAG 2.2 AA violations in light and dark mode, on desktop and mobile                            |
+| Lighthouse          | `yarn lhci`                 | Median of 5 mobile runs over local HTTP/2 ([`scripts/serve-h2.mjs`](scripts/serve-h2.mjs)). Content: Performance ≥ 97, LCP ≤ 2 s. Tape ≥ 95. Tour ≥ 90. All other categories 100 |
 
 ## Writing case studies
 

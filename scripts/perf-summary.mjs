@@ -67,7 +67,7 @@ const commit = execSync('git rev-parse --short HEAD').toString().trim()
 const summary = {
   measuredAt: new Date().toISOString().slice(0, 10),
   commit,
-  tool: `Lighthouse ${lighthouseVersion}, mobile emulation, simulated throttling, median of ${Object.values(routes)[0].runs} runs, local static server (HTTP/1.1)`,
+  tool: `Lighthouse ${lighthouseVersion}, mobile emulation, simulated throttling, median of ${Object.values(routes)[0].runs} runs, local HTTP/2 server (scripts/serve-h2.mjs)`,
   routes,
   weights,
 }
