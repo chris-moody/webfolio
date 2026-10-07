@@ -7,6 +7,8 @@ test('the tour menu links only to real tour pages (and back to the site)', async
   await page.goto('/tour/about/0')
   await page.getByRole('button', { name: 'Navigation' }).click()
   const menu = page.locator('.MuiDrawer-paper')
+  // The drawer's code loads on first open.
+  await expect(menu).toBeVisible()
   // Open every submenu with the keyboard-operable toggles.
   const show = menu.getByRole('button', { name: /^Show .* pages$/ })
   while ((await show.count()) > 0) await show.first().click()
@@ -80,4 +82,28 @@ test('the outgoing slide stays hidden once it has faded', async ({
     () => (window as unknown as { __fills: string[] }).__fills
   )
   expect(new Set(fills)).toEqual(new Set(['both']))
+})
+
+// Leaving the tour is a client-side navigation: the site's stylesheet has to
+// win even with the tour's still in the document (the dev server keeps it).
+test('leaving the tour lands on a styled site page', async ({ page }) => {
+  await page.goto('/tour/about/0')
+  await page.getByRole('button', { name: 'Navigation' }).click()
+  await page.getByRole('link', { name: 'Leave the tour' }).click()
+  await expect(page).toHaveURL(/\/$/)
+  const h1 = page.getByRole('heading', { level: 1 })
+  await expect(h1).toHaveText(/christopher moody/i)
+  await expect
+    .poll(() => h1.evaluate((el) => parseFloat(getComputedStyle(el).fontSize)))
+    .toBeGreaterThan(30)
+})
+
+test('the resume slide styles its own links', async ({ page }) => {
+  await page.goto('/tour/resume')
+  const email = page.getByRole('link', { name: /@moodydigital\.com/ })
+  await expect(email).toBeVisible()
+  // Not the browser's default link blue: the tour has no site stylesheet.
+  expect(await email.evaluate((el) => getComputedStyle(el).color)).not.toBe(
+    'rgb(0, 0, 238)'
+  )
 })

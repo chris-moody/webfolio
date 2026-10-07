@@ -35,15 +35,19 @@ export const FlairGif: FC<FlairGifProps> = ({
   width = 'auto',
   height = 'auto',
 }) => {
+  // Anywhere on screen, fully inside it: the box sits at x% / y% of the
+  // viewport and shifts back by the same share of its own size, so it fits
+  // at any size (0% hugs the left/top edge, 100% the right/bottom one).
   const [position] = useState(() => ({
-    x: Math.random() * 80,
-    y: Math.random() * 80,
+    x: Math.random() * 100,
+    y: Math.random() * 100,
   }))
   return (
     <StyledBox
       sx={{
-        transform: `translate(min(${position.x}vw, max(0px, calc(100vw - ${width}))),
-        min(${position.y}vh, max(0px, calc(100vh - ${height}))))`,
+        left: `${position.x}%`,
+        top: `${position.y}%`,
+        transform: `translate(-${position.x}%, -${position.y}%)`,
       }}
     >
       <TypeWriter

@@ -1,6 +1,12 @@
 /* Tour pages: utilities and tokens without Tailwind's preflight, so MUI's own
-   baseline (CssBaseline) stays in charge of the tour's look. */
-@layer theme, utilities;
+   baseline (CssBaseline) stays in charge of the tour's look.
+
+   The full Tailwind layer order, the same as site.css declares: the first
+   stylesheet to name a layer fixes its position. With only "theme, utilities"
+   here, a later site.css (navigating out of the tour; dev never removes
+   stylesheets) put its preflight "base" layer after "utilities", and the
+   preflight resets overrode every utility. */
+@layer theme, base, components, utilities;
 @import 'tailwindcss/theme.css' layer(theme);
 @import 'tailwindcss/utilities.css' layer(utilities);
 @import './tokens.generated.css';

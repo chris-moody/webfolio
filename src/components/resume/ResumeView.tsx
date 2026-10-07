@@ -3,6 +3,10 @@ import { resume } from '@/content/resume/resume'
 import type { ResumeWork } from '@/content/resume/resume.types'
 import { formatResumeDate, RESUME_PDF_PATH } from './resume.utils'
 
+// Styled here, not by site.css's base `a` rule: the tour shows this view
+// without the site stylesheet.
+const link = 'text-accent underline underline-offset-2 hover:text-accent-strong'
+
 type Level = 1 | 2
 
 interface HeadingProps {
@@ -77,13 +81,18 @@ export const ResumeView: FC<ResumeViewProps> = ({
           <address className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-sm not-italic">
             <span>{basics.location}</span>
             {basics.phone && (
-              <a href={`tel:+1${basics.phone.replace(/\D/g, '')}`}>
+              <a
+                className={link}
+                href={`tel:+1${basics.phone.replace(/\D/g, '')}`}
+              >
                 {basics.phone}
               </a>
             )}
-            <a href={`mailto:${basics.email}`}>{basics.email}</a>
+            <a className={link} href={`mailto:${basics.email}`}>
+              {basics.email}
+            </a>
             {basics.profiles.map((profile) => (
-              <a key={profile.network} href={profile.url}>
+              <a key={profile.network} className={link} href={profile.url}>
                 {profile.label}
               </a>
             ))}

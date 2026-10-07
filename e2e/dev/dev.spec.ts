@@ -69,3 +69,19 @@ for (const path of ['/tour/home/flair', '/tour/about/0']) {
     expect(errors).toEqual([])
   })
 }
+
+// Vite's dev server never removes a stylesheet once loaded, so after leaving
+// the tour both tour.css and site.css apply. Their layer order must agree.
+test('leaving the tour lands on a styled site page', async ({ page }) => {
+  const errors = trackErrors(page)
+  await page.goto('/tour/about/0')
+  await page.waitForLoadState('networkidle')
+  await page.getByRole('button', { name: 'Navigation' }).click()
+  await page.getByRole('link', { name: 'Leave the tour' }).click()
+  await expect(page).toHaveURL(/\/$/)
+  const h1 = page.getByRole('heading', { level: 1 })
+  await expect
+    .poll(() => h1.evaluate((el) => parseFloat(getComputedStyle(el).fontSize)))
+    .toBeGreaterThan(30)
+  expect(errors).toEqual([])
+})

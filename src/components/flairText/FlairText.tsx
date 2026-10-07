@@ -182,6 +182,9 @@ export const FlairText: FC<FlairTextProps> = ({ text = '' }) => {
       </FlairWrapper>
       <StyledButton
         ref={container}
+        // One span per letter (for the dance) reads letter by letter, and
+        // the arrows are decoration: name the button once, in words.
+        aria-label={text.replace(/[<>]/g, '').trim()}
         onClick={onClick}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
