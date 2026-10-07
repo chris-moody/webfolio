@@ -5,6 +5,7 @@ import { PassThrough } from 'node:stream'
 import { renderToPipeableStream } from 'react-dom/server'
 import type { EntryContext } from 'react-router'
 import { ServerRouter } from 'react-router'
+import { preloadTourMedia } from './data/tour.lazy'
 import { EMOTION_CACHE_KEY } from './emotion'
 
 const INSERTION_POINT = '<meta name="emotion-insertion-point" content=""/>'
@@ -13,12 +14,15 @@ const INSERTION_POINT = '<meta name="emotion-insertion-point" content=""/>'
 // completion (onAllReady), so React Router's streamed hydration data is in the
 // HTML. Then the critical Emotion (MUI) CSS is extracted and inlined in <head>;
 // the tour's client-side cache adopts those styles on hydration.
-export default function handleRequest(
+export default async function handleRequest(
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
   routerContext: EntryContext
 ) {
+  // Tour media is code-split with lazy(); load it first so the server renders
+  // it in place instead of streaming a placeholder plus an inline script.
+  await preloadTourMedia()
   const cache = createCache({ key: EMOTION_CACHE_KEY })
   const { extractCriticalToChunks, constructStyleTagsFromChunks } =
     createEmotionServer(cache)
@@ -30,6 +34,12 @@ export default function handleRequest(
         <ServerRouter context={routerContext} url={request.url} />
       </CacheProvider>,
       {
+        // Static pages: never outline large Suspense boundaries into a later
+        // chunk (React's default above ~12.8 kB). Outlined content arrives in a
+        // hidden <div> plus an inline script, so it's invisible without
+        // JavaScript and breaks under a strict CSP. The tour's marquee and
+        // socket-diagram slides were being outlined.
+        progressiveChunkSize: Number.MAX_SAFE_INTEGER,
         onAllReady() {
           const chunks: Buffer[] = []
           const body = new PassThrough()

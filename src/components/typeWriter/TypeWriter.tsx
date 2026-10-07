@@ -50,6 +50,13 @@ export const TypeWriter: FC<TypeWriterProps> = ({
     <FancyText fancy={{ depth: 7 }} ref={container} {...props} className="text">
       {prefix}
       {reduced ? text : textValue}
+      {/* The untyped remainder holds its space, so the box never resizes
+          (empty text collapsed it and shifted everything below). */}
+      {!reduced && (
+        <span aria-hidden="true" style={{ visibility: 'hidden' }}>
+          {text.substring(textValue.length)}
+        </span>
+      )}
     </FancyText>
   )
 }

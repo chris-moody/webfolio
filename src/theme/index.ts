@@ -4,19 +4,21 @@ import {
   responsiveFontSizes,
   type ThemeOptions,
 } from '@mui/material/styles'
-import '@fontsource/chivo/300.css'
-import '@fontsource/chivo/400.css'
-import '@fontsource/chivo/500.css'
-import '@fontsource/chivo/700.css'
-import '@fontsource/roboto/300.css'
-import '@fontsource/roboto/400.css'
-import '@fontsource/roboto/500.css'
-import '@fontsource/roboto/700.css'
-import '@fontsource/fira-sans/300.css'
-import '@fontsource/fira-sans/400.css'
-import '@fontsource/fira-sans/500.css'
-import '@fontsource/fira-sans/700.css'
-import '@fontsource/rammetto-one/400.css'
+// Latin subsets only: the site's copy is English, and the other subsets'
+// @font-face rules were dead weight in the tour's CSS.
+import '@fontsource/chivo/latin-300.css'
+import '@fontsource/chivo/latin-400.css'
+import '@fontsource/chivo/latin-500.css'
+import '@fontsource/chivo/latin-700.css'
+import '@fontsource/roboto/latin-300.css'
+import '@fontsource/roboto/latin-400.css'
+import '@fontsource/roboto/latin-500.css'
+import '@fontsource/roboto/latin-700.css'
+import '@fontsource/fira-sans/latin-300.css'
+import '@fontsource/fira-sans/latin-400.css'
+import '@fontsource/fira-sans/latin-500.css'
+import '@fontsource/fira-sans/latin-700.css'
+import '@fontsource/rammetto-one/latin-400.css'
 import {
   data,
   type Mode,

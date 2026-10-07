@@ -11,18 +11,19 @@ const root = path.resolve('build/client')
 // Budgets in kB (gzipped).
 // Content routes: ≤ 120 kB JS (§1). React DOM (~64 kB) + React Router (~42 kB)
 // are a ~106 kB floor, so app code on content routes has ~14 kB to work with.
-// Tour routes: a ratchet just above today's build; Phase 4 code-splits
-// Pixi/d3/GSAP and lowers it.
+// Tour routes: MUI + GSAP shell; Pixi, React Flow, d3, the marquees, and the
+// flair videos are split out per slide (Phase 4: 427 → ~256 kB).
 const budgets = {
   '/': { js: 120, css: 10 },
   '/resume': { js: 120, css: 10 },
   '/404': { js: 120, css: 10 },
   '/lab': { js: 120, css: 10 },
   '/system': { js: 130, css: 10 },
+  '/colophon': { js: 120, css: 10 },
   // Tape adds TanStack Table, Virtual, and Query; the worker is a separate file.
   '/lab/tape': { js: 165, css: 10 },
-  '/tour/home/flair': { js: 430, css: 35 },
-  '/tour/about/0': { js: 430, css: 35 },
+  '/tour/home/flair': { js: 270, css: 30 },
+  '/tour/about/0': { js: 270, css: 30 },
 }
 
 const htmlFile = (route) =>

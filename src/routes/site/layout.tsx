@@ -74,7 +74,8 @@ export default function SiteLayout() {
           <p>
             © {new Date().getFullYear()} {resume.basics.name}
           </p>
-          <p>
+          <p className="flex gap-4">
+            <NavLink to="/colophon">Colophon</NavLink>
             <a href={SITE.repo}>Source on GitHub</a>
           </p>
         </div>

@@ -7,7 +7,7 @@ import {
   SelectionRendererProps,
 } from '../DefaultSelectionRenderer'
 import { WizardResult } from '../../../../wizard.types'
-import { CirclePacking } from './components/CirclePacking'
+import { CirclePacking } from '@/data/tour.lazy'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { selectThemeFlair } from '@/redux/slices/theme/theme.selector'
 import { setFlair } from '@/redux/slices/theme/theme.reducer'

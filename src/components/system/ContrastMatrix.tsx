@@ -1,7 +1,7 @@
 import { ScrollRegion } from '@/components/ScrollRegion'
 import {
-  contrastMatrix,
   contrastPairs,
+  type PairResult,
   SWEEP_CHROMAS,
   SWEEP_HUES,
   SWEEP_LIGHTNESSES,
@@ -11,11 +11,11 @@ import {
 const ratio = (value: number) => `${value.toFixed(2)}`
 
 /**
- * The contrast matrix, computed at build time by the same functions and sweep
- * the CI suite (src/tokens/contrast.test.ts) asserts.
+ * The contrast matrix. Rows are computed at build time (the /system route's
+ * loader) by the same functions and sweep the CI suite asserts; recomputing
+ * them in the browser cost ~230 ms of main-thread time under throttling.
  */
-export const ContrastMatrix = () => {
-  const rows = contrastMatrix()
+export const ContrastMatrix = ({ rows }: { rows: PairResult[] }) => {
   const accents =
     1 + SWEEP_HUES.length * SWEEP_CHROMAS.length * SWEEP_LIGHTNESSES.length
   const checks = Object.keys(themes).length * 2 * accents * contrastPairs.length

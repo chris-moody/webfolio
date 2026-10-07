@@ -7,7 +7,11 @@ export default mergeConfig(
     test: {
       environment: 'jsdom',
       setupFiles: ['./src/test/setup.ts'],
-      include: ['src/**/*.test.{ts,tsx}', 'scripts/**/*.test.ts'],
+      include: [
+        'src/**/*.test.{ts,tsx}',
+        'scripts/**/*.test.ts',
+        'netlify/**/*.test.ts',
+      ],
       css: false,
       coverage: {
         provider: 'v8',

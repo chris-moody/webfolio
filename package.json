@@ -22,7 +22,8 @@
     "e2e:dev": "playwright test --config playwright.dev.config.ts",
     "tokens": "node scripts/build-tokens.ts",
     "tokens:check": "node scripts/build-tokens.ts --check",
-    "lint:colors": "node scripts/check-color-literals.mjs"
+    "lint:colors": "node scripts/check-color-literals.mjs",
+    "perf:update": "yarn build && yarn size && yarn lhci && node scripts/perf-summary.mjs"
   },
   "dependencies": {
     "@emotion/cache": "^11",
@@ -53,7 +54,8 @@
     "react-dom": "^19.3.0",
     "react-redux": "^9.2.0",
     "react-router": "7.18.4",
-    "react-swipeable": "^7.0.2"
+    "react-swipeable": "^7.0.2",
+    "web-vitals": "^6"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",
@@ -61,6 +63,8 @@
     "@eslint/js": "^10",
     "@lhci/cli": "^0.15.1",
     "@mdx-js/rollup": "^3.1.1",
+    "@netlify/blobs": "^11.1.3",
+    "@netlify/functions": "^6.0.2",
     "@playwright/test": "^1.63.0",
     "@react-router/dev": "7.18.4",
     "@tailwindcss/vite": "^4.3.3",

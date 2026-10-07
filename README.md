@@ -33,7 +33,9 @@ react-router.config.ts      Prerender list; writes 404.html, _redirects, sitemap
 scripts/                    postbuild (resume PDF + social card), route budgets, resume history tooling
 e2e/                        Playwright: smoke, no-JS content, hydration, axe (light/dark × desktop/mobile), Tape behavior, frame-time smoke budget
 docs/adr/                   Architecture decision records
-perf/                       Pre-rework baseline and per-route weights
+perf/                       Baseline and latest Lighthouse summaries (published on /colophon)
+media-src/                  Original images, GIFs, and icons; scripts/optimize-media.sh builds the served versions
+netlify/functions/          Field Core Web Vitals collector (/api/vitals)
 ```
 
 ## Running it
@@ -43,6 +45,8 @@ yarn            # Node 24 (see .nvmrc); installs a pre-commit hook (ESLint + Pre
 yarn dev        # http://localhost:3000
 yarn build      # prerender to build/client, then print the resume PDF and social card (needs Playwright's Chromium)
 yarn serve:dist # serve build/client with compression on :4173
+yarn perf:update # build, budgets, Lighthouse CI, then refresh perf/latest.json for /colophon
+yarn tokens      # regenerate token CSS/constants after editing src/tokens/
 ```
 
 ## Quality gates

@@ -18,7 +18,8 @@ export interface HorizontalLoopTimeline extends gsap.core.Timeline {
   times: number[]
 }
 
-const num = (value: unknown) => Number(value) || 0
+// parseFloat, not Number: getProperty(el, 'width', 'px') returns "100px".
+const num = (value: unknown) => parseFloat(String(value)) || 0
 
 // Adapted from GSAP's horizontalLoop helper:
 // https://gsap.com/docs/v3/HelperFunctions/helpers/seamlessLoop

@@ -3,19 +3,23 @@ import { ColorSelectionRenderer } from '@/components/wizard/components/wizardSte
 import { WizardConfig } from '@/components/wizard/Wizard'
 import { TourResume } from '@/components/resume/ResumeView'
 import { Link, Stack } from '@mui/material'
-import { Image } from '@/components/image/Image'
 import { Youtube } from '@/components/video/Youtube'
 import { TypeWriter } from '@/components/typeWriter/TypeWriter'
-import { TechMarquees } from '@/containers/techMarquees/TechMarquees'
 
-import betaClass from '@/assets/beta/beta_classroom.jpg'
-import betaLaptop from '@/assets/beta/beta_laptop.png'
-import betaLevel from '@/assets/beta/beta_paper_level_design.png'
-import meAtMagens from '@/assets/aboutme/me_at_magens.jpg'
+import {
+  betaClassroom,
+  betaLaptop,
+  betaLevelDesign,
+  meAtMagens,
+} from '@/data/media'
+import { Picture } from '@/components/image/Picture'
 import { WizardStepConfig } from '@/components/wizard/components/wizardStep/WizardStep'
-import { SocketFlow } from '@/components/socketFlow/SocketFlow'
-import { FlairText } from '@/components/flairText/FlairText'
-import { WaterText } from '@/containers/waterText/WaterText'
+import {
+  FlairText,
+  SocketFlow,
+  TechMarquees,
+  WaterText,
+} from '@/data/tour.lazy'
 import { tourPath } from '@/data/tour.manifest'
 import { LinkSelectionRenderer } from '@/components/wizard/components/wizardStep/components/LinkSelectionRenderer'
 
@@ -212,9 +216,10 @@ const wizards: Record<string, WizardConfig> = {
         ),
         headerNext: 'End',
         media: (
-          <Image
+          <Picture
+            priority
+            {...meAtMagens}
             style={{ maxWidth: '600px', height: '100%', objectFit: 'contain' }}
-            src={meAtMagens}
             alt="Chris Moody at Magen's Bay"
           />
         ),
@@ -424,9 +429,10 @@ const wizards: Record<string, WizardConfig> = {
           'CodePop sported an event model, conditional statements, loops, and simple custom functions. We ran classes, camps and conference events where we showed attendees how to protoype a simple game on paper and then bring it to life using Beta!',
         headerNext: 'Next',
         media: (
-          <Image
+          <Picture
+            priority
+            {...betaLevelDesign}
             style={{ maxWidth: '600px', height: '100%', objectFit: 'contain' }}
-            src={betaLevel}
             alt="Paper prototype"
           />
         ),
@@ -439,9 +445,10 @@ const wizards: Record<string, WizardConfig> = {
           'Most of our students had never coded before, but left the events having successfully designed and programmed their own video games. The genuine joy of discovery coupled with the undeniable educational benefits of critical and creative thinking made Beta a one of a kind experience.',
         headerNext: 'Next',
         media: (
-          <Image
+          <Picture
+            priority
+            {...betaClassroom}
             style={{ maxWidth: '650px', height: '100%', objectFit: 'contain' }}
-            src={betaClass}
             alt="Beta classroom"
           />
         ),
@@ -454,14 +461,15 @@ const wizards: Record<string, WizardConfig> = {
           'All students received a BetaNet account with which they could continue to play and iterate on their games, make new ones, or experience what other creators were coming up with.',
         headerNext: 'Next',
         media: (
-          <Image
+          <Picture
+            priority
+            {...betaLaptop}
             style={{
               maxWidth: '650px',
               height: '100%',
               objectFit: 'contain',
               margin: '0 auto',
             }}
-            src={betaLaptop}
             alt="Beta the game"
           />
         ),

@@ -20,6 +20,7 @@ const pages = [
   '/lab',
   '/lab/tape',
   '/system',
+  '/colophon',
   ...tourPaths(),
 ]
 

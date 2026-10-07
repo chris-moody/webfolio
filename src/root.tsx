@@ -8,7 +8,9 @@ import {
   ScrollRestoration,
 } from 'react-router'
 import type { Route } from './+types/root'
+import { useEffect } from 'react'
 import { MOTION_BOOT_SCRIPT } from './motion/motion'
+import { startRum } from './rum'
 import { SITE } from './site'
 
 export const links: Route.LinksFunction = () => [
@@ -41,6 +43,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
+  useEffect(() => startRum(), [])
   return <Outlet />
 }
 

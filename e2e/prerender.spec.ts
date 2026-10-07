@@ -13,6 +13,18 @@ test.describe('without JavaScript', () => {
     })
   }
 
+  test('large lazy slides (marquee logos) render without JavaScript', async ({
+    page,
+  }) => {
+    await page.goto('/tour/about/3')
+    await expect(
+      page.getByRole('list', { name: 'Tools and technologies' })
+    ).toContainText('TypeScript')
+    await expect(
+      page.locator('img[src="/tech_icons/typescript.webp"]').first()
+    ).toBeVisible()
+  })
+
   test('the resume is readable', async ({ page }) => {
     await page.goto('/resume')
     await expect(
@@ -64,4 +76,17 @@ test('the resume PDF is generated and served', async ({ request }) => {
   const response = await request.get('/cmoodyResume.pdf')
   expect(response.status()).toBe(200)
   expect((await response.body()).subarray(0, 5).toString()).toBe('%PDF-')
+})
+
+// React outlines large or still-suspended boundaries into a hidden <div> plus
+// an inline script. Prerendered pages must have everything in place: content
+// visible without JavaScript and no inline scripts needed to reveal it.
+test('no prerendered page defers content to an inline script', async ({
+  request,
+}) => {
+  for (const route of routes) {
+    const html = await (await request.get(route.path)).text()
+    expect(html, route.path).not.toContain('<!--$?-->')
+    expect(html, route.path).not.toContain('<template id="B:')
+  }
 })

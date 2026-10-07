@@ -17,6 +17,7 @@ import {
 } from '@/redux/slices/theme/theme.selector'
 import { store } from '@/redux/store'
 import { createTourTheme } from '@/theme'
+import { prefetchTourMediaOnIntent } from '@/data/tour.lazy'
 import { accentDeclarations, themeForFlair } from '@/tokens'
 import { useEffect, useMemo } from 'react'
 import '@/styles/tour.css'
@@ -53,6 +54,7 @@ function TourTheme() {
   const flair = useAppSelector(selectThemeFlair)
   const theme = useMemo(() => createTourTheme({ flair, color }), [flair, color])
   useTourTokens(flair, color)
+  useEffect(() => prefetchTourMediaOnIntent(), [])
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline enableColorScheme />

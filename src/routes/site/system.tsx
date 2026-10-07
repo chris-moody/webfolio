@@ -4,7 +4,11 @@ import { Playground } from '@/components/system/Playground'
 import { TierDiagram } from '@/components/system/TierDiagram'
 import { TokenTables } from '@/components/system/TokenTables'
 import { pageMeta, SITE } from '@/site'
+import { contrastMatrix } from '@/tokens/sweep'
 import type { Route } from './+types/system'
+
+// Runs at build time for the prerendered page; the matrix ships as data.
+export const loader = () => ({ matrix: contrastMatrix() })
 
 export const meta: Route.MetaFunction = () =>
   pageMeta({
@@ -33,7 +37,7 @@ const Section = ({
 
 const repo = (file: string) => `${SITE.repo}/blob/develop/${file}`
 
-export default function System() {
+export default function System({ loaderData }: Route.ComponentProps) {
   return (
     <>
       <h1 className="text-4xl font-bold tracking-tight">Design system</h1>
@@ -98,7 +102,7 @@ export default function System() {
       </Section>
 
       <Section id="contrast" title="Contrast matrix">
-        <ContrastMatrix />
+        <ContrastMatrix rows={loaderData.matrix} />
       </Section>
 
       <Section id="tokens" title="Tokens">

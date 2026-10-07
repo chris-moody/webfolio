@@ -2,10 +2,18 @@ import { FC, useRef, useState } from 'react'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import { Box, styled, Typography } from '@mui/material'
-import woo1 from '@/assets/flair/woo-1.gif'
-import woo4 from '@/assets/flair/woo-4.gif'
-import woo5 from '@/assets/flair/woo-5.gif'
-import woo6 from '@/assets/flair/woo-6.gif'
+import woo1Mp4 from '@/assets/media/woo-1.mp4'
+import woo1Webm from '@/assets/media/woo-1.webm'
+import woo1Poster from '@/assets/media/woo-1-poster.webp'
+import woo4Mp4 from '@/assets/media/woo-4.mp4'
+import woo4Webm from '@/assets/media/woo-4.webm'
+import woo4Poster from '@/assets/media/woo-4-poster.webp'
+import woo5Mp4 from '@/assets/media/woo-5.mp4'
+import woo5Webm from '@/assets/media/woo-5.webm'
+import woo5Poster from '@/assets/media/woo-5-poster.webp'
+import woo6Mp4 from '@/assets/media/woo-6.mp4'
+import woo6Webm from '@/assets/media/woo-6.webm'
+import woo6Poster from '@/assets/media/woo-6-poster.webp'
 import { FlairGif } from './FlairGif'
 import { useReducedMotion } from '@/motion/motion'
 
@@ -13,7 +21,7 @@ const flairs = [
   {
     flair: {
       id: 'woo1',
-      src: woo1,
+      video: { mp4: woo1Mp4, webm: woo1Webm, poster: woo1Poster },
       clipR: '25%',
       clipX: '45%',
       clipY: '45%',
@@ -24,7 +32,7 @@ const flairs = [
   {
     flair: {
       id: 'woo4',
-      src: woo4,
+      video: { mp4: woo4Mp4, webm: woo4Webm, poster: woo4Poster },
       clipR: '40%',
       clipX: '60%',
       clipY: '50%',
@@ -35,7 +43,7 @@ const flairs = [
   {
     flair: {
       id: 'woo5',
-      src: woo5,
+      video: { mp4: woo5Mp4, webm: woo5Webm, poster: woo5Poster },
       clipR: '40%',
       clipX: '55%',
       clipY: '50%',
@@ -46,7 +54,7 @@ const flairs = [
   {
     flair: {
       id: 'woo6',
-      src: woo6,
+      video: { mp4: woo6Mp4, webm: woo6Webm, poster: woo6Poster },
       clipR: '25%',
       clipX: '65%',
       clipY: '40%',

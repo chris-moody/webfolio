@@ -1,80 +1,11 @@
-import { FC, ReactElement } from 'react'
-import { preload } from 'react-dom'
-import { Box, styled } from '@mui/material'
+import { FC, HTMLAttributes, ReactNode, useState } from 'react'
+import { Box, styled, Tooltip, Typography } from '@mui/material'
 import { Marquee } from '@/components/marquee/Marquee'
-import { Image, ImageProps } from '@/components/image/Image'
 import { useReducedMotion } from '@/motion/motion'
+import { libraries, platform, type Tech, tools } from '@/data/tech'
 
-const aws = '/tech_icons/aws.svg'
-const canva = '/tech_icons/canva.svg'
-const confluence = '/tech_icons/confluence.png'
-const copilot = '/tech_icons/copilot.png'
-const css = '/tech_icons/css.svg'
-const cytoscape = '/tech_icons/cytoscape.svg'
-const d3 = '/tech_icons/d3.png'
-const dexie = '/tech_icons/dexiejs.svg'
-const dynamoDb = '/tech_icons/dynamoDb.png'
-const figma = '/tech_icons/figma.png'
-const git = '/tech_icons/git.png'
-const gsap = '/tech_icons/gsap.svg'
-const highcharts = '/tech_icons/highcharts.png'
-const html = '/tech_icons/html.svg'
-const jira = '/tech_icons/jira.png'
-const js = '/tech_icons/js.svg'
-const miro = '/tech_icons/miro.svg'
-const mongoDb = '/tech_icons/mongoDb.svg'
-const mui = '/tech_icons/mui.png'
-const nextjs = '/tech_icons/nextjs.svg'
-const node = '/tech_icons/node.svg'
-const pixijs = '/tech_icons/pixijs.png'
-const postgresql = '/tech_icons/postgresql.png'
-const react_router = '/tech_icons/react-router.svg'
-const wouter = '/tech_icons/wouter.svg'
-const react = '/tech_icons/react.svg'
-const redux = '/tech_icons/redux.png'
-const sass = '/tech_icons/sass.png'
-const socketIO = '/tech_icons/socketIO.png'
-const styledComponents = '/tech_icons/styled-components.png'
-const typescript = '/tech_icons/typescript.webp'
-const vite = '/tech_icons/vite.svg'
-const vscode = '/tech_icons/vscode.svg'
-const webpack = '/tech_icons/webpack.png'
-const webstorm = '/tech_icons/webstorm.png'
-preload(aws, { as: 'image' })
-preload(canva, { as: 'image' })
-preload(confluence, { as: 'image' })
-preload(copilot, { as: 'image' })
-preload(css, { as: 'image' })
-preload(cytoscape, { as: 'image' })
-preload(d3, { as: 'image' })
-preload(dexie, { as: 'image' })
-preload(dynamoDb, { as: 'image' })
-preload(figma, { as: 'image' })
-preload(git, { as: 'image' })
-preload(gsap, { as: 'image' })
-preload(highcharts, { as: 'image' })
-preload(html, { as: 'image' })
-preload(jira, { as: 'image' })
-preload(js, { as: 'image' })
-preload(miro, { as: 'image' })
-preload(mongoDb, { as: 'image' })
-preload(mui, { as: 'image' })
-preload(nextjs, { as: 'image' })
-preload(node, { as: 'image' })
-preload(pixijs, { as: 'image' })
-preload(postgresql, { as: 'image' })
-preload(react_router, { as: 'image' })
-preload(wouter, { as: 'image' })
-preload(react, { as: 'image' })
-preload(redux, { as: 'image' })
-preload(sass, { as: 'image' })
-preload(socketIO, { as: 'image' })
-preload(styledComponents, { as: 'image' })
-preload(typescript, { as: 'image' })
-preload(vite, { as: 'image' })
-preload(vscode, { as: 'image' })
-preload(webpack, { as: 'image' })
-preload(webstorm, { as: 'image' })
+const LOGO = 84
+const GAP = 16
 
 const StyledTechMarquees = styled(Box)({
   position: 'relative',
@@ -91,13 +22,7 @@ const StyledWrapper = styled(Box)({
   transformOrigin: '50% 50%',
 })
 
-export type MarqueeImageProps = Omit<ImageProps, 'id'> & {
-  id: string
-}
-
-const StaticGrid = styled('ul')(({ theme }) => ({
-  listStyle: 'none',
-  margin: 0,
+const StaticGrid = styled('div')(({ theme }) => ({
   padding: theme.spacing(2),
   display: 'flex',
   flexWrap: 'wrap',
@@ -105,107 +30,141 @@ const StaticGrid = styled('ul')(({ theme }) => ({
   alignItems: 'center',
   gap: theme.spacing(2),
   overflowY: 'auto',
-  img: { width: 56, height: 'auto' },
+  img: { width: 56, height: 56 },
 }))
 
-const createImageArray = (data: MarqueeImageProps[]): ReactElement[] => {
-  return data
-    .map(({ id, ...props }) => (
-      <Image
-        className="item"
-        {...props}
-        alt={id}
-        key={id}
-        style={{ maxWidth: '100px', paddingRight: '16px' }}
-      />
-    ))
-    .concat(
-      data.map(({ id, ...props }) => (
-        <Image
-          className="item"
-          {...props}
-          alt={id}
-          key={id + 2}
-          style={{ maxWidth: '100px', paddingRight: '16px' }}
-        />
-      ))
-    )
+// Fixed, inline-styled box: the marquee measures each item's computed width
+// once, when it starts. Unsized or not-yet-styled items measured 0, and the
+// loop never moved.
+const item = {
+  display: 'flex',
+  flex: 'none',
+  boxSizing: 'border-box',
+  width: LOGO + GAP,
+  paddingRight: GAP,
+} as const
+
+const Logo = styled('img')({
+  width: LOGO,
+  height: LOGO,
+  objectFit: 'contain',
+  display: 'block',
+})
+
+const srOnly = {
+  position: 'absolute',
+  width: 1,
+  height: 1,
+  margin: -1,
+  padding: 0,
+  overflow: 'hidden',
+  clip: 'rect(0 0 0 0)',
+  whiteSpace: 'nowrap',
+  border: 0,
+} as const
+
+type TechTooltipProps = { tech: Tech; children: ReactNode } & Pick<
+  HTMLAttributes<HTMLSpanElement>,
+  'className' | 'style'
+>
+
+/**
+ * Name and description on hover or tap. A tap also opens it on click: MUI's
+ * touch delay is a timer that a quick tap's touchend cancels. Touch tooltips
+ * close themselves after MUI's leaveTouchDelay.
+ */
+const TechTooltip: FC<TechTooltipProps> = ({ tech, children, ...props }) => {
+  const [open, setOpen] = useState(false)
+  return (
+    <Tooltip
+      arrow
+      placement="top"
+      enterTouchDelay={0}
+      describeChild
+      open={open}
+      onOpen={() => setOpen(true)}
+      onClose={() => setOpen(false)}
+      title={
+        <>
+          <Typography variant="subtitle2" component="span" display="block">
+            {tech.name}
+          </Typography>
+          <Typography variant="caption" component="span" display="block">
+            {tech.description}
+          </Typography>
+        </>
+      }
+    >
+      <span {...props} onClick={() => setOpen(true)}>
+        {children}
+      </span>
+    </Tooltip>
+  )
 }
+
+const items = (data: Tech[], copy: number) =>
+  data.map((tech) => (
+    <TechTooltip
+      key={`${tech.name}-${copy}`}
+      tech={tech}
+      className="item"
+      style={item}
+    >
+      <Logo src={tech.src} alt="" width={LOGO} height={LOGO} decoding="async" />
+    </TechTooltip>
+  ))
+
+/** Enough copies of a row to cover the rotated wall. */
+const row = (data: Tech[]) => [...items(data, 0), ...items(data, 1)]
 
 export const TechMarquees: FC = () => {
   const reduced = useReducedMotion()
-  const toolData: MarqueeImageProps[] = [
-    { id: 'Canva', src: canva },
-    { id: 'Confluence', src: confluence },
-    { id: 'Copilot', src: copilot },
-    { id: 'Figma', src: figma },
-    { id: 'jira', src: jira },
-    { id: 'miro', src: miro },
-    { id: 'vscode', src: vscode },
-    { id: 'webstorm', src: webstorm },
-  ]
-  const techData: MarqueeImageProps[] = [
-    { id: 'Cytoscape', src: cytoscape },
-    { id: 'd3', src: d3 },
-    { id: 'dexiejs', src: dexie },
-    { id: 'react_router', src: react_router },
-    { id: 'git', src: git },
-    { id: 'gsap', src: gsap },
-    { id: 'highcharts', src: highcharts },
-    { id: 'mui', src: mui },
-    { id: 'pixijs', src: pixijs },
-    { id: 'wouter', src: wouter },
-    { id: 'react', src: react },
-    { id: 'redux', src: redux },
-    { id: 'styled_components', src: styledComponents },
-    { id: 'nextjs', src: nextjs },
-  ]
-  const serverData: MarqueeImageProps[] = [
-    { id: 'AWS', src: aws },
-    { id: 'CSS', src: css },
-    { id: 'Dynamo DB', src: dynamoDb },
-    { id: 'html', src: html },
-    { id: 'js', src: js },
-    { id: 'Mongo DB', src: mongoDb },
-    { id: 'nodejs', src: node },
-    { id: 'postgresql', src: postgresql },
-    { id: 'sass', src: sass },
-    { id: 'socketIO', src: socketIO },
-    { id: 'typescript', src: typescript },
-    { id: 'vite', src: vite },
-    { id: 'webpack', src: webpack },
-  ]
+  const all = [...tools, ...libraries, ...platform]
+
+  // The logos are decorative and repeated; assistive tech gets one list.
+  const list = (
+    <Box component="ul" sx={srOnly} aria-label="Tools and technologies">
+      {all.map((tech) => (
+        <li key={tech.name}>
+          {tech.name}: {tech.description}
+        </li>
+      ))}
+    </Box>
+  )
 
   // Three endless marquees can't be paused individually, so reduced motion
   // (also the tour's "Stop animations" control) shows the same logos as a grid.
   if (reduced) {
     return (
       <StyledTechMarquees className="content">
-        <StaticGrid aria-label="Tools and technologies">
-          {[...toolData, ...techData, ...serverData].map(({ id, ...props }) => (
-            <li key={id}>
-              <Image {...props} alt={id} />
-            </li>
+        {list}
+        <StaticGrid aria-hidden="true">
+          {all.map((tech) => (
+            <TechTooltip
+              key={tech.name}
+              tech={tech}
+              style={{ display: 'flex' }}
+            >
+              <img src={tech.src} alt="" width={56} height={56} />
+            </TechTooltip>
           ))}
         </StaticGrid>
       </StyledTechMarquees>
     )
   }
 
-  const tools = createImageArray(toolData)
-  const tech = createImageArray(techData)
-  const server = createImageArray(serverData)
   return (
     <StyledTechMarquees className="content">
-      <StyledWrapper>
-        <Marquee speed={0.5} overflow="hidden">
-          {tools}
+      {list}
+      <StyledWrapper aria-hidden="true">
+        <Marquee speed={0.5} overflow="hidden" pauseOnHover>
+          {row(tools)}
         </Marquee>
-        <Marquee speed={1} overflow="hidden" reversed>
-          {tech}
+        <Marquee speed={1} overflow="hidden" reversed pauseOnHover>
+          {row(libraries)}
         </Marquee>
-        <Marquee speed={0.25} overflow="hidden">
-          {server}
+        <Marquee speed={0.25} overflow="hidden" pauseOnHover>
+          {row(platform)}
         </Marquee>
       </StyledWrapper>
     </StyledTechMarquees>

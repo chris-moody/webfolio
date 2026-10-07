@@ -15,7 +15,9 @@ module.exports = {
         'http://localhost:4173/',
         'http://localhost:4173/resume',
         'http://localhost:4173/lab/tape',
+        'http://localhost:4173/system',
         'http://localhost:4173/tour/about/0',
+        'http://localhost:4173/tour/about/4',
       ],
       numberOfRuns: 5,
     },
@@ -24,7 +26,7 @@ module.exports = {
         {
           // Content routes: prerendered, Tailwind only. Measured 2026-10-06:
           // 98 / 100 / 100 / 100 on the local server.
-          matchingUrlPattern: 'localhost:4173/(resume)?$',
+          matchingUrlPattern: 'localhost:4173/(resume|system)?$',
           aggregationMethod: 'median-run',
           assertions: {
             'categories:performance': ['error', { minScore: 0.95 }],
@@ -49,11 +51,12 @@ module.exports = {
           },
         },
         {
-          // The tour: MUI, GSAP, Pixi, and four font families. Phase 4 raises this.
+          // The tour: MUI + GSAP shell, with Pixi/React Flow/d3/marquees split per
+          // slide (Phase 4). Measured 83 locally; first paint is the limit.
           matchingUrlPattern: 'localhost:4173/tour/',
           aggregationMethod: 'median-run',
           assertions: {
-            'categories:performance': ['error', { minScore: 0.7 }],
+            'categories:performance': ['error', { minScore: 0.8 }],
             'categories:accessibility': ['error', { minScore: 0.95 }],
             'categories:best-practices': ['error', { minScore: 0.95 }],
             'categories:seo': ['error', { minScore: 0.9 }],

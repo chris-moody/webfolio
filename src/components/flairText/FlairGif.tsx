@@ -19,7 +19,8 @@ export interface FlairGifProps {
   id: string
   width?: number | string
   height?: number | string
-  src: string
+  /** Former GIFs, re-encoded as muted looping video (~90% smaller). */
+  video: { mp4: string; webm: string; poster: string }
   clipX?: string
   clipY?: string
   clipR?: string
@@ -27,7 +28,7 @@ export interface FlairGifProps {
 
 export const FlairGif: FC<FlairGifProps> = ({
   id,
-  src,
+  video,
   clipR = '25%',
   clipX = '45%',
   clipY = '45%',
@@ -54,17 +55,25 @@ export const FlairGif: FC<FlairGifProps> = ({
         duration={0.5}
         text="Wooooo!!!"
       />
-      <img
+      {/* Decorative and short (under 4 s, user-triggered): no controls needed. */}
+      <video
         id={id}
-        src={src}
-        alt=""
+        poster={video.poster}
+        autoPlay
+        loop
+        muted
+        playsInline
+        aria-hidden="true"
         width={width}
         height={height}
         style={{
           clipPath: `circle(${clipR} at ${clipX} ${clipY})`,
           zIndex: 2,
         }}
-      />
+      >
+        <source src={video.webm} type="video/webm" />
+        <source src={video.mp4} type="video/mp4" />
+      </video>
     </StyledBox>
   )
 }
