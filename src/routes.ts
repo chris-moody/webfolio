@@ -10,6 +10,8 @@ export default [
   layout('routes/site/layout.tsx', [
     index('routes/site/home.tsx'),
     route('resume', 'routes/site/resume.tsx'),
+    route('work', 'routes/site/work.tsx'),
+    route('work/:slug', 'routes/site/work.$slug.tsx'),
     route('lab', 'routes/site/lab.tsx'),
     route('lab/tape', 'routes/site/lab.tape.tsx'),
     route('*', 'routes/site/not-found.tsx'),

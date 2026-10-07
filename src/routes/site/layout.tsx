@@ -2,10 +2,16 @@ import { NavLink, Outlet } from 'react-router'
 import { tourPath, TOUR_START } from '@/data/tour.manifest'
 import { resume } from '@/content/resume/resume'
 import { SITE } from '@/site'
+import { caseStudyIndex } from 'virtual:case-studies/index'
 import '@/styles/site.css'
 
+// Work appears once at least one case study is in this build (drafts are
+// excluded from production builds).
 const nav = [
   { to: '/', label: 'Home', end: true },
+  ...(caseStudyIndex.length
+    ? [{ to: '/work', label: 'Work', end: false }]
+    : []),
   { to: '/lab', label: 'Lab', end: false },
   { to: '/resume', label: 'Resume', end: false },
   {

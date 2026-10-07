@@ -1,7 +1,11 @@
+import mdx from '@mdx-js/rollup'
 import { reactRouter } from '@react-router/dev/vite'
 import tailwindcss from '@tailwindcss/vite'
 import path from 'node:path'
+import remarkFrontmatter from 'remark-frontmatter'
+import remarkMdxFrontmatter from 'remark-mdx-frontmatter'
 import { defineConfig } from 'vite'
+import { caseStudiesPlugin } from './scripts/case-studies.plugin.ts'
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -19,5 +23,19 @@ export default defineConfig({
     noExternal: [/^@mui\//],
   },
   // The React Router plugin owns the app build; Vitest only needs JSX.
-  plugins: [tailwindcss(), !process.env.VITEST && reactRouter()],
+  plugins: [
+    tailwindcss(),
+    // Case studies: MDX with YAML frontmatter exported as `frontmatter`.
+    {
+      enforce: 'pre',
+      ...mdx({
+        remarkPlugins: [
+          remarkFrontmatter,
+          [remarkMdxFrontmatter, { name: 'frontmatter' }],
+        ],
+      }),
+    },
+    caseStudiesPlugin(),
+    !process.env.VITEST && reactRouter(),
+  ],
 })

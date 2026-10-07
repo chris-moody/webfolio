@@ -1,10 +1,26 @@
 import type { Config } from '@react-router/dev/config'
 import { copyFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
+import { listCaseStudies, shouldIncludeDrafts } from './scripts/case-studies.ts'
 import { tourPaths, tourRedirects } from './src/data/tour.manifest'
 import { SITE } from './src/site'
 
-const pages = ['/', '/resume', '/lab', '/lab/tape', ...tourPaths()]
+// Prerender runs in production mode; drafts are included only for preview builds.
+const caseStudies = listCaseStudies({
+  includeDrafts: shouldIncludeDrafts('production'),
+})
+const workPages = caseStudies.length
+  ? ['/work', ...caseStudies.map((study) => `/work/${study.slug}`)]
+  : []
+
+const pages = [
+  '/',
+  '/resume',
+  ...workPages,
+  '/lab',
+  '/lab/tape',
+  ...tourPaths(),
+]
 
 // Static prerendering (ADR 0001): every page is an HTML file with its content
 // in it. Netlify serves those files directly; anything else gets 404.html with

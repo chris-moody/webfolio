@@ -23,6 +23,8 @@ src/
 ├── lab/tape/               Real-time market grid demo: worker engine, TanStack grid, frame meter (see its ARCHITECTURE.md)
 ├── routes/tour/            Tour layout (Redux + MUI theme) and wizard/step routes
 ├── content/resume/         Resume data, the single source for the page and the PDF (ADR 0005)
+├── content/work/           Case studies (MDX); drafts never ship in production builds
+├── components/case-study/  Case-study building blocks, including the RTK Query ↔ TanStack Query sandbox
 ├── data/                   Tour manifest (route structure) and wizard content
 ├── styles/                 Design tokens (light/dark) and Tailwind entry points
 ├── components/, containers/, hooks/, redux/, theme/, utils/
@@ -55,6 +57,10 @@ Every pull request runs these in CI ([`.github/workflows/ci.yml`](.github/workfl
 | Route budgets       | `yarn size`                 | Gzipped JS/CSS each prerendered page loads: ≤ 120 kB JS on content routes ([`scripts/check-budgets.mjs`](scripts/check-budgets.mjs))                  |
 | E2E + accessibility | `yarn e2e`                  | Content is in the HTML without JS; pages hydrate; unknown URLs return 404; 0 axe WCAG 2.2 AA violations in light and dark mode, on desktop and mobile |
 | Lighthouse          | `yarn lhci`                 | Median of 5 mobile runs. Content routes: Performance ≥ 95, the rest 100, LCP ≤ 2.5 s. Tour: floor until Phase 4                                       |
+
+## Writing case studies
+
+Case studies are MDX files in `src/content/work/` with frontmatter (`title`, `summary`, `date`, `draft`, `order`). Drafts appear in `yarn dev` and in preview builds (`INCLUDE_DRAFTS=1 yarn build`) only.
 
 ## Updating the resume
 
