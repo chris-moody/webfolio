@@ -65,3 +65,26 @@ test('switches the engine to the main thread and back', async ({ page }) => {
   await page.getByText('Web Worker', { exact: true }).click()
   await expect(grid(page).getByRole('row').nth(1)).not.toContainText('…')
 })
+
+test('the Columns menu opens without shifting the layout', async ({ page }) => {
+  await waitForData(page)
+  const before = await grid(page).boundingBox()
+  const button = page.getByRole('button', { name: /^columns/i })
+  await button.click()
+  const menu = page.getByRole('group', { name: 'Visible columns' })
+  await expect(menu).toBeVisible()
+  expect(await grid(page).boundingBox()).toEqual(before)
+
+  await expect(
+    grid(page).getByRole('columnheader', { name: 'Trend' })
+  ).toBeVisible()
+  await menu.getByRole('checkbox', { name: 'Trend' }).uncheck()
+  await expect(
+    grid(page).getByRole('columnheader', { name: 'Trend' })
+  ).toHaveCount(0)
+  await expect(button).toContainText('8/11')
+
+  await page.keyboard.press('Escape')
+  await expect(menu).toBeHidden()
+  await expect(button).toBeFocused()
+})

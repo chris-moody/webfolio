@@ -16,6 +16,7 @@ import type { HostMode } from '../hosts'
 import { referenceQuery } from '../reference'
 import { TapeStore, type TapeSnapshot } from '../store'
 import { COLUMN_IDS, frameRows, type TapeRow } from '../rows'
+import { ColumnsMenu } from './ColumnsMenu'
 import { TapeGrid } from './TapeGrid'
 
 const EMPTY: TapeSnapshot = {
@@ -243,27 +244,18 @@ export const TapeDemo = () => {
           </div>
         </div>
 
-        <details className="text-sm md:justify-self-end">
-          <summary className="cursor-pointer font-semibold">Columns</summary>
-          <fieldset className="mt-2 grid grid-cols-2 gap-x-4 gap-y-1">
-            <legend className="sr-only">Visible columns</legend>
-            {COLUMN_IDS.filter((id) => id !== 'symbol').map((id) => (
-              <label key={id} className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  checked={columnVisibility[id] !== false}
-                  onChange={(event) =>
-                    setColumnVisibility((current) => ({
-                      ...current,
-                      [id]: event.target.checked,
-                    }))
-                  }
-                />
-                {labels[id]}
-              </label>
-            ))}
-          </fieldset>
-        </details>
+        <div className="md:justify-self-end">
+          <ColumnsMenu
+            columns={COLUMN_IDS.filter((id) => id !== 'symbol').map((id) => ({
+              id,
+              label: labels[id] ?? id,
+            }))}
+            visibility={columnVisibility}
+            onChange={(id, visible) =>
+              setColumnVisibility((current) => ({ ...current, [id]: visible }))
+            }
+          />
+        </div>
       </div>
 
       <TapeGrid
