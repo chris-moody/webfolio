@@ -29,6 +29,7 @@
     "vitest.config.ts",
     "react-router.config.ts",
     "playwright.config.ts",
+    "playwright.dev.config.ts",
     "src/data/tour.manifest.ts",
     "src/site.ts"
   ]

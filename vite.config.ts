@@ -17,6 +17,25 @@ export default defineConfig({
       '@': path.resolve(import.meta.dirname, './src'),
     },
   },
+  optimizeDeps: {
+    // Scan every route up front so dependencies are pre-bundled at startup.
+    // Otherwise the first visit to the tour (MUI, GSAP, Pixi) re-optimizes
+    // and reloads the page mid-session.
+    entries: ['src/**/*.tsx'],
+    // MUI's transitive dependencies, which the scan doesn't reach through
+    // MUI's deep imports. Listed so the first tour visit doesn't trigger
+    // "optimized dependencies changed, reloading".
+    include: [
+      '@emotion/serialize',
+      '@emotion/sheet',
+      '@emotion/styled',
+      '@popperjs/core',
+      'clsx',
+      'prop-types',
+      'react-is',
+      'react-transition-group',
+    ],
+  },
   ssr: {
     // MUI 6's ESM build uses directory imports, which Node's resolver rejects,
     // so the build-time renderer bundles it instead of importing it from node_modules.

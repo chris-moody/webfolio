@@ -9,6 +9,30 @@ const waitForData = async (page: Page) => {
   })
 }
 
+/** The open Columns panel sits against its button (above or below), on screen. */
+const expectNextTo = async (page: Page) => {
+  const { button, panel, viewport } = await page.evaluate(() => {
+    const box = (el: Element | null) =>
+      el!.getBoundingClientRect().toJSON() as DOMRect
+    return {
+      button: box(document.querySelector('button[popovertarget]')),
+      panel: box(document.querySelector('[popover]')),
+      viewport: { width: innerWidth, height: innerHeight },
+    }
+  })
+  const gapBelow = panel.top - button.bottom
+  const gapAbove = button.top - panel.bottom
+  expect(Math.min(Math.abs(gapBelow - 6), Math.abs(gapAbove - 6))).toBeLessThan(
+    2
+  )
+  const alignedRight = Math.abs(panel.right - button.right) < 2
+  const alignedLeft = Math.abs(panel.left - button.left) < 2
+  expect(alignedRight || alignedLeft).toBe(true)
+  expect(panel.left).toBeGreaterThanOrEqual(0)
+  expect(panel.right).toBeLessThanOrEqual(viewport.width)
+  expect(panel.bottom).toBeLessThanOrEqual(viewport.height)
+}
+
 test('streams quotes into the virtualized grid', async ({ page }) => {
   await waitForData(page)
   // 10k symbols, but only a window of rows is in the DOM.
@@ -74,6 +98,7 @@ test('the Columns menu opens without shifting the layout', async ({ page }) => {
   const menu = page.getByRole('group', { name: 'Visible columns' })
   await expect(menu).toBeVisible()
   expect(await grid(page).boundingBox()).toEqual(before)
+  await expectNextTo(page)
 
   await expect(
     grid(page).getByRole('columnheader', { name: 'Trend' })
@@ -87,4 +112,21 @@ test('the Columns menu opens without shifting the layout', async ({ page }) => {
   await page.keyboard.press('Escape')
   await expect(menu).toBeHidden()
   await expect(button).toBeFocused()
+})
+
+test.describe('before hydration (no JavaScript)', () => {
+  test.use({ javaScriptEnabled: false })
+
+  // The prerendered page's popover works natively; CSS anchor positioning
+  // must place it without any script.
+  test('the Columns menu still opens next to its button', async ({ page }) => {
+    await page.goto('/lab/tape')
+    const button = page.getByRole('button', { name: /^columns/i })
+    await button.scrollIntoViewIfNeeded()
+    await button.click()
+    await expect(
+      page.getByRole('group', { name: 'Visible columns' })
+    ).toBeVisible()
+    await expectNextTo(page)
+  })
 })

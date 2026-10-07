@@ -17,12 +17,14 @@ export default defineConfig({
     {
       name: 'desktop',
       use: { ...devices['Desktop Chrome'] },
-      testIgnore: /perf\.spec\.ts/,
+      // Dev-server smoke tests have their own config (playwright.dev.config.ts).
+      testIgnore: [/perf\.spec\.ts/, /\/dev\//],
     },
     {
       name: 'mobile',
       use: { ...devices['Pixel 7'] },
-      testIgnore: /perf\.spec\.ts/,
+      // Dev-server smoke tests have their own config (playwright.dev.config.ts).
+      testIgnore: [/perf\.spec\.ts/, /\/dev\//],
     },
     {
       name: 'perf',

@@ -27,7 +27,6 @@ export const caseStudiesPlugin = (): Plugin => {
     },
     load(id) {
       if (id !== `\0${CONTENT_ID}` && id !== `\0${INDEX_ID}`) return
-      this.addWatchFile(CONTENT_DIR)
       const entries = listCaseStudies({ includeDrafts })
       const meta = entries.map(({ slug, frontmatter, readingMinutes }) => ({
         slug,
@@ -48,12 +47,26 @@ export const caseStudiesPlugin = (): Plugin => {
         .join(',\n')
       return `${imports}\nexport const caseStudies = [${list}]`
     },
-    handleHotUpdate({ file, server }) {
-      if (!file.startsWith(CONTENT_DIR)) return
-      for (const id of [CONTENT_ID, INDEX_ID]) {
-        const module = server.moduleGraph.getModuleById(`\0${id}`)
-        if (module) server.moduleGraph.invalidateModule(module)
+    // Watch the content directory through the dev server's watcher. (Passing a
+    // directory to addWatchFile makes it an import dependency, which fails to
+    // resolve in dev.) Any add, change, or removal rebuilds both modules.
+    configureServer(server) {
+      server.watcher.add(CONTENT_DIR)
+      const refresh = (file: string) => {
+        if (!file.startsWith(CONTENT_DIR)) return
+        for (const id of [CONTENT_ID, INDEX_ID]) {
+          const module = server.moduleGraph.getModuleById(`\0${id}`)
+          if (module) server.moduleGraph.invalidateModule(module)
+        }
+        server.ws.send({ type: 'full-reload' })
       }
+      server.watcher.on('add', refresh)
+      server.watcher.on('unlink', refresh)
+      server.watcher.on('change', (file) => {
+        // Frontmatter (title, draft, order) feeds the virtual modules, so an
+        // MDX edit reloads the page rather than hot-updating it.
+        if (file.endsWith('.mdx')) refresh(file)
+      })
     },
   }
 }

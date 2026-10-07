@@ -1,5 +1,16 @@
 import type { ColumnVisibilityState } from '@tanstack/react-table'
-import { type ToggleEvent, useEffect, useId, useRef, useState } from 'react'
+import {
+  type CSSProperties,
+  type ToggleEvent,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+} from 'react'
+
+/** CSS anchor positioning places the panel with no JavaScript at all. */
+const supportsAnchors = () =>
+  typeof CSS !== 'undefined' && CSS.supports('position-area: bottom')
 
 export interface ColumnsMenuProps {
   columns: { id: string; label: string }[]
@@ -11,6 +22,10 @@ export interface ColumnsMenuProps {
  * Column chooser built on the native Popover API: the panel renders in the
  * top layer (no layout shift), and the browser provides light dismiss,
  * Escape to close, and the button's expanded state. No menu library needed.
+ *
+ * Placement: CSS anchor positioning keeps the panel at its button even before
+ * the page hydrates (the popover itself works without JavaScript). Browsers
+ * without anchor positioning get the same placement from `place()`.
  */
 export const ColumnsMenu = ({
   columns,
@@ -18,6 +33,7 @@ export const ColumnsMenu = ({
   onChange,
 }: ColumnsMenuProps) => {
   const id = useId()
+  const anchorName = `--columns-${id.replace(/[^a-zA-Z0-9_-]/g, '')}`
   const button = useRef<HTMLButtonElement>(null)
   const panel = useRef<HTMLDivElement>(null)
   const [open, setOpen] = useState(false)
@@ -28,7 +44,7 @@ export const ColumnsMenu = ({
   // Keep the panel next to its button while open: below and right-aligned,
   // flipping above when there isn't room below (e.g. low on a phone screen).
   const place = () => {
-    if (!button.current || !panel.current) return
+    if (!button.current || !panel.current || supportsAnchors()) return
     const anchor = button.current.getBoundingClientRect()
     const { offsetWidth: width, offsetHeight: height } = panel.current
     const gap = 6
@@ -36,10 +52,14 @@ export const ColumnsMenu = ({
     const fitsBelow =
       anchor.bottom + gap + height <= window.innerHeight - margin
     const top = fitsBelow ? anchor.bottom + gap : anchor.top - gap - height
+    // Right-aligned to the button; left-aligned if that would overflow left.
+    const preferred =
+      anchor.right - width >= margin ? anchor.right - width : anchor.left
     const left = Math.max(
       margin,
-      Math.min(anchor.right - width, window.innerWidth - width - margin)
+      Math.min(preferred, window.innerWidth - width - margin)
     )
+    panel.current.style.margin = '0'
     panel.current.style.top = `${Math.max(margin, top)}px`
     panel.current.style.left = `${left}px`
   }
@@ -61,6 +81,7 @@ export const ColumnsMenu = ({
         ref={button}
         type="button"
         popoverTarget={id}
+        style={{ anchorName } as CSSProperties}
         className="inline-flex items-center gap-1.5 rounded-md border border-border px-3 py-1.5 text-sm font-semibold hover:border-accent"
       >
         Columns
@@ -80,6 +101,19 @@ export const ColumnsMenu = ({
         ref={panel}
         id={id}
         popover="auto"
+        style={
+          {
+            // Below the button, right-aligned. When that overflows, try above,
+            // then left-aligned (a button at the start of a wrapped row on a
+            // phone), then both.
+            positionAnchor: anchorName,
+            positionArea: 'bottom span-left',
+            positionTryFallbacks:
+              'flip-block, flip-inline, flip-block flip-inline',
+            inset: 'auto',
+            margin: '6px 0',
+          } as CSSProperties
+        }
         // `toggle` fires after the panel is shown, so it's kept invisible from
         // `beforetoggle` until it's positioned: it never flashes at the
         // browser's default (centered) popover position.
