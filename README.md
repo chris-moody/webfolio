@@ -61,7 +61,7 @@ Every pull request runs these in CI ([`.github/workflows/ci.yml`](.github/workfl
 | Resume history      | `yarn check:resume-history` | ≤ 1 commit touches `src/content/resume/` (ADR 0005)                                                                                                   |
 | Route budgets       | `yarn size`                 | Gzipped JS/CSS each prerendered page loads: ≤ 120 kB JS on content routes ([`scripts/check-budgets.mjs`](scripts/check-budgets.mjs))                  |
 | E2E + accessibility | `yarn e2e`                  | Content is in the HTML without JS; pages hydrate; unknown URLs return 404; 0 axe WCAG 2.2 AA violations in light and dark mode, on desktop and mobile |
-| Lighthouse          | `yarn lhci`                 | Median of 5 mobile runs. Content routes: Performance ≥ 95, the rest 100, LCP ≤ 2.5 s. Tour: floor until Phase 4                                       |
+| Lighthouse          | `yarn lhci`                 | Median of 5 mobile runs. Content routes: Performance ≥ 95, the rest 100, LCP ≤ 2.5 s. `/lab/tape` ≥ 90. Tour ≥ 80, the rest 100                       |
 
 ## Writing case studies
 

@@ -52,14 +52,14 @@ module.exports = {
         },
         {
           // The tour: MUI + GSAP shell, with Pixi/React Flow/d3/marquees split per
-          // slide (Phase 4). Measured 83 locally; first paint is the limit.
+          // slide (Phase 4). Measured 85–87 locally; first paint is the limit.
           matchingUrlPattern: 'localhost:4173/tour/',
           aggregationMethod: 'median-run',
           assertions: {
             'categories:performance': ['error', { minScore: 0.8 }],
-            'categories:accessibility': ['error', { minScore: 0.95 }],
-            'categories:best-practices': ['error', { minScore: 0.95 }],
-            'categories:seo': ['error', { minScore: 0.9 }],
+            'categories:accessibility': ['error', { minScore: 1 }],
+            'categories:best-practices': ['error', { minScore: 1 }],
+            'categories:seo': ['error', { minScore: 1 }],
             'cumulative-layout-shift': ['error', { maxNumericValue: 0.1 }],
           },
         },

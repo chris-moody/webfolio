@@ -284,8 +284,9 @@ export default function Colophon({ loaderData }: Route.ComponentProps) {
           <li>
             <strong>Splitting the tour.</strong> PixiJS, React Flow, d3, the
             logo marquees, and the flair videos load with the slide that uses
-            them, then prefetch when the browser is idle. Tour JavaScript went
-            from 427 KB to about 256 KB gzipped.
+            them, then prefetch on the visitor’s first interaction (prefetching
+            on idle cost 300–500 ms of blocking time). Tour JavaScript went from
+            427 KB to about 256 KB gzipped.
           </li>
           <li>
             <strong>Images.</strong> The about-me photo went from 950 KB to
