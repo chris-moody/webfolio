@@ -13,6 +13,7 @@ import classNames from 'classnames'
 import { useAppSelector } from '@/redux/hooks'
 import { selectThemeFlair } from '@/redux/slices/theme/theme.selector'
 import { NavLink, NavLinkProps } from 'react-router'
+import { useReducedMotion } from '@/motion/motion'
 
 const FancyStyles = ({ theme }: { theme: Theme }) => `
   position: relative;
@@ -49,7 +50,8 @@ const FancyStyles = ({ theme }: { theme: Theme }) => `
   }
   &.active {
     filter: brightness(120%);
-    animation: wave 1s ease infinite;
+    /* Three waves, then still: an endless wave would need a pause control (WCAG 2.2.2). */
+    animation: wave 1s ease 3;
     transform: rotate(var(--wave-angle)) scale(1.1);
   }
   &:focus {
@@ -140,6 +142,7 @@ export const FancyButton: FC<ButtonProps> = ({
 }
 
 const StyledFancyLink = styled(NavLink)<NavLinkProps>(FancyStyles)
+const StyledFancyAnchor = styled('a')(FancyStyles)
 
 type FancyNavButtonProps = Omit<NavLinkProps, 'children' | 'to'> & {
   to: string | null
@@ -156,19 +159,51 @@ export const FancyNavButton: FC<FancyNavButtonProps> = ({
 }) => {
   const flair = useAppSelector(selectThemeFlair)
   const theme = useTheme()
+  const reduced = useReducedMotion()
 
+  // No destination (e.g. Back on the first slide): still a link, marked
+  // aria-disabled, so it keeps its place and name instead of vanishing.
   if (!to) {
+    const { disabled: _disabled, sx, ...rest } = props
+    const anchorProps = rest as Record<string, unknown>
+    if (flair === 37) {
+      return (
+        <StyledFancyAnchor
+          role="link"
+          aria-disabled="true"
+          className={classNames('button', 'disabled', className)}
+          {...anchorProps}
+        >
+          <span className={'shadow'} />
+          <span className={'wall'} />
+          <Typography
+            component="span"
+            color={theme.palette.getContrastText(theme.palette.primary.main)}
+            className={'face'}
+          >
+            {children}
+          </Typography>
+        </StyledFancyAnchor>
+      )
+    }
     return (
-      <FancyButton className={className} {...(props as ButtonProps)}>
+      <Button
+        component="a"
+        role="link"
+        disabled
+        className={className}
+        sx={sx}
+        {...(anchorProps as ButtonProps)}
+      >
         {children}
-      </FancyButton>
+      </Button>
     )
   }
   if (flair === 37) {
     return (
       <StyledFancyLink
         to={to}
-        viewTransition
+        viewTransition={!reduced}
         className={classNames('button', className, {
           disabled: props.disabled,
         })}
@@ -189,7 +224,7 @@ export const FancyNavButton: FC<FancyNavButtonProps> = ({
 
   return (
     <Button
-      viewTransition
+      viewTransition={!reduced}
       component={NavLink}
       to={to}
       className={className}

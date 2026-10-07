@@ -1,6 +1,11 @@
 import {
   Box,
   Dialog,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  Radio,
+  RadioGroup,
   DialogActions,
   DialogContent,
   DialogTitle,
@@ -15,11 +20,13 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { selectThemeFlair } from '@/redux/slices/theme/theme.selector'
 import { setFlair } from '@/redux/slices/theme/theme.reducer'
 import { FancyButton } from '../fancyButton/FancyButton'
+import { type MotionSetting, useMotionPreference } from '@/motion/motion'
 
 export const SettingsDialog: FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const dispatch = useAppDispatch()
   const flair = useAppSelector(selectThemeFlair)
+  const motion = useMotionPreference()
   const handleClick = () => {
     setIsOpen(true)
   }
@@ -92,6 +99,28 @@ export const SettingsDialog: FC = () => {
             {flair === 37 && <>Too much? </>}You can adjust your Flair below
             {flair === 1 && <>, a little more can't hurt!</>}!
           </Typography>
+          <FormControl component="fieldset" sx={{ mt: 1 }}>
+            <FormLabel component="legend">Motion</FormLabel>
+            <RadioGroup
+              row
+              value={motion.setting}
+              onChange={(event) =>
+                motion.setSetting(event.target.value as MotionSetting)
+              }
+            >
+              <FormControlLabel
+                value="system"
+                control={<Radio />}
+                label="Match my system"
+              />
+              <FormControlLabel
+                value="reduce"
+                control={<Radio />}
+                label="Reduce"
+              />
+              <FormControlLabel value="full" control={<Radio />} label="Full" />
+            </RadioGroup>
+          </FormControl>
         </DialogContent>
         <DialogActions>
           <FancyButton

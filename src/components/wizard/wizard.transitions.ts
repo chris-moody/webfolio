@@ -1,4 +1,5 @@
 import gsap from 'gsap'
+import { isReducedMotion } from '@/motion/motion'
 
 export interface WizardTransitionProps {
   target?: HTMLElement | string
@@ -33,10 +34,25 @@ export const wizardOff: WizardTransition = (
 }
 
 export const buildStepOn: WizardTransition = () => {
-  gsap.fromTo('.content', { alpha: 0, scrollTop: 0 }, { alpha: 1, stagger: 0.2, delay: 0.3, duration: 0.3, scrollTop: 0 })
-  gsap.fromTo('.text', { scrollTop: 0 }, { stagger: 0.2, delay: 0.3, duration: 0.3, scrollTop: 0 })
+  if (isReducedMotion()) {
+    gsap.set('.content', { alpha: 1 })
+    gsap.set('.text', { scrollTop: 0 })
+    return
+  }
+  gsap.fromTo(
+    '.content',
+    { alpha: 0, scrollTop: 0 },
+    { alpha: 1, stagger: 0.2, delay: 0.3, duration: 0.3, scrollTop: 0 }
+  )
+  gsap.fromTo(
+    '.text',
+    { scrollTop: 0 },
+    { stagger: 0.2, delay: 0.3, duration: 0.3, scrollTop: 0 }
+  )
 }
 
-export const buildStepOff: WizardTransition = ({ target } = {} as WizardTransitionProps) => {
-  gsap.to((target && target+' ')+'.content', { alpha: 0, x: -100 })
+export const buildStepOff: WizardTransition = (
+  { target } = {} as WizardTransitionProps
+) => {
+  gsap.to((target && target + ' ') + '.content', { alpha: 0, x: -100 })
 }

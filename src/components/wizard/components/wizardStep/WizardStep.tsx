@@ -9,7 +9,8 @@ import {
 import { FancyText } from '@/components/fancyText/FancyText'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { useOutletContext, useParams } from 'react-router'
-import { useWizardStep } from '@/data/wizards'
+import { useWizard, useWizardStep } from '@/data/wizards'
+import { slideHeadingId } from '../../wizard.ids'
 import { setSelection, setStep } from '@/redux/slices/wizard/wizard.reducer'
 import { selectWizardSelection } from '@/redux/slices/wizard/wizard.selector'
 import { buildStepOn } from '../../wizard.transitions'
@@ -24,6 +25,8 @@ export interface WizardOutetContext {
 export interface WizardStepConfig {
   next?: string
   id: string
+  /** Short slide title: the slide's heading and its accessible name. */
+  title: string
   selections?: WizardSelection[]
   header?: ReactNode
   headerNext?: string
@@ -37,6 +40,29 @@ export interface WizardStepConfig {
 export type WizardStepProps = Omit<BoxProps, 'onSelect' | 'id'> & {
   nextLink?: string
 }
+
+// "Slide 2 of 5 · Title", on a pill so it reads on every flair background.
+const SlideHeading = styled('h2')(({ theme }) => [
+  {
+    alignSelf: 'center',
+    margin: theme.spacing(0, 0, 1),
+    padding: theme.spacing(0.25, 1.5),
+    borderRadius: theme.spacing(2),
+    background: 'rgba(255, 255, 255, 0.85)',
+    color: theme.palette.text.primary,
+    fontSize: '0.875rem',
+    fontWeight: 600,
+    letterSpacing: '0.02em',
+    position: 'relative',
+    zIndex: 2,
+    '&:focus-visible': {
+      outline: `3px solid ${theme.palette.primary.main}`,
+      outlineOffset: 2,
+    },
+    '&:focus:not(:focus-visible)': { outline: 'none' },
+  },
+  theme.applyStyles('dark', { background: 'rgba(0, 0, 0, 0.6)' }),
+])
 
 const StyledWizardStep = styled(Box)(({ theme }) => ({
   position: 'absolute',
@@ -53,6 +79,13 @@ const StyledWizardStep = styled(Box)(({ theme }) => ({
     display: 'flex',
     flexDirection: 'row-reverse',
   },
+  '@media (max-height: 520px)': {
+    position: 'relative',
+    height: 'auto',
+    // The page scrolls here, so media needs a real height (Pixi sizes its
+    // canvas to this box and would otherwise fall back to 600px).
+    '.slide-media': { height: '60vh', minHeight: 200, flexShrink: 0 },
+  },
   [theme.breakpoints.up('md')]: {
     maxWidth: 768,
   },
@@ -68,7 +101,12 @@ export const WizardStep: FC<WizardStepProps> = ({ className, ...props }) => {
   const dispatch = useAppDispatch()
   const { wizardId = 'home', stepId: id = '' } = useParams()
   const stepConfig = useWizardStep(wizardId, id)
+  const slides = useWizard(wizardId)?.stepData ?? []
+  const total = slides.length
+  const index = slides.findIndex((slide) => slide.id === id)
+  const isCarousel = total > 1
   const {
+    title,
     selections = [],
     header,
     headerNext,
@@ -96,6 +134,7 @@ export const WizardStep: FC<WizardStepProps> = ({ className, ...props }) => {
       dispatch(
         setStep({
           id,
+          title,
           next,
           selections: selections.map((s) => ({
             next: s.next,
@@ -105,7 +144,7 @@ export const WizardStep: FC<WizardStepProps> = ({ className, ...props }) => {
         })
       )
     }
-  }, [dispatch, id, next, selections])
+  }, [dispatch, id, next, selections, title])
 
   const selectionHandler = useCallback(
     (value: WizardResult) => () => {
@@ -120,8 +159,25 @@ export const WizardStep: FC<WizardStepProps> = ({ className, ...props }) => {
       id={`wizard-step-${id}`}
       ref={container}
       className={classNames(`wizard-step`, active, className)}
+      {...(isCarousel && {
+        role: 'group',
+        'aria-roledescription': 'slide',
+        'aria-label': `${index + 1} of ${total}: ${title}`,
+      })}
       {...props}
     >
+      {title && (
+        // The slide's heading, and the focus target when focus would be lost.
+        // Single-slide wizards already show their question, so it's for
+        // screen readers only there.
+        <SlideHeading
+          id={slideHeadingId(wizardId, id)}
+          tabIndex={-1}
+          className={isCarousel ? undefined : 'sr-only'}
+        >
+          {isCarousel ? `Slide ${index + 1} of ${total} · ${title}` : title}
+        </SlideHeading>
+      )}
       {(header || body || media || unwrappedMedia) && (
         <Stack
           flex={selectionRenderer || selections.length > 0 ? 0.4 : 1}
@@ -144,9 +200,7 @@ export const WizardStep: FC<WizardStepProps> = ({ className, ...props }) => {
                 {header}{' '}
                 {headerNext && nextLink && (
                   <Box className="header-actions">
-                    <FancyNavButton aria-label="Next" to={nextLink}>
-                      {headerNext}
-                    </FancyNavButton>
+                    <FancyNavButton to={nextLink}>{headerNext}</FancyNavButton>
                   </Box>
                 )}
               </FancyText>
@@ -179,7 +233,7 @@ export const WizardStep: FC<WizardStepProps> = ({ className, ...props }) => {
             <Stack
               justifyContent="center"
               alignContent="center"
-              className="content"
+              className="content slide-media"
               height="50%"
             >
               {media}

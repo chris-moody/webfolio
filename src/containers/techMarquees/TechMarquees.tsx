@@ -3,6 +3,7 @@ import { preload } from 'react-dom'
 import { Box, styled } from '@mui/material'
 import { Marquee } from '@/components/marquee/Marquee'
 import { Image, ImageProps } from '@/components/image/Image'
+import { useReducedMotion } from '@/motion/motion'
 
 const aws = '/tech_icons/aws.svg'
 const canva = '/tech_icons/canva.svg'
@@ -94,6 +95,19 @@ export type MarqueeImageProps = Omit<ImageProps, 'id'> & {
   id: string
 }
 
+const StaticGrid = styled('ul')(({ theme }) => ({
+  listStyle: 'none',
+  margin: 0,
+  padding: theme.spacing(2),
+  display: 'flex',
+  flexWrap: 'wrap',
+  justifyContent: 'center',
+  alignItems: 'center',
+  gap: theme.spacing(2),
+  overflowY: 'auto',
+  img: { width: 56, height: 'auto' },
+}))
+
 const createImageArray = (data: MarqueeImageProps[]): ReactElement[] => {
   return data
     .map(({ id, ...props }) => (
@@ -119,7 +133,8 @@ const createImageArray = (data: MarqueeImageProps[]): ReactElement[] => {
 }
 
 export const TechMarquees: FC = () => {
-  const tools = createImageArray([
+  const reduced = useReducedMotion()
+  const toolData: MarqueeImageProps[] = [
     { id: 'Canva', src: canva },
     { id: 'Confluence', src: confluence },
     { id: 'Copilot', src: copilot },
@@ -128,8 +143,8 @@ export const TechMarquees: FC = () => {
     { id: 'miro', src: miro },
     { id: 'vscode', src: vscode },
     { id: 'webstorm', src: webstorm },
-  ])
-  const tech = createImageArray([
+  ]
+  const techData: MarqueeImageProps[] = [
     { id: 'Cytoscape', src: cytoscape },
     { id: 'd3', src: d3 },
     { id: 'dexiejs', src: dexie },
@@ -144,8 +159,8 @@ export const TechMarquees: FC = () => {
     { id: 'redux', src: redux },
     { id: 'styled_components', src: styledComponents },
     { id: 'nextjs', src: nextjs },
-  ])
-  const server = createImageArray([
+  ]
+  const serverData: MarqueeImageProps[] = [
     { id: 'AWS', src: aws },
     { id: 'CSS', src: css },
     { id: 'Dynamo DB', src: dynamoDb },
@@ -159,7 +174,27 @@ export const TechMarquees: FC = () => {
     { id: 'typescript', src: typescript },
     { id: 'vite', src: vite },
     { id: 'webpack', src: webpack },
-  ])
+  ]
+
+  // Three endless marquees can't be paused individually, so reduced motion
+  // (also the tour's "Stop animations" control) shows the same logos as a grid.
+  if (reduced) {
+    return (
+      <StyledTechMarquees className="content">
+        <StaticGrid aria-label="Tools and technologies">
+          {[...toolData, ...techData, ...serverData].map(({ id, ...props }) => (
+            <li key={id}>
+              <Image {...props} alt={id} />
+            </li>
+          ))}
+        </StaticGrid>
+      </StyledTechMarquees>
+    )
+  }
+
+  const tools = createImageArray(toolData)
+  const tech = createImageArray(techData)
+  const server = createImageArray(serverData)
   return (
     <StyledTechMarquees className="content">
       <StyledWrapper>

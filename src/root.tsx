@@ -8,6 +8,7 @@ import {
   ScrollRestoration,
 } from 'react-router'
 import type { Route } from './+types/root'
+import { MOTION_BOOT_SCRIPT } from './motion/motion'
 import { SITE } from './site'
 
 export const links: Route.LinksFunction = () => [
@@ -22,6 +23,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content={SITE.themeColor} />
+        {/* Sets data-motion on <html> before first paint (src/motion/motion.ts). */}
+        <script dangerouslySetInnerHTML={{ __html: MOTION_BOOT_SCRIPT }} />
         <Meta />
         <Links />
         {/* Emotion's prerendered styles are inserted after this tag (entry.server.tsx). */}

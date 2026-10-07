@@ -10,7 +10,8 @@ import {
   Text,
   TextStyle,
 } from 'pixi.js'
-import { useCallback, useRef } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
+import { useReducedMotion } from '@/motion/motion'
 
 export interface WaterTextProps {
   value: string
@@ -18,6 +19,12 @@ export interface WaterTextProps {
 
 export const WaterText = ({ value }: WaterTextProps) => {
   const textRef = useRef<Text | null>(null)
+  // Read inside the Pixi ticker, so changing the setting takes effect live.
+  const reduced = useReducedMotion()
+  const reducedRef = useRef(reduced)
+  useEffect(() => {
+    reducedRef.current = reduced
+  }, [reduced])
   const theme = useTheme()
 
   const preload = async () => {
@@ -81,6 +88,7 @@ export const WaterText = ({ value }: WaterTextProps) => {
       app.stage.addChild(noiseSprite)
 
       app.ticker.add(() => {
+        if (reducedRef.current) return
         noiseSprite.x += 1
         if (noiseSprite.x > noiseSprite.width) {
           noiseSprite.x = 0

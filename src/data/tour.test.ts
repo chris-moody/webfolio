@@ -18,6 +18,18 @@ describe('tour manifest', () => {
     }
   })
 
+  it('gives every slide a short title', () => {
+    for (const wizard of Object.values(wizards)) {
+      for (const step of wizard.stepData ?? []) {
+        expect(step.title, `${wizard.id}/${step.id}`).toMatch(/\S/)
+        expect(
+          step.title.length,
+          `${wizard.id}/${step.id}`
+        ).toBeLessThanOrEqual(32)
+      }
+    }
+  })
+
   it('starts on a real page', () => {
     expect(tourPaths()).toContain(
       `/tour/${TOUR_START.wizard}/${TOUR_START.step}`

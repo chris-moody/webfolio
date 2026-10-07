@@ -10,6 +10,7 @@ import {
 import classNames from 'classnames'
 import gsap from 'gsap'
 import { FC, useRef } from 'react'
+import { useReducedMotion } from '@/motion/motion'
 
 export interface ThreeDProps {
   depth?: number
@@ -99,10 +100,12 @@ export const Text3d: FC<Text3dProps> = ({
   const theme = useTheme()
   const layers = Math.max(depth, 7)
   const container = useRef<HTMLDivElement | null>(null)
+  const reduced = useReducedMotion()
 
+  // The wobble loops forever, so reduced motion turns it off entirely.
   useGSAP(
     () => {
-      if (animate && container.current) {
+      if (animate && !reduced && container.current) {
         gsap.fromTo(
           container.current,
           { rotateX: -20 },
@@ -138,7 +141,7 @@ export const Text3d: FC<Text3dProps> = ({
         )
       }
     },
-    { dependencies: [animate], scope: container }
+    { dependencies: [animate, reduced], scope: container, revertOnUpdate: true }
   )
   const median = Math.floor(layers / 2)
   return (
@@ -153,6 +156,10 @@ export const Text3d: FC<Text3dProps> = ({
           return (
             <LayeredText
               key={n}
+              // Only the front layer is real; the others are depth. Without
+              // this, every link and word inside 3D text existed eight times
+              // for keyboard and screen-reader users.
+              {...(n > 0 && { 'aria-hidden': true, inert: true })}
               {...props}
               sx={[
                 {
@@ -187,7 +194,11 @@ export const Text3d: FC<Text3dProps> = ({
           )
         })}
       </span>
-      <HiddenText {...props}>{children}</HiddenText>
+      {/* Reserves layout space only (visibility: hidden keeps it out of the
+          accessibility tree and tab order). */}
+      <HiddenText {...props} aria-hidden>
+        {children}
+      </HiddenText>
     </Container>
   )
 }

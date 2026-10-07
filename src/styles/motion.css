@@ -1,0 +1,17 @@
+/* Reduced motion, site-wide. Components swap infinite animations for static
+   alternatives in script; this stops any CSS animation or transition that
+   remains (MUI transitions, the conic background, button waves, flashes). */
+:root[data-motion='reduce'] *,
+:root[data-motion='reduce'] *::before,
+:root[data-motion='reduce'] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+:root[data-motion='reduce']::view-transition-group(*),
+:root[data-motion='reduce']::view-transition-old(*),
+:root[data-motion='reduce']::view-transition-new(*) {
+  animation: none !important;
+}

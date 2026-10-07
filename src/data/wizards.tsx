@@ -29,6 +29,7 @@ const wizards: Record<string, WizardConfig> = {
     stepData: [
       {
         id: 'flair',
+        title: 'Pick your flair',
         next: 'color',
         header: 'First, we need to talk about your Flair',
         body: (
@@ -49,6 +50,7 @@ const wizards: Record<string, WizardConfig> = {
       },
       {
         id: 'color',
+        title: 'Choose your colors',
         header: 'Choose a color scheme and a favorite color',
         selectionRenderer: ColorSelectionRenderer,
       },
@@ -63,6 +65,7 @@ const wizards: Record<string, WizardConfig> = {
     stepData: [
       {
         id: 'why',
+        title: 'Why are you here?',
         header: 'Why are you here?',
         selectionRenderer: LinkSelectionRenderer,
         selections: [
@@ -94,6 +97,7 @@ const wizards: Record<string, WizardConfig> = {
     stepData: [
       {
         id: 'story-selection',
+        title: 'Pick a story',
         header: 'What kind of story are you looking for?',
         selectionRenderer: LinkSelectionRenderer,
         selections: [
@@ -113,6 +117,7 @@ const wizards: Record<string, WizardConfig> = {
     stepData: [
       {
         id: '0',
+        title: 'My name',
         next: '1',
         header: (
           <>
@@ -143,6 +148,7 @@ const wizards: Record<string, WizardConfig> = {
       },
       {
         id: '1',
+        title: 'What I build',
         next: '2',
         header: (
           <>
@@ -159,6 +165,7 @@ const wizards: Record<string, WizardConfig> = {
       },
       {
         id: '2',
+        title: 'Where I’ve worked',
         next: '3',
         header: (
           <>
@@ -175,6 +182,7 @@ const wizards: Record<string, WizardConfig> = {
       },
       {
         id: '3',
+        title: 'Languages and tools',
         next: '4',
         header: (
           <>
@@ -193,6 +201,7 @@ const wizards: Record<string, WizardConfig> = {
       },
       {
         id: '4',
+        title: 'Outside of work',
         header: (
           <>
             Outside of work I am a husband and father of 3 awesome kids. I used
@@ -226,6 +235,7 @@ const wizards: Record<string, WizardConfig> = {
     stepData: [
       {
         id: '0',
+        title: 'The review',
         next: '1',
         header: (
           <>
@@ -240,6 +250,7 @@ const wizards: Record<string, WizardConfig> = {
       },
       {
         id: '1',
+        title: 'The request',
         next: '2',
         header: (
           <>
@@ -257,6 +268,7 @@ const wizards: Record<string, WizardConfig> = {
       },
       {
         id: '2',
+        title: 'The flair',
         next: '3',
         header: (
           <>
@@ -277,6 +289,7 @@ const wizards: Record<string, WizardConfig> = {
       },
       {
         id: '3',
+        title: 'The reveal',
         headerNext: 'End',
         header: (
           <>
@@ -301,6 +314,7 @@ const wizards: Record<string, WizardConfig> = {
     stepData: [
       {
         id: '0',
+        title: 'A new client',
         next: '1',
         header: (
           <>
@@ -314,6 +328,7 @@ const wizards: Record<string, WizardConfig> = {
       },
       {
         id: '1',
+        title: 'The pressure',
         next: '2',
         header: (
           <>
@@ -330,6 +345,7 @@ const wizards: Record<string, WizardConfig> = {
       },
       {
         id: '2',
+        title: 'The constraints',
         next: '3',
         header: (
           <>
@@ -346,6 +362,7 @@ const wizards: Record<string, WizardConfig> = {
       },
       {
         id: '3',
+        title: 'The emitter',
         next: '4',
         header: (
           <>
@@ -360,6 +377,7 @@ const wizards: Record<string, WizardConfig> = {
       },
       {
         id: '4',
+        title: 'Make it bad',
         header: (
           <>
             “I need you to make it bad,” she said to me in hushed tones. I
@@ -384,6 +402,7 @@ const wizards: Record<string, WizardConfig> = {
     stepData: [
       {
         id: '0',
+        title: 'Beta and CodePop',
         next: '1',
         header:
           'I ran a small video game company between 2011 and 2017. My partners and I had a blast designing, animating and coding an ed-tech game centered around a cute little robot named Beta. Beta could manipulate his world and objects in it via a runtime scripting language we called CodePop!',
@@ -399,6 +418,7 @@ const wizards: Record<string, WizardConfig> = {
       },
       {
         id: '1',
+        title: 'Paper prototypes',
         next: '2',
         header:
           'CodePop sported an event model, conditional statements, loops, and simple custom functions. We ran classes, camps and conference events where we showed attendees how to protoype a simple game on paper and then bring it to life using Beta!',
@@ -413,6 +433,7 @@ const wizards: Record<string, WizardConfig> = {
       },
       {
         id: '2',
+        title: 'In the classroom',
         next: '3',
         header:
           'Most of our students had never coded before, but left the events having successfully designed and programmed their own video games. The genuine joy of discovery coupled with the undeniable educational benefits of critical and creative thinking made Beta a one of a kind experience.',
@@ -427,6 +448,7 @@ const wizards: Record<string, WizardConfig> = {
       },
       {
         id: '3',
+        title: 'BetaNet',
         next: '4',
         header:
           'All students received a BetaNet account with which they could continue to play and iterate on their games, make new ones, or experience what other creators were coming up with.',
@@ -446,6 +468,7 @@ const wizards: Record<string, WizardConfig> = {
       },
       {
         id: '4',
+        title: 'Watch it',
         header: (
           <>
             While the BetaNet is no longer online, some of our{' '}

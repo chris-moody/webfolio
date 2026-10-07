@@ -7,6 +7,7 @@ import woo4 from '@/assets/flair/woo-4.gif'
 import woo5 from '@/assets/flair/woo-5.gif'
 import woo6 from '@/assets/flair/woo-6.gif'
 import { FlairGif } from './FlairGif'
+import { useReducedMotion } from '@/motion/motion'
 
 const flairs = [
   {
@@ -97,10 +98,12 @@ export const FlairText: FC<FlairTextProps> = ({ text = '' }) => {
   const container = useRef<HTMLButtonElement>(null)
   const tmln = useRef<gsap.core.Timeline>(null)
   const [flairId, setFlairId] = useState(-1)
+  const reduced = useReducedMotion()
 
+  // Hover dance and an endless color cycle; reduced motion shows plain letters.
   useGSAP(
     () => {
-      if (!container.current) return
+      if (!container.current || reduced) return
       const targets = container.current.querySelectorAll('span')
       if (tmln.current) tmln.current.kill()
       const tl = (tmln.current = gsap.timeline({
@@ -135,7 +138,7 @@ export const FlairText: FC<FlairTextProps> = ({ text = '' }) => {
         )
       })
     },
-    { dependencies: [flairId], scope: container }
+    { dependencies: [flairId, reduced], scope: container, revertOnUpdate: true }
   )
 
   useGSAP(
@@ -164,9 +167,9 @@ export const FlairText: FC<FlairTextProps> = ({ text = '' }) => {
       <FlairWrapper>
         {flairs.map(
           (entry, index) =>
-            flairId === index && (
-              <FlairGif key={entry.flair.id} {...entry.flair} />
-            )
+            // The GIFs are the punchline, but they're motion: skipped when reduced.
+            flairId === index &&
+            !reduced && <FlairGif key={entry.flair.id} {...entry.flair} />
         )}
       </FlairWrapper>
       <StyledButton

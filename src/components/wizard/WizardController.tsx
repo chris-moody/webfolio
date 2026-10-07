@@ -6,7 +6,6 @@ import {
   lighten,
   styled,
   Typography,
-  useMediaQuery,
   useTheme,
 } from '@mui/material'
 import classNames from 'classnames'
@@ -14,11 +13,11 @@ import { useAppSelector } from '@/redux/hooks'
 import { selectThemeFlair } from '@/redux/slices/theme/theme.selector'
 import './wizardController.scss'
 import { SettingsDialog } from '../settingsDialog/SettingsDialog'
-import { useResize } from '@/hooks/resize.hook'
 import { FolioNav } from '@/containers/folioNav/FolioNav'
+import { MotionToggle } from '../motionToggle/MotionToggle'
 
-const landscapeQuery =
-  '@media only screen and (min-width: 320px) and (max-width: 992px) and (orientation: landscape)'
+// Short landscape screens scroll instead of rotating the app (WCAG 1.3.4).
+const shortScreen = '@media (max-height: 520px)'
 const StyledController = styled(Box)(({ theme }) => [
   {
     '@keyframes spinner': {
@@ -55,14 +54,16 @@ const StyledController = styled(Box)(({ theme }) => [
         animation: 'spinner 300s linear infinite',
       },
     },
-    [landscapeQuery]: {
+    [shortScreen]: {
+      position: 'relative',
+      height: 'auto',
+      minHeight: '100dvh',
       '.controller-content': {
-        transform: 'rotate(-90deg)',
-        transformOrigin: 'left top',
-        overflowX: 'hidden',
-        position: 'absolute',
-        top: '100%',
-        left: 0,
+        position: 'relative',
+        height: 'auto',
+        minHeight: '100%',
+        overflow: 'visible',
+        paddingBottom: theme.spacing(4),
       },
     },
   },
@@ -83,21 +84,11 @@ const StyledController = styled(Box)(({ theme }) => [
 const WizardController: FC<BoxProps> = ({ children }) => {
   const theme = useTheme()
   const flair = useAppSelector(selectThemeFlair)
-  const [monitor, size] = useResize()
-  const isFlipped = useMediaQuery(landscapeQuery)
   return (
     <StyledController className="wizard-controller">
-      {monitor}
-      <Box
-        className={classNames('controller-content', `flair-${flair}`)}
-        sx={{
-          ...(isFlipped && {
-            width: `${size.height}px !important`,
-            height: `${size.width}px !important`,
-          }),
-        }}
-      >
+      <Box className={classNames('controller-content', `flair-${flair}`)}>
         <FolioNav />
+        <MotionToggle />
         <SettingsDialog />
         {children}
         <Typography

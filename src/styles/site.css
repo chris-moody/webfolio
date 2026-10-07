@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 @import './tokens.css';
+@import './motion.css';
 
 @theme {
   --font-sans:
@@ -37,12 +38,7 @@
 .tape-down {
   animation: tape-flash-down 700ms ease-out;
 }
-@media (prefers-reduced-motion: reduce) {
-  .tape-up,
-  .tape-down {
-    animation: none;
-  }
-}
+/* Reduced motion (motion.css) shortens these to a single instant frame. */
 
 /* The resume PDF is printed from /resume (scripts/build-resume-pdf.mjs).
    Everything is sized in rem, so this scales the whole page to fit two sheets. */

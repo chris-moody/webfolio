@@ -15,6 +15,12 @@ const StyledWrapper = styled(Box)(({ theme }) => [
     borderRadius: theme.spacing(2),
     width: '100%',
     overflow: 'hidden',
+    // Short landscape screens scroll the page, so the text flows instead.
+    '@media (max-height: 520px)': {
+      maxHeight: 'none !important',
+      flexShrink: 0,
+      '.text': { height: 'auto', overflow: 'visible' },
+    },
   },
   theme.applyStyles('dark', {
     background: 'rgba(0,0,0,.75)',
@@ -74,7 +80,17 @@ export const TextDisplay: FC<TextDisplayProps> = ({
 
   return (
     <StyledWrapper {...props}>
-      <StyledText ref={textRef} className="text">
+      {/* When the text overflows, its scroll container takes focus so
+          keyboard users can scroll it (WCAG 2.1.1). */}
+      <StyledText
+        ref={textRef}
+        className="text"
+        {...(isOverflowing && {
+          tabIndex: 0,
+          role: 'region',
+          'aria-label': 'Slide text',
+        })}
+      >
         {children}
       </StyledText>
       {isOverflowing && <StyledShadow />}

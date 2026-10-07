@@ -57,3 +57,8 @@
 }
 
 @custom-variant dark (&:where(.dark, .dark *));
+
+/* Motion follows the site setting (src/motion/motion.ts), which already folds
+   in prefers-reduced-motion, so these replace Tailwind's media-query variants. */
+@custom-variant motion-reduce (&:where([data-motion='reduce'], [data-motion='reduce'] *));
+@custom-variant motion-safe (&:where([data-motion='full'], [data-motion='full'] *));

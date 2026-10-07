@@ -1,31 +1,28 @@
-import { FC, useCallback, useEffect, useMemo } from 'react'
-import { WizardStepConfig } from './components/wizardStep/WizardStep'
 import {
-  Box,
-  BoxProps,
-  IconButton,
-  Stack,
-  styled,
-  useTheme,
-} from '@mui/material'
+  FC,
+  KeyboardEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
+import { WizardStepConfig } from './components/wizardStep/WizardStep'
+import { Box, BoxProps, Stack, styled } from '@mui/material'
 import classNames from 'classnames'
-import CloseIcon from '@mui/icons-material/Close'
 import gsap from 'gsap'
 import { TextPlugin } from 'gsap/TextPlugin'
 import { MotionPathPlugin } from 'gsap/MotionPathPlugin'
 import { useGSAP } from '@gsap/react'
 import { WizardResult } from './wizard.types'
-import { WizardDot } from './components/WizardDot'
+import { SlideNav } from './components/SlideNav'
+import { slideHeadingId } from './wizard.ids'
 import { FancyText } from '../fancyText/FancyText'
 import { useWizard } from '@/data/wizards'
-import { NavLink, Outlet, useNavigate, useParams } from 'react-router'
+import { Outlet, useLocation, useNavigate, useParams } from 'react-router'
 import { FancyNavButton } from '../fancyButton/FancyButton'
 import { useAppSelector } from '@/redux/hooks'
-import {
-  selectWizardSelection,
-  selectWizardStep,
-} from '@/redux/slices/wizard/wizard.selector'
-import { tourPath } from '@/data/tour.manifest'
+import { selectWizardSelection } from '@/redux/slices/wizard/wizard.selector'
+import { findTourWizard, tourPath } from '@/data/tour.manifest'
 import { NotFound } from '@/components/notFound/NotFound'
 import { useSwipeable } from 'react-swipeable'
 gsap.registerPlugin(useGSAP, TextPlugin, MotionPathPlugin)
@@ -36,7 +33,6 @@ export interface WizardConfig {
   prev?: string
   stepData?: WizardStepConfig[]
   active?: boolean
-  renderClose?: boolean
   header?: React.ReactNode
   body?: React.ReactNode
   showNav?: boolean
@@ -66,22 +62,40 @@ const StyledWizard = styled(Box)(({ theme }) => ({
   '> h1': {
     viewTransitionName: 'wizard-title',
   },
+  // Short landscape screens: let the page scroll instead of squeezing or
+  // rotating the layout (WCAG 1.3.4 Orientation).
+  '@media (max-height: 520px)': {
+    position: 'relative',
+    height: 'auto',
+    minHeight: '100%',
+    overflow: 'visible',
+  },
 }))
 
+const isTyping = (target: EventTarget | null) =>
+  target instanceof HTMLElement &&
+  (target.isContentEditable ||
+    ['INPUT', 'SELECT', 'TEXTAREA'].includes(target.tagName) ||
+    // react-colorful's pickers use arrow keys themselves.
+    !!target.closest('.react-colorful, [role="slider"]'))
+
+/**
+ * A tour "wizard". Multi-slide wizards follow the WAI-ARIA APG carousel
+ * pattern, adapted to route-based slides: every slide is a URL, so Back, Next,
+ * and the slide picker are real links that work before (and without)
+ * hydration.
+ */
 export const Wizard: FC<WizardProps> = ({ className, ...props }) => {
   const { wizardId: id = 'home', stepId } = useParams()
-  const stepConfig = useAppSelector(selectWizardStep)
   const selection = useAppSelector(selectWizardSelection)
-
-  const theme = useTheme()
   const navigate = useNavigate()
+  const location = useLocation()
 
   const wizardData = useWizard(id)
   const {
     showNav = true,
     active = true,
     defaultStep = '',
-    renderClose = false,
     stepData = [],
     header,
     body,
@@ -89,48 +103,104 @@ export const Wizard: FC<WizardProps> = ({ className, ...props }) => {
     prev = next,
     bodyComponent,
   } = wizardData || {}
-  const wizardId = useMemo(() => wizardData?.id, [wizardData])
+  const wizardId = wizardData?.id
+  const title = findTourWizard(id)?.title ?? ''
+  const total = stepData.length
+  const isCarousel = total > 1
   const stepIndex = stepData.findIndex((step) => step.id === stepId)
-  const { stepPrev } = useMemo(() => {
-    return {
-      stepNext: stepData[stepIndex + 1]?.id || '',
-      stepPrev: stepData[stepIndex - 1]?.id || '',
-    }
-  }, [stepData, stepIndex])
-  const prevLink = useMemo(
-    () => stepPrev || (prev ? tourPath(prev) : null),
-    [prev, stepPrev]
-  )
-  const nextLink = useMemo(
-    () =>
-      !showNav
-        ? null
-        : stepConfig.next || (next && tourPath(next)) || selection.next || '',
-    [next, selection, stepConfig, showNav]
-  )
+  const slide = stepData[stepIndex]
+
+  // Destinations come from the wizard data, not from effects, so the
+  // prerendered links are already correct.
+  const prevLink = useMemo(() => {
+    const previous = stepData[stepIndex - 1]
+    if (wizardId && previous) return tourPath(wizardId, previous.id)
+    return prev ? tourPath(prev) : null
+  }, [prev, stepData, stepIndex, wizardId])
+  const nextLink = useMemo(() => {
+    if (!showNav) return null
+    const following = slide?.next ?? stepData[stepIndex + 1]?.id
+    if (wizardId && following) return tourPath(wizardId, following)
+    return (next && tourPath(next)) || selection.next || null
+  }, [next, selection, showNav, slide, stepData, stepIndex, wizardId])
 
   useEffect(() => {
     if (wizardId && stepIndex < 0 && defaultStep)
       navigate(tourPath(wizardId, defaultStep), { replace: true })
-  }, [defaultStep, id, navigate, stepIndex, wizardId])
+  }, [defaultStep, navigate, stepIndex, wizardId])
 
-  const onPrev = useCallback(() => {
-    if (prevLink) navigate(prevLink)
-  }, [navigate, prevLink])
+  // Announce slide changes politely, but not on the first page load: the
+  // page itself is being read then.
+  const [initialKey] = useState(location.key)
+  const navigated = location.key !== initialKey
+  const announcement = !navigated
+    ? ''
+    : isCarousel && slide
+      ? `${title}, slide ${stepIndex + 1} of ${total}: ${slide.title}`
+      : title
 
-  const onNext = useCallback(() => {
-    if (nextLink) navigate(nextLink)
-  }, [navigate, nextLink])
+  // Keep focus where it was (on Next, or on a slide link) so repeated presses
+  // keep working. If it was inside the old slide and vanished with it, move it
+  // to the new slide's heading instead of leaving it on <body>.
+  useEffect(() => {
+    if (!navigated || !wizardId || !slide) return
+    const active = document.activeElement
+    if (active && active !== document.body && active.isConnected) return
+    document
+      .getElementById(slideHeadingId(wizardId, slide.id))
+      ?.focus({ preventScroll: true })
+  }, [location.key, navigated, slide, wizardId])
 
+  const goTo = useCallback(
+    (to: string | null | undefined) => {
+      if (to) navigate(to)
+    },
+    [navigate]
+  )
+
+  const onKeyDown = (event: KeyboardEvent<HTMLElement>) => {
+    if (
+      event.defaultPrevented ||
+      event.altKey ||
+      event.ctrlKey ||
+      event.metaKey ||
+      isTyping(event.target)
+    )
+      return
+    if (!wizardId) return
+    // Navigation updates the URL before React re-renders, so a fast second key
+    // press would see the previous slide's links. Work from the URL instead.
+    const current = window.location.pathname.split('/').pop()
+    const index = stepData.findIndex((step) => step.id === current)
+    const at = index < 0 ? stepIndex : index
+    const before = stepData[at - 1]
+    const following = stepData[at]?.next ?? stepData[at + 1]?.id
+    const first = stepData[0]
+    const last = stepData[total - 1]
+    const target = {
+      ArrowLeft: before
+        ? tourPath(wizardId, before.id)
+        : prev
+          ? tourPath(prev)
+          : null,
+      ArrowRight: following ? tourPath(wizardId, following) : nextLink,
+      Home: isCarousel && first ? tourPath(wizardId, first.id) : null,
+      End: isCarousel && last ? tourPath(wizardId, last.id) : null,
+    }[event.key]
+    if (target === undefined) return
+    event.preventDefault()
+    goTo(target)
+  }
+
+  // Swipe is a touch convenience only; every swipe has a button equivalent.
   const handlers = useSwipeable({
-    onSwipedLeft: onNext,
-    onSwipedRight: onPrev,
+    onSwipedLeft: () => goTo(nextLink),
+    onSwipedRight: () => goTo(prevLink),
     swipeDuration: 450,
     preventScrollOnSwipe: true,
-    trackMouse: true,
   })
 
-  if (!wizardData || !wizardData.id) {
+  if (!wizardData || !wizardId) {
     return <NotFound />
   }
 
@@ -138,30 +208,15 @@ export const Wizard: FC<WizardProps> = ({ className, ...props }) => {
   const wizardBody = BodyComponent ? <BodyComponent /> : body
   return (
     <StyledWizard
+      component="section"
       id={`wizard-${id}`}
       className={classNames('wizard', { active }, className)}
+      aria-label={title}
+      {...(isCarousel && { 'aria-roledescription': 'carousel' })}
+      onKeyDown={onKeyDown}
       {...props}
       {...handlers}
     >
-      {renderClose && prev && (
-        <IconButton
-          sx={{
-            position: 'absolute',
-            top: theme.spacing(1),
-            right: theme.spacing(1),
-            zIndex: 10,
-          }}
-        >
-          <NavLink
-            aria-label="Close"
-            viewTransition
-            style={{ lineHeight: 0, color: 'inherit !important' }}
-            to={tourPath(prev)}
-          >
-            <CloseIcon />
-          </NavLink>
-        </IconButton>
-      )}
       {header && (
         <FancyText
           fancy={{ animate: true, renderBorder: true }}
@@ -180,15 +235,7 @@ export const Wizard: FC<WizardProps> = ({ className, ...props }) => {
           flex: 1,
         }}
       >
-        <Outlet
-          context={
-            stepConfig.next
-              ? tourPath(wizardId, stepConfig.next)
-              : next
-                ? tourPath(next)
-                : ''
-          }
-        />
+        <Outlet context={nextLink ?? ''} />
       </Box>
 
       {showNav && (
@@ -200,7 +247,6 @@ export const Wizard: FC<WizardProps> = ({ className, ...props }) => {
           my={1}
         >
           <FancyNavButton
-            aria-label="Back"
             to={prevLink}
             disabled={!prevLink}
             sx={{
@@ -211,10 +257,9 @@ export const Wizard: FC<WizardProps> = ({ className, ...props }) => {
           >
             Back
           </FancyNavButton>
-
           <FancyNavButton
-            aria-label="Next"
             to={nextLink}
+            disabled={!nextLink}
             sx={{
               position: 'relative',
               zIndex: 2,
@@ -226,31 +271,13 @@ export const Wizard: FC<WizardProps> = ({ className, ...props }) => {
         </Stack>
       )}
 
-      <Stack
-        className="wizard-dots"
-        direction="row"
-        spacing={0}
-        sx={[
-          {
-            ...(stepData.length <= 1 && { visibility: 'hidden' }),
-            zIndex: 1,
-            justifyContent: 'center',
-            width: 'fit-content',
-            mb: 2,
-            mx: 'auto',
-            p: 0.25,
-            background: `rgba(255,255,255, ${stepData?.length > 1 ? 0.75 : 0})`,
-            borderRadius: 3,
-          },
-          theme.applyStyles('dark', {
-            background: `rgba(0,0,0, ${stepData?.length > 1 ? 0.5 : 0})`,
-          }),
-        ]}
-      >
-        {stepData.map((step) => (
-          <WizardDot key={step.id} id={step.id} />
-        ))}
-      </Stack>
+      {isCarousel && (
+        <SlideNav wizardId={wizardId} slides={stepData} current={stepIndex} />
+      )}
+
+      <p role="status" aria-live="polite" className="sr-only">
+        {announcement}
+      </p>
     </StyledWizard>
   )
 }

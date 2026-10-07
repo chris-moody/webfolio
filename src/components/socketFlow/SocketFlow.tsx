@@ -14,6 +14,7 @@ import { useRef, useState } from 'react'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
 import { useTheme } from '@mui/material'
+import { useReducedMotion } from '@/motion/motion'
 
 const initialNodes: Node[] = [
   {
@@ -86,7 +87,7 @@ export const SocketFlow = () => {
   const [instance, setInstance] = useState<ReactFlowInstance>()
   const [nodes] = useNodesState(initialNodes)
   const [edges] = useEdgesState(initialEdges)
-  const tmln = useRef<gsap.core.Timeline>(gsap.timeline({ paused: true }))
+  const reduced = useReducedMotion()
 
   const onInit = (instance: ReactFlowInstance) => {
     setInstance(instance)
@@ -96,133 +97,223 @@ export const SocketFlow = () => {
     () => {
       if (!instance) return
 
+      // Fit once, without animating it when motion is reduced.
+      gsap.delayedCall(reduced ? 0 : 1, () =>
+        instance.fitView({ duration: reduced ? 0 : 1000, minZoom: 0.0875 })
+      )
+      // The signal animation loops forever; reduced motion shows the static diagram.
+      if (reduced) return
+
       const duration = 2
-      const tl = tmln.current
+      const tl = gsap.timeline({ paused: true })
 
-      tl.set('#r1', {
-        backgroundColor: '#FFFF00',
-        repeat: -1,
-        repeatDelay: 2,
-      }, 0)
-      tl.set('#r1 .label', {
-        color: theme.palette.getContrastText('#FFFF00'),
-        repeat: -1,
-        repeatDelay: 2,
-      }, 0)
-      tl.set('#r2', {
-        backgroundColor: '#ff8800',
-        color: theme.palette.getContrastText('#ff8800'),
-        repeat: -1,
-        repeatDelay: 2,
-      }, 0)
-      tl.set('#r2 .label', {
-        color: theme.palette.getContrastText('#ff8800'),
-        repeat: -1,
-        repeatDelay: 2,
-      }, 0)
-      tl.set('#r1', {
-        backgroundColor: '#FF00FF',
-        color: theme.palette.getContrastText('#FF00FF'),
-        repeat: -1,
-        repeatDelay: 2,
-      }, 1)
-      tl.set('#r1 .label', {
-        color: theme.palette.getContrastText('#FF00FF'),
-        repeat: -1,
-        repeatDelay: 2,
-      }, 1)
-      tl.set('#r2', {
-        backgroundColor: '#00FFFF',
-        color: theme.palette.getContrastText('#00FFFF'),
-        repeat: -1,
-        repeatDelay: 2,
-      }, 1)
-      tl.set('#r2 .label', {
-        color: theme.palette.getContrastText('#00FFFF'),
-        repeat: -1,
-        repeatDelay: 2,
-      }, 1)
+      tl.set(
+        '#r1',
+        {
+          backgroundColor: '#FFFF00',
+          repeat: -1,
+          repeatDelay: 2,
+        },
+        0
+      )
+      tl.set(
+        '#r1 .label',
+        {
+          color: theme.palette.getContrastText('#FFFF00'),
+          repeat: -1,
+          repeatDelay: 2,
+        },
+        0
+      )
+      tl.set(
+        '#r2',
+        {
+          backgroundColor: '#ff8800',
+          color: theme.palette.getContrastText('#ff8800'),
+          repeat: -1,
+          repeatDelay: 2,
+        },
+        0
+      )
+      tl.set(
+        '#r2 .label',
+        {
+          color: theme.palette.getContrastText('#ff8800'),
+          repeat: -1,
+          repeatDelay: 2,
+        },
+        0
+      )
+      tl.set(
+        '#r1',
+        {
+          backgroundColor: '#FF00FF',
+          color: theme.palette.getContrastText('#FF00FF'),
+          repeat: -1,
+          repeatDelay: 2,
+        },
+        1
+      )
+      tl.set(
+        '#r1 .label',
+        {
+          color: theme.palette.getContrastText('#FF00FF'),
+          repeat: -1,
+          repeatDelay: 2,
+        },
+        1
+      )
+      tl.set(
+        '#r2',
+        {
+          backgroundColor: '#00FFFF',
+          color: theme.palette.getContrastText('#00FFFF'),
+          repeat: -1,
+          repeatDelay: 2,
+        },
+        1
+      )
+      tl.set(
+        '#r2 .label',
+        {
+          color: theme.palette.getContrastText('#00FFFF'),
+          repeat: -1,
+          repeatDelay: 2,
+        },
+        1
+      )
 
-      tl.to('#signal-r1-s1', {
-        duration,
-        motionPath: {
-          path: "#r1-s1",
+      tl.to(
+        '#signal-r1-s1',
+        {
+          duration,
+          motionPath: {
+            path: '#r1-s1',
+          },
+          repeat: -1,
+          ease: 'none',
         },
-        repeat: -1,
-        ease: 'none'
-      }, 0)
-      tl.to('#signal-r1-s2', {
-        duration,
-        motionPath: {
-          path: "#r1-s2",
+        0
+      )
+      tl.to(
+        '#signal-r1-s2',
+        {
+          duration,
+          motionPath: {
+            path: '#r1-s2',
+          },
+          repeat: -1,
+          ease: 'none',
         },
-        repeat: -1,
-        ease: 'none'
-      }, 1)
-      tl.to('#signal-r2-s1', {
-        duration,
-        motionPath: {
-          path: "#r2-s1",
+        1
+      )
+      tl.to(
+        '#signal-r2-s1',
+        {
+          duration,
+          motionPath: {
+            path: '#r2-s1',
+          },
+          repeat: -1,
+          ease: 'none',
         },
-        repeat: -1,
-        ease: 'none'
-      }, 1)
-      tl.to('#signal-r2-s2', {
-        duration,
-        motionPath: {
-          path: "#r2-s2",
+        1
+      )
+      tl.to(
+        '#signal-r2-s2',
+        {
+          duration,
+          motionPath: {
+            path: '#r2-s2',
+          },
+          repeat: -1,
+          ease: 'none',
         },
-        repeat: -1,
-        ease: 'none'
-      }, 0)
+        0
+      )
 
-      tl.set('#s1', {
-        backgroundColor: '#FFFF00',
-        repeat: -1,
-        repeatDelay: 2,
-      }, 2)
-      tl.set('#s1 .label', {
-        color: theme.palette.getContrastText('#FFFF00'),
-        repeat: -1,
-        repeatDelay: 2,
-      }, 2)
-      tl.set('#s1', {
-        backgroundColor: '#00FFFF',
-        color: theme.palette.getContrastText('#00FFFF'),
-        repeat: -1,
-        repeatDelay: 2,
-      }, 3)
-      tl.set('#s1 .label', {
-        color: theme.palette.getContrastText('#00FFFF'),
-        repeat: -1,
-        repeatDelay: 2,
-      }, 2)
-      tl.set('#s2', {
-        backgroundColor: '#FF00FF',
-        color: theme.palette.getContrastText('#FF00FF'),
-        repeat: -1,
-        repeatDelay: 2,
-      }, 3)
-      tl.set('#s2 .label', {
-        color: theme.palette.getContrastText('#FF00FF'),
-        repeat: -1,
-        repeatDelay: 2,
-      }, 3)
-      tl.set('#s2', {
-        backgroundColor: '#ff8800',
-        color: theme.palette.getContrastText('#ff8800'),
-        repeat: -1,
-        repeatDelay: 2,
-      }, 2)
-      tl.set('#s2 .label', {
-        color: theme.palette.getContrastText('#ff8800'),
-        repeat: -1,
-        repeatDelay: 2,
-      }, 2)
+      tl.set(
+        '#s1',
+        {
+          backgroundColor: '#FFFF00',
+          repeat: -1,
+          repeatDelay: 2,
+        },
+        2
+      )
+      tl.set(
+        '#s1 .label',
+        {
+          color: theme.palette.getContrastText('#FFFF00'),
+          repeat: -1,
+          repeatDelay: 2,
+        },
+        2
+      )
+      tl.set(
+        '#s1',
+        {
+          backgroundColor: '#00FFFF',
+          color: theme.palette.getContrastText('#00FFFF'),
+          repeat: -1,
+          repeatDelay: 2,
+        },
+        3
+      )
+      tl.set(
+        '#s1 .label',
+        {
+          color: theme.palette.getContrastText('#00FFFF'),
+          repeat: -1,
+          repeatDelay: 2,
+        },
+        2
+      )
+      tl.set(
+        '#s2',
+        {
+          backgroundColor: '#FF00FF',
+          color: theme.palette.getContrastText('#FF00FF'),
+          repeat: -1,
+          repeatDelay: 2,
+        },
+        3
+      )
+      tl.set(
+        '#s2 .label',
+        {
+          color: theme.palette.getContrastText('#FF00FF'),
+          repeat: -1,
+          repeatDelay: 2,
+        },
+        3
+      )
+      tl.set(
+        '#s2',
+        {
+          backgroundColor: '#ff8800',
+          color: theme.palette.getContrastText('#ff8800'),
+          repeat: -1,
+          repeatDelay: 2,
+        },
+        2
+      )
+      tl.set(
+        '#s2 .label',
+        {
+          color: theme.palette.getContrastText('#ff8800'),
+          repeat: -1,
+          repeatDelay: 2,
+        },
+        2
+      )
       tl.play()
-      gsap.delayedCall(1, () => instance.fitView({ duration: 1000, minZoom: 0.0875 }))
     },
-    { dependencies: [instance], scope: container }
+    {
+      dependencies: [instance, reduced],
+      scope: container,
+      revertOnUpdate: true,
+    }
   )
 
   return (

@@ -11,26 +11,37 @@ export interface ForceGraph extends ForceGraphProps {
   initForce: (nodes: Node[]) => d3.Simulation<Node, undefined>
 }
 
+/** The pin layout's forces: collide by radius, gentle attraction, centered. */
+export const createSimulation = (data: Node[], width: number, height: number) =>
+  d3
+    .forceSimulation(data)
+    .force(
+      'collide',
+      d3.forceCollide().radius((d) => (d as Node).value)
+    )
+    .force('charge', d3.forceManyBody().strength(2))
+    .force('center', d3.forceCenter(width / 2, height / 2))
+
+/** Runs the simulation to rest without animating (reduced motion). */
+export const settleLayout = (
+  data: Node[],
+  width: number,
+  height: number
+): Node[] => {
+  const nodes = data.map((node) => ({ ...node }))
+  const simulation = createSimulation(nodes, width, height).stop()
+  simulation.tick(300)
+  return simulation.nodes()
+}
+
 export const useForceGraph = ({
   width = 400,
   height = 400,
 }: ForceGraphProps) => {
   const graph: ForceGraph = {} as ForceGraph
 
-  const initForce = (data: Node[]): d3.Simulation<Node, undefined> => {
-    d3.select('svg')
-      .selectAll('.pin')
-      .data(data, (d) => (d as Node)?.name)
-
-    return d3
-      .forceSimulation(data)
-      .force(
-        'collide',
-        d3.forceCollide().radius((d) => ((d as Node).value))
-      )
-      .force('charge', d3.forceManyBody().strength(2))
-      .force('center', d3.forceCenter((graph.width || width) / 2, (graph.height || height) / 2))
-  }
+  const initForce = (data: Node[]): d3.Simulation<Node, undefined> =>
+    createSimulation(data, graph.width || width, graph.height || height)
 
   graph.width = width
   graph.height = height
