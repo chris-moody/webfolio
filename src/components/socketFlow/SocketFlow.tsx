@@ -1,3 +1,4 @@
+import { data } from '@/tokens'
 import {
   ReactFlow,
   useEdgesState,
@@ -47,7 +48,7 @@ const initialEdges: Edge[] = [
     id: 'r1-s1',
     source: 'r1',
     target: 's1',
-    data: { color: 'yellow' },
+    data: { color: data.yellow },
     type: 'socketEdge',
     sourceHandle: 'source-bot-l',
     targetHandle: 'target-top-l',
@@ -74,7 +75,7 @@ const initialEdges: Edge[] = [
     id: 'r2-s2',
     source: 'r2',
     target: 's2',
-    data: { color: 'orange' },
+    data: { color: data.orange },
     type: 'socketEdge',
     sourceHandle: 'source-bot-r',
     targetHandle: 'target-top-r',
@@ -110,7 +111,7 @@ export const SocketFlow = () => {
       tl.set(
         '#r1',
         {
-          backgroundColor: '#FFFF00',
+          backgroundColor: data.yellow,
           repeat: -1,
           repeatDelay: 2,
         },
@@ -119,7 +120,7 @@ export const SocketFlow = () => {
       tl.set(
         '#r1 .label',
         {
-          color: theme.palette.getContrastText('#FFFF00'),
+          color: theme.palette.getContrastText(data.yellow),
           repeat: -1,
           repeatDelay: 2,
         },
@@ -128,8 +129,8 @@ export const SocketFlow = () => {
       tl.set(
         '#r2',
         {
-          backgroundColor: '#ff8800',
-          color: theme.palette.getContrastText('#ff8800'),
+          backgroundColor: data.orange,
+          color: theme.palette.getContrastText(data.orange),
           repeat: -1,
           repeatDelay: 2,
         },
@@ -138,7 +139,7 @@ export const SocketFlow = () => {
       tl.set(
         '#r2 .label',
         {
-          color: theme.palette.getContrastText('#ff8800'),
+          color: theme.palette.getContrastText(data.orange),
           repeat: -1,
           repeatDelay: 2,
         },
@@ -147,8 +148,8 @@ export const SocketFlow = () => {
       tl.set(
         '#r1',
         {
-          backgroundColor: '#FF00FF',
-          color: theme.palette.getContrastText('#FF00FF'),
+          backgroundColor: data.magenta,
+          color: theme.palette.getContrastText(data.magenta),
           repeat: -1,
           repeatDelay: 2,
         },
@@ -157,7 +158,7 @@ export const SocketFlow = () => {
       tl.set(
         '#r1 .label',
         {
-          color: theme.palette.getContrastText('#FF00FF'),
+          color: theme.palette.getContrastText(data.magenta),
           repeat: -1,
           repeatDelay: 2,
         },
@@ -166,8 +167,8 @@ export const SocketFlow = () => {
       tl.set(
         '#r2',
         {
-          backgroundColor: '#00FFFF',
-          color: theme.palette.getContrastText('#00FFFF'),
+          backgroundColor: data.cyan,
+          color: theme.palette.getContrastText(data.cyan),
           repeat: -1,
           repeatDelay: 2,
         },
@@ -176,7 +177,7 @@ export const SocketFlow = () => {
       tl.set(
         '#r2 .label',
         {
-          color: theme.palette.getContrastText('#00FFFF'),
+          color: theme.palette.getContrastText(data.cyan),
           repeat: -1,
           repeatDelay: 2,
         },
@@ -235,7 +236,7 @@ export const SocketFlow = () => {
       tl.set(
         '#s1',
         {
-          backgroundColor: '#FFFF00',
+          backgroundColor: data.yellow,
           repeat: -1,
           repeatDelay: 2,
         },
@@ -244,7 +245,7 @@ export const SocketFlow = () => {
       tl.set(
         '#s1 .label',
         {
-          color: theme.palette.getContrastText('#FFFF00'),
+          color: theme.palette.getContrastText(data.yellow),
           repeat: -1,
           repeatDelay: 2,
         },
@@ -253,8 +254,8 @@ export const SocketFlow = () => {
       tl.set(
         '#s1',
         {
-          backgroundColor: '#00FFFF',
-          color: theme.palette.getContrastText('#00FFFF'),
+          backgroundColor: data.cyan,
+          color: theme.palette.getContrastText(data.cyan),
           repeat: -1,
           repeatDelay: 2,
         },
@@ -263,7 +264,7 @@ export const SocketFlow = () => {
       tl.set(
         '#s1 .label',
         {
-          color: theme.palette.getContrastText('#00FFFF'),
+          color: theme.palette.getContrastText(data.cyan),
           repeat: -1,
           repeatDelay: 2,
         },
@@ -272,8 +273,8 @@ export const SocketFlow = () => {
       tl.set(
         '#s2',
         {
-          backgroundColor: '#FF00FF',
-          color: theme.palette.getContrastText('#FF00FF'),
+          backgroundColor: data.magenta,
+          color: theme.palette.getContrastText(data.magenta),
           repeat: -1,
           repeatDelay: 2,
         },
@@ -282,7 +283,7 @@ export const SocketFlow = () => {
       tl.set(
         '#s2 .label',
         {
-          color: theme.palette.getContrastText('#FF00FF'),
+          color: theme.palette.getContrastText(data.magenta),
           repeat: -1,
           repeatDelay: 2,
         },
@@ -291,8 +292,8 @@ export const SocketFlow = () => {
       tl.set(
         '#s2',
         {
-          backgroundColor: '#ff8800',
-          color: theme.palette.getContrastText('#ff8800'),
+          backgroundColor: data.orange,
+          color: theme.palette.getContrastText(data.orange),
           repeat: -1,
           repeatDelay: 2,
         },
@@ -301,7 +302,7 @@ export const SocketFlow = () => {
       tl.set(
         '#s2 .label',
         {
-          color: theme.palette.getContrastText('#ff8800'),
+          color: theme.palette.getContrastText(data.orange),
           repeat: -1,
           repeatDelay: 2,
         },

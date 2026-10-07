@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { BRAND_ACCENT } from '@/tokens'
 
 export interface ThemeState {
   flair: number
@@ -10,7 +11,7 @@ export interface ThemeState {
 // match. Color mode is owned by MUI's `useColorScheme`.
 export const initialThemeState: ThemeState = {
   flair: 1,
-  color: '#256ee0',
+  color: BRAND_ACCENT,
 }
 
 const themeSlice = createSlice({

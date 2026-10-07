@@ -2,7 +2,7 @@ import { deepmerge } from '@mui/utils'
 import {
   createTheme,
   responsiveFontSizes,
-  ThemeOptions,
+  type ThemeOptions,
 } from '@mui/material/styles'
 import '@fontsource/chivo/300.css'
 import '@fontsource/chivo/400.css'
@@ -16,295 +16,218 @@ import '@fontsource/fira-sans/300.css'
 import '@fontsource/fira-sans/400.css'
 import '@fontsource/fira-sans/500.css'
 import '@fontsource/fira-sans/700.css'
-import '@fontsource/rammetto-one/400.css';
+import '@fontsource/rammetto-one/400.css'
+import {
+  data,
+  type Mode,
+  semanticColors,
+  themeForFlair,
+  withAlpha,
+} from '@/tokens'
 
-export const useDynamicTheme = (
-  options: ThemeOptions = {},
-  level: number = 1
-) => {
+/**
+ * The tour's MUI theme, generated from the design tokens (ADR 0002): the same
+ * source that produces the CSS variables Tailwind reads. Colors come from the
+ * semantic tier with the visitor's accent resolved for contrast in each mode;
+ * type, radius, and backdrop come from the flair level's theme.
+ */
+export interface TourThemeInput {
+  flair: number
+  /** The visitor's chosen color (any hex); resolved per mode for contrast. */
+  color: string
+}
 
-  const defaultPalette = {
-    defaultChannel: '12 12 12',
+const palette = (mode: Mode, color: string) => {
+  const c = semanticColors(mode, color)
+  return {
     primary: {
-      main: '#256ee0',
+      main: c.accent,
+      dark: c.accentStrong,
+      light: c.accentSubtle,
+      contrastText: c.onAccent,
     },
-    secondary: {
-      main: '#00bef5',
+    secondary: { main: c.accent, contrastText: c.onAccent },
+    error: { main: c.negative },
+    success: { main: c.positive },
+    info: { main: c.accent },
+    warning: { main: data.yellow },
+    divider: c.border,
+    text: { primary: c.fg, secondary: c.fgMuted },
+    background: {
+      default: c.backdrop,
+      paper: c.surface,
+      defaultChannel: '12 12 12',
     },
-    error: {
-      main: '#de0c0c',
-    },
-    warning: {
-      main: '#f9e630',
-    },
-    info: {
-      main: '#0474e0',
-    },
-    success: {
-      main: '#07d013',
-    },
-    divider: 'rgba(137,0,154,0.12)',
-    ...options.palette,
   }
+}
 
-  const themeZero = createTheme({ palette: defaultPalette })
+export const createTourTheme = ({ flair, color }: TourThemeInput) => {
+  const theme = themeForFlair(flair)
+  const light = palette('light', color)
+  const dark = palette('dark', color)
 
-  const themeOptions: ThemeOptions = {
+  // Backdrop treatment per theme. Maximal's conic stripes live in
+  // WizardController, where they can animate.
+  const backdrops: Partial<Record<Mode, string>> =
+    theme.backdrop === 'radial'
+      ? {
+          light: `radial-gradient(${light.background.paper}, ${light.primary.light})`,
+          dark: `radial-gradient(${dark.primary.dark}, ${dark.background.default})`,
+        }
+      : {}
+
+  const base: NonNullable<Parameters<typeof createTheme>[0]> = {
+    // AA text everywhere MUI picks a contrast color (default threshold is 3).
+    cssVariables: { colorSchemeSelector: 'class' },
     colorSchemes: {
-      dark: {
-        palette: {
-          ...defaultPalette,
-        },
-      },
       light: {
         palette: {
-          ...defaultPalette,
+          ...light,
+          contrastThreshold: 4.5,
           background: {
-            default: '#ddd',
-            defaultChannel: '12 12 12',
+            ...light.background,
+            default: backdrops.light ?? light.background.default,
+          },
+        },
+      },
+      dark: {
+        palette: {
+          ...dark,
+          contrastThreshold: 4.5,
+          background: {
+            ...dark.background,
+            default: backdrops.dark ?? dark.background.default,
           },
         },
       },
     },
+    shape: { borderRadius: parseInt(theme.radius, 10) },
     typography: {
+      fontFamily: theme.font.body,
       h1: {
+        fontFamily: theme.font.display,
         fontWeight: 400,
-        textDecoration: 'underline',
-        textDecorationColor: themeZero.palette.primary.main,
+        ...(theme.name === 'minimal' && {
+          textDecoration: 'underline',
+          textDecorationColor: 'var(--mui-palette-primary-main)',
+        }),
       },
-      h4: {
-        lineHeight: 1.1,
-      },
+      h4: { lineHeight: 1.1 },
+      ...(theme.name === 'maximal' && {
+        body1: { fontSize: '1.2rem' },
+        threed: {
+          fontSize: '6rem',
+          fontFamily: theme.font.display,
+          fontWeight: 400,
+        },
+      }),
     },
     components: {
-      MuiButton: {
-        styleOverrides: {
-          root: {
-            variants: [
-              {
-                props: { variant: 'text' },
-                style: ({ theme }) => [
-                  {
-                    background: 'rgba(255,255,255,0.75)',
-                    color: theme.palette.getContrastText('rgba(255,255,255,0.75)'),
-                    '&.active, &:hover, &:focus, &:focus-visible': {
-                      background: theme.palette.primary.main,
-                      color: theme.palette.getContrastText(theme.palette.primary.main),
-                    },
-                  },
-                  theme.applyStyles('dark', {
-                    background: 'rgba(0,0,0,.75)',
-                    color: theme.palette.getContrastText('rgba(0,0,0,0.75)'),
-                    transition: theme.transitions.create(['transform'], {
-                      duration: theme.transitions.duration.standard,
-                    }),
-                  }),
-                ],
-              },
-            ],
-          },
-        },
-      },
       MuiLink: {
         styleOverrides: {
-          root: ({ theme }) => ({
-            color: theme.palette.text.primary,
-            textDecorationColor: theme.palette.text.primary,
-            transition: theme.transitions.create(['color', 'text-decoration'], {
-              duration: theme.transitions.duration.standard,
+          root: ({ theme: t }) => ({
+            color: t.palette.text.primary,
+            textDecorationColor: t.palette.text.primary,
+            transition: t.transitions.create(['color', 'text-decoration'], {
+              duration: t.transitions.duration.standard,
             }),
             '&:hover': {
-              color: theme.palette.primary.light,
-              textDecorationColor: theme.palette.primary.light,
+              color: t.palette.primary.main,
+              textDecorationColor: t.palette.primary.main,
             },
-          })
-        }
-      }
-    },
-  }
-
-  const baseTheme = createTheme(themeOptions)
-
-  const flair15: ThemeOptions = {
-    colorSchemes: {
-      dark: {
-        palette: {
-          ...defaultPalette,
-          background: {
-            default: `radial-gradient(${baseTheme.palette.primary.dark}, ${baseTheme.palette.common.black})`,
-            defaultChannel: '12 12 12',
-          },
+          }),
         },
       },
-      light: {
-        palette: {
-          ...defaultPalette,
-          background: {
-            default: `radial-gradient(${baseTheme.palette.common.white}, ${baseTheme.palette.primary.light})`,
-            defaultChannel: '12 12 12',
-          },
-        },
-      },
-    },
-    typography: {
-      h1: {
-        fontWeight: 400
-      },
-      h4: {
-        lineHeight: 1.1,
-      },
-      fontFamily: 'Fira Sans',
-    },
-    components: {
       MuiButton: {
         styleOverrides: {
           root: {
             variants: [
-              {
-                props: { variant: 'text' },
-                style: ({ theme }) => [
-                  {
-                    background: theme.palette.primary.main,
-                    color: theme.palette.getContrastText(theme.palette.primary.main),
-                    '&.active, &:hover, &:focus, &:focus-visible': {
-                      background: theme.palette.primary.light,
-                      boxShadow: `inset 0 0 0 2px ${theme.palette.text.primary}`,
-                    },
-                  },
-                  theme.applyStyles('dark', {
-                    background: theme.palette.primary.dark,
-                    color: theme.palette.getContrastText(theme.palette.primary.dark),
-                    '&.active, &:hover, &:focus, &:focus-visible': {
-                      background: theme.palette.primary.main,
-                    },
-                  }),
-                ],
-              },
+              { props: { variant: 'text' }, style: buttonStyles(theme.name) },
             ],
           },
         },
       },
-      MuiLink: themeOptions.components?.MuiLink,
     },
   }
 
-  const flair37: ThemeOptions = {
-    colorSchemes: {
-      dark: {
-        palette: {
-          ...defaultPalette,
-        },
-      },
-      light: {
-        palette: {
-          ...defaultPalette,
-        },
-      },
-    },
-    typography: {
-      body1: {
-        fontSize: '1.2rem'
-      },
-      h1: {
-        fontFamily: 'Rammetto One',
-        fontWeight: 400
-      },
-      h4: {
-        lineHeight: 1.1,
-      },
-      threed: {
-        fontSize: baseTheme.typography.h1.fontSize,
-        fontFamily: 'Rammetto One',
-        fontWeight: 400
-      },
-      fontFamily: 'Chivo',
-    },
-    components: {
-      MuiButton: {
-        styleOverrides: {
-          root: {
-            variants: [
-              {
-                props: { variant: 'text' },
-                style: ({ theme }) => [
-                  {
-                    backgroundImage: `repeating-linear-gradient(150deg, ${theme.palette.primary.light}, ${theme.palette.primary.main}, ${theme.palette.primary.light} 10%)`,
-                    backgroundSize: '400% 400%',
-                    color: theme.palette.getContrastText(theme.palette.primary.main),
-                    transition: theme.transitions.create(
-                      ['background', 'transform'],
-                      {
-                        duration: theme.transitions.duration.standard,
-                      }
-                    ),
-                    '@keyframes Gradient': {
-                      '0%': {
-                        backgroundPosition: '0% 0%',
-                      },
-                      '100%': {
-                        backgroundPosition: '98% 0%',
-                      },
-                    },
-                    '&.active, &:hover': {
-                      animation: 'Gradient 3s linear infinite',
-                      transform: 'scale(1.2)',
-                    },
-                    '&:hover, &:focus, &:focus-visible': {
-                      outline: 0,
-                    },
-                    '&.disabled': {
-                      pointerEvents: 'none',
-                      cursor: 'not-allowed',
-                    }
-                  },
-                  theme.applyStyles('dark', {
-                    backgroundImage: `repeating-linear-gradient(150deg, ${theme.palette.primary.dark}, ${theme.palette.primary.main}, ${theme.palette.primary.light}, ${theme.palette.primary.main}, ${theme.palette.primary.dark} 20%)`,
-                  }),
-                ],
-              },
-            ],
-          },
-        },
-      },
-      MuiLink: themeOptions.components?.MuiLink,
-    },
-  }
-
-  const theme = createTheme(
-    deepmerge(
-      { cssVariables: { colorSchemeSelector: 'class' } },
-      level === 15 ? flair15 : level === 37 ? flair37 : themeOptions
-    )
-  )
-
-  return responsiveFontSizes(theme)
+  return responsiveFontSizes(createTheme(deepmerge({}, base)))
 }
+
+type ButtonStyle = NonNullable<
+  NonNullable<
+    NonNullable<
+      NonNullable<ThemeOptions['components']>['MuiButton']
+    >['styleOverrides']
+  >['root']
+>
+type StyleFn = Extract<
+  NonNullable<
+    Extract<ButtonStyle, { variants?: unknown }>['variants']
+  >[number]['style'],
+  (...args: never[]) => unknown
+>
+
+/** The text button per theme: quiet, filled, or animated gradient. */
+const buttonStyles = (name: 'minimal' | 'expressive' | 'maximal'): StyleFn =>
+  (({ theme: t }) => {
+    const fill = t.palette.primary.main
+    const onFill = t.palette.getContrastText(fill)
+    if (name === 'minimal') {
+      return {
+        background: 'var(--surface-overlay)',
+        color: t.palette.text.primary,
+        '&.active, &:hover, &:focus, &:focus-visible': {
+          background: fill,
+          color: onFill,
+        },
+      }
+    }
+    if (name === 'expressive') {
+      return {
+        background: fill,
+        color: onFill,
+        '&.active, &:hover, &:focus, &:focus-visible': {
+          background: t.palette.primary.dark,
+          color: t.palette.getContrastText(t.palette.primary.dark),
+          boxShadow: `inset 0 0 0 2px ${t.palette.text.primary}`,
+        },
+      }
+    }
+    return {
+      backgroundImage: `repeating-linear-gradient(150deg, ${t.palette.primary.dark}, ${fill}, ${t.palette.primary.dark} 10%)`,
+      backgroundSize: '400% 400%',
+      color: onFill,
+      textShadow: `0 1px 2px ${withAlpha(t.palette.common.black, 0.4)}`,
+      transition: t.transitions.create(['background', 'transform'], {
+        duration: t.transitions.duration.standard,
+      }),
+      '@keyframes Gradient': {
+        '0%': { backgroundPosition: '0% 0%' },
+        '100%': { backgroundPosition: '98% 0%' },
+      },
+      '&.active, &:hover': {
+        animation: 'Gradient 3s linear infinite',
+        transform: 'scale(1.2)',
+      },
+      '&:hover, &:focus, &:focus-visible': { outline: 0 },
+      '&.disabled': { pointerEvents: 'none', cursor: 'not-allowed' },
+    }
+  }) as StyleFn
 
 declare module '@mui/material/styles' {
   interface TypographyVariants {
-    threed: React.CSSProperties;
+    threed: React.CSSProperties
   }
-
-  // allow configuration using `createTheme()`
   interface TypographyVariantsOptions {
-    threed?: React.CSSProperties;
+    threed?: React.CSSProperties
   }
-
-  interface ThemeOptions {
-    colorSchemes?: {
-      dark: ThemeOptions;
-      light: ThemeOptions;
-    }
-  }
-
   interface TypeBackground {
-    defaultChannel: string;
+    defaultChannel: string
   }
 }
 
-// Update the Typography's variant prop options
 declare module '@mui/material/Typography' {
   interface TypographyPropsVariantOverrides {
-    threed: true;
+    threed: true
   }
 }

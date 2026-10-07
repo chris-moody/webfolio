@@ -16,7 +16,9 @@ import {
   selectThemeFlair,
 } from '@/redux/slices/theme/theme.selector'
 import { store } from '@/redux/store'
-import { useDynamicTheme } from '@/theme'
+import { createTourTheme } from '@/theme'
+import { accentDeclarations, themeForFlair } from '@/tokens'
+import { useEffect, useMemo } from 'react'
 import '@/styles/tour.css'
 
 // In the browser, a cache with the same key as the build-time renderer adopts
@@ -49,10 +51,8 @@ function TourTheme() {
 
   const color = useAppSelector(selectThemeColor)
   const flair = useAppSelector(selectThemeFlair)
-  const theme = useDynamicTheme(
-    { palette: { primary: { main: color } } },
-    flair
-  )
+  const theme = useMemo(() => createTourTheme({ flair, color }), [flair, color])
+  useTourTokens(flair, color)
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline enableColorScheme />
@@ -65,4 +65,27 @@ function TourTheme() {
       </ErrorBoundary>
     </ThemeProvider>
   )
+}
+
+/**
+ * Mirrors the tour's theme and the visitor's accent into the CSS variables
+ * Tailwind reads, so token utilities inside the tour match MUI. Removed on
+ * leaving the tour, so the rest of the site keeps the brand accent.
+ */
+function useTourTokens(flair: number, color: string) {
+  useEffect(() => {
+    const root = document.documentElement
+    root.dataset.theme = themeForFlair(flair).name
+    const style = document.createElement('style')
+    style.id = 'tour-accent'
+    style.textContent = [
+      `:root {\n${accentDeclarations('light', color).join('\n')}\n}`,
+      `:root.dark {\n${accentDeclarations('dark', color).join('\n')}\n}`,
+    ].join('\n')
+    document.head.append(style)
+    return () => {
+      style.remove()
+      delete root.dataset.theme
+    }
+  }, [flair, color])
 }

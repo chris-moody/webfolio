@@ -26,7 +26,8 @@ src/
 ├── content/work/           Case studies (MDX); drafts never ship in production builds
 ├── components/case-study/  Case-study building blocks, including the RTK Query ↔ TanStack Query sandbox
 ├── data/                   Tour manifest (route structure) and wizard content
-├── styles/                 Design tokens (light/dark) and Tailwind entry points
+├── tokens/                 Design tokens (TypeScript): OKLCH math, reference/semantic/component tiers, themes, accent resolver
+├── styles/                 Generated token CSS and the Tailwind entry points
 ├── components/, containers/, hooks/, redux/, theme/, utils/
 react-router.config.ts      Prerender list; writes 404.html, _redirects, sitemap, robots
 scripts/                    postbuild (resume PDF + social card), route budgets, resume history tooling

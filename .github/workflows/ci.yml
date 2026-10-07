@@ -26,6 +26,8 @@ jobs:
       - run: yarn lint
       - run: yarn test
       - run: yarn check:resume-history
+      - run: yarn tokens:check
+      - run: yarn lint:colors
 
   build:
     name: Build · route budgets

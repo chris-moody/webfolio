@@ -3,6 +3,7 @@ export const contentRoutes = [
   { path: '/', heading: /christopher moody/i },
   { path: '/resume', heading: /christopher moody/i },
   { path: '/lab', heading: /^lab$/i },
+  { path: '/system', heading: /^design system$/i },
   { path: '/lab/tape', heading: /^tape$/i },
 ] as const
 

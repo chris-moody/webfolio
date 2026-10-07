@@ -13,6 +13,7 @@ const nav = [
     ? [{ to: '/work', label: 'Work', end: false }]
     : []),
   { to: '/lab', label: 'Lab', end: false },
+  { to: '/system', label: 'System', end: false },
   { to: '/resume', label: 'Resume', end: false },
   {
     to: tourPath(TOUR_START.wizard, TOUR_START.step),

@@ -278,7 +278,12 @@ export const Wizard: FC<WizardProps> = ({ className, ...props }) => {
         <SlideNav wizardId={wizardId} slides={stepData} current={stepIndex} />
       )}
 
-      <p role="status" aria-live="polite" className="sr-only">
+      <p
+        role="status"
+        aria-live="polite"
+        className="sr-only"
+        data-slide-announcer
+      >
         {announcement}
       </p>
     </StyledWizard>

@@ -49,7 +49,7 @@ const LayeredText = styled(Typography)(({ theme }) => [
     left: 0,
     top: 0,
     transformStyle: 'preserve-3d',
-    textShadow: '0 0 4px rgba(255,255,255, 0.25)',
+    textShadow: '0 0 4px var(--highlight)',
     color: theme.palette.text.primary,
     userSelect: 'none',
     pointerEvents: 'none',
@@ -59,7 +59,7 @@ const LayeredText = styled(Typography)(({ theme }) => [
       textShadow: 'none',
     },
     '&:last-of-type': {
-      WebkitTextStroke: '8px rgba(255,255,255, 0.75)',
+      WebkitTextStroke: '8px var(--highlight)',
     },
     variants: [
       {
@@ -67,9 +67,9 @@ const LayeredText = styled(Typography)(({ theme }) => [
         style: [
           {
             color: theme.palette.common.white,
-            textShadow: '4px 0 10px rgba(0, 0, 0, 0.5)',
+            textShadow: '4px 0 10px var(--shadow)',
             '&:last-of-type': {
-              WebkitTextStroke: '16px rgba(0, 0, 0, 0.1)',
+              WebkitTextStroke: '16px var(--shadow)',
             },
           },
           theme.applyStyles('dark', {
@@ -80,9 +80,9 @@ const LayeredText = styled(Typography)(({ theme }) => [
     ],
   },
   theme.applyStyles('dark', {
-    textShadow: '0px 0 4px rgba(0, 0, 0, 0.125)',
+    textShadow: '0px 0 4px var(--shadow)',
     '&:last-of-type': {
-      WebkitTextStroke: '12px rgba(0, 0, 0, 0.25)',
+      WebkitTextStroke: '12px var(--shadow)',
     },
   }),
 ])
@@ -165,7 +165,7 @@ export const Text3d: FC<Text3dProps> = ({
                 {
                   transform: `translateZ(${n * -stepSize}px)`,
                   ...(n === median + 1 && {
-                    WebkitTextStroke: '3px rgba(0, 0, 0, 0.25)',
+                    WebkitTextStroke: '3px var(--shadow)',
                   }),
                   ...(n === median + 2 &&
                     renderBorder && {

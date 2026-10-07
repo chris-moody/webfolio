@@ -1,7 +1,9 @@
+import { RESOLVED } from './tokens/generated.ts'
+
 export const SITE = {
   name: 'Christopher Moody',
   url: 'https://webfolio.moodydigital.com',
-  themeColor: '#1f5fc7',
+  themeColor: RESOLVED.light.accent,
   repo: 'https://github.com/chris-moody/webfolio',
 } as const
 

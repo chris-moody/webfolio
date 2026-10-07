@@ -1,3 +1,4 @@
+import { data as palette } from '@/tokens'
 import { BaseEdge, getSmoothStepPath, EdgeProps } from '@xyflow/react'
 
 export interface SocketEdgeProps extends EdgeProps {
@@ -5,7 +6,7 @@ export interface SocketEdgeProps extends EdgeProps {
   duration?: number
   data: {
     color?: string
-  },
+  }
 }
 
 export function SocketEdge({
@@ -26,12 +27,12 @@ export function SocketEdge({
     targetY,
     targetPosition,
   })
-  const { color = '#ff0073' } = data
+  const { color = palette.pink } = data
 
   return (
     <>
       <BaseEdge id={id} path={edgePath} />
-      <circle id={"signal-"+id} r="10" fill={color} />
+      <circle id={'signal-' + id} r="10" fill={color} />
     </>
   )
 }

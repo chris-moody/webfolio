@@ -7,7 +7,7 @@ export interface TextDisplayProps extends BoxProps {
 }
 const StyledWrapper = styled(Box)(({ theme }) => [
   {
-    background: 'rgba(255,255,255,.75)',
+    background: 'var(--surface-overlay)',
     position: 'relative',
     display: 'block',
     padding: 0,
@@ -22,9 +22,6 @@ const StyledWrapper = styled(Box)(({ theme }) => [
       '.text': { height: 'auto', overflow: 'visible' },
     },
   },
-  theme.applyStyles('dark', {
-    background: 'rgba(0,0,0,.75)',
-  }),
 ])
 
 const StyledText = styled(Box)(({ theme }) => ({
@@ -48,18 +45,16 @@ const StyledText = styled(Box)(({ theme }) => ({
   },
 }))
 
-const StyledShadow = styled(Box)<TextDisplayProps>(({ theme }) => [
+const StyledShadow = styled(Box)<TextDisplayProps>(() => [
   {
     position: 'absolute',
     bottom: 0,
     zIndex: 2,
     width: '100%',
     height: '15px',
-    background: `linear-gradient(transparent 0%, white 75%)`,
+    // Fades overflowing text into the panel.
+    background: `linear-gradient(transparent 0%, var(--surface) 75%)`,
   },
-  theme.applyStyles('dark', {
-    background: `linear-gradient(transparent 0%, black 75%)`,
-  }),
 ])
 
 export const TextDisplay: FC<TextDisplayProps> = ({

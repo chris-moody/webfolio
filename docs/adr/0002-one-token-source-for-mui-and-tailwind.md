@@ -16,3 +16,7 @@ Design tokens are defined once and compiled to CSS custom properties scoped by `
 - One contrast test suite covers both consumers.
 - Two styling runtimes ship on pages that mix them, which is a performance cost to watch. Content routes move to Tailwind first.
 - The `/system` page has to explain the bridge and show migration status, so the coexistence reads as deliberate.
+
+## Implementation (2026-10-07)
+
+The source is TypeScript in `src/tokens/`, so it's typed and runs in the browser, at build time, and in tests. `yarn tokens` generates the CSS variables and Tailwind `@theme` block; `createTourTheme()` builds the MUI theme from the same functions. The visitor's accent goes through `resolveAccent()` before either consumer sees it. See `/system`.

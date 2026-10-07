@@ -13,11 +13,10 @@ const List = styled('ol')(({ theme }) => [
     margin: theme.spacing(0, 'auto', 2),
     padding: theme.spacing(0.25),
     borderRadius: theme.spacing(3),
-    background: 'rgba(255, 255, 255, 0.75)',
+    background: 'var(--surface-overlay)',
     position: 'relative',
     zIndex: 1,
   },
-  theme.applyStyles('dark', { background: 'rgba(0, 0, 0, 0.5)' }),
 ])
 
 // The visible dot is 12 px; the link around it is 24 × 24 (WCAG 2.5.8).

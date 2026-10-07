@@ -3,7 +3,7 @@ import { tourManifest } from '../src/data/tour.manifest'
 
 const carousels = tourManifest.filter((wizard) => wizard.steps.length > 1)
 
-const live = (page: Page) => page.locator('section.wizard p[role="status"]')
+const live = (page: Page) => page.locator('[data-slide-announcer]')
 const activeText = (page: Page) =>
   page.evaluate(() => document.activeElement?.textContent?.trim() ?? '')
 

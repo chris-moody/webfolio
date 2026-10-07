@@ -1,3 +1,4 @@
+import { data, neutral } from '@/tokens'
 import { PixiWrapper } from '@/components/pixiWrapper/PixiWrapper'
 import { useTheme } from '@mui/material'
 import {
@@ -56,9 +57,9 @@ export const WaterText = ({ value }: WaterTextProps) => {
         fontWeight: 'bold',
         align: 'center',
         fill: { fill },
-        stroke: { color: '#4a1850', width: 5, join: 'round' },
+        stroke: { color: data.plum, width: 5, join: 'round' },
         dropShadow: {
-          color: '#000000',
+          color: neutral[1000],
           blur: 4,
           angle: Math.PI / 6,
           distance: 6,

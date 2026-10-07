@@ -19,6 +19,7 @@ const pages = [
   ...workPages,
   '/lab',
   '/lab/tape',
+  '/system',
   ...tourPaths(),
 ]
 

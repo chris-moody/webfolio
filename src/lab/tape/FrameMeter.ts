@@ -9,7 +9,10 @@
  * - Engine throughput and bytes per frame come from the store via `record()`.
  */
 
+import { semanticColors } from '@/tokens'
 import { themeColor } from './themeColors'
+
+const FALLBACK = semanticColors('light')
 
 const SAMPLES = 300
 const GRAPH_SAMPLES = 120
@@ -228,9 +231,9 @@ export class FrameMeter {
     const context = this.context
     if (!context) return
     const { width, height } = this.canvas
-    const good = themeColor('accent', '#1f5fc7')
-    const bad = themeColor('danger', '#c0262d')
-    const guide = themeColor('border', '#d5d9e0')
+    const good = themeColor('accent', FALLBACK.accent)
+    const bad = themeColor('danger', FALLBACK.negative)
+    const guide = themeColor('border', FALLBACK.border)
     context.clearRect(0, 0, width, height)
     // Scale: 0–50 ms; the guide line marks the 16.7 ms budget.
     const y = (ms: number) => height - Math.min(ms, 50) * (height / 50)

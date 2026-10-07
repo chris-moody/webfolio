@@ -1,3 +1,4 @@
+import { data, neutral, withAlpha } from '@/tokens'
 import { Box, BoxProps, styled } from '@mui/material'
 import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded'
 import { FC, useState } from 'react'
@@ -36,10 +37,10 @@ const StyledWrapper = styled(Box)(({ theme }) => ({
       display: 'grid',
       placeItems: 'center',
       color: theme.palette.common.white,
-      background: 'rgba(0, 0, 0, 0.75)',
+      background: withAlpha(neutral[1000], 0.75),
       transition: theme.transitions.create('background'),
     },
-    '&:hover .play, &:focus-visible .play': { background: '#c00' },
+    '&:hover .play, &:focus-visible .play': { background: data.red },
     '&:focus-visible': {
       outline: `3px solid ${theme.palette.primary.main}`,
       outlineOffset: 2,

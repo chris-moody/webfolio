@@ -19,7 +19,10 @@
     "check:resume-history": "scripts/check-resume-history.sh",
     "resume:squash": "scripts/resume-squash.sh",
     "prepare": "simple-git-hooks",
-    "e2e:dev": "playwright test --config playwright.dev.config.ts"
+    "e2e:dev": "playwright test --config playwright.dev.config.ts",
+    "tokens": "node scripts/build-tokens.ts",
+    "tokens:check": "node scripts/build-tokens.ts --check",
+    "lint:colors": "node scripts/check-color-literals.mjs"
   },
   "dependencies": {
     "@emotion/cache": "^11",

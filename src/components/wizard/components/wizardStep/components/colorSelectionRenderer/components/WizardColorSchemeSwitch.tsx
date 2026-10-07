@@ -28,10 +28,9 @@ export const WizardColorSchemeSwitch: FC = () => {
           p: 1,
           mb: 2,
           minHeight: '56px',
-          background: 'rgba(255,255,255,.75)',
+          background: 'var(--surface-overlay)',
           borderRadius: 3,
         },
-        (theme) => theme.applyStyles('dark', { background: 'rgba(0,0,0,.5)' }),
       ]}
     >
       <FormControl>

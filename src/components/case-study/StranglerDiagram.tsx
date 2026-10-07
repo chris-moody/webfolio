@@ -1,3 +1,4 @@
+import { ScrollRegion } from '@/components/ScrollRegion'
 import { useState } from 'react'
 
 const SURFACES = ['Orders', 'Reports', 'Search', 'Billing', 'Settings', 'Admin']
@@ -94,7 +95,7 @@ export const StranglerDiagram = () => {
         ))}
       </div>
 
-      <div className="mt-4 overflow-x-auto">
+      <ScrollRegion label="Migration diagram" className="mt-4">
         <svg
           viewBox={`0 -4 ${WIDTH} 250`}
           className="w-full min-w-[34rem]"
@@ -218,7 +219,7 @@ export const StranglerDiagram = () => {
             New implementation
           </text>
         </svg>
-      </div>
+      </ScrollRegion>
 
       <figcaption aria-live="polite" className="mt-3">
         <p className="font-semibold text-fg">

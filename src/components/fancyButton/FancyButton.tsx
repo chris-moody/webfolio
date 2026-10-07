@@ -71,7 +71,7 @@ const FancyStyles = ({ theme }: { theme: Theme }) => `
     width: 100%;
     height: 100%;
     border-radius: 12px;
-    background: hsl(0deg 0% 0% / 0.25);
+    background: var(--shadow);
     will-change: transform;
     transform: translateY(2px);
     transition: transform 600ms cubic-bezier(0.3, 0.7, 0.4, 1);

@@ -48,7 +48,7 @@ const SlideHeading = styled('h2')(({ theme }) => [
     margin: theme.spacing(0, 0, 1),
     padding: theme.spacing(0.25, 1.5),
     borderRadius: theme.spacing(2),
-    background: 'rgba(255, 255, 255, 0.85)',
+    background: 'var(--surface-overlay)',
     color: theme.palette.text.primary,
     fontSize: '0.875rem',
     fontWeight: 600,
@@ -61,7 +61,6 @@ const SlideHeading = styled('h2')(({ theme }) => [
     },
     '&:focus:not(:focus-visible)': { outline: 'none' },
   },
-  theme.applyStyles('dark', { background: 'rgba(0, 0, 0, 0.6)' }),
 ])
 
 const StyledWizardStep = styled(Box)(({ theme }) => ({
@@ -219,11 +218,9 @@ export const WizardStep: FC<WizardStepProps> = ({ className, ...props }) => {
                   mx: 'auto',
                   width: 'fit-content',
                   zIndex: 2,
-                  background: 'rgba(255,255,255,.75)',
+                  background: 'var(--surface-overlay)',
                   borderRadius: 3,
                 },
-                (theme) =>
-                  theme.applyStyles('dark', { background: 'rgba(0,0,0,.75)' }),
               ]}
             >
               {body}
