@@ -1,8 +1,7 @@
-import { useGSAP } from '@gsap/react'
-import gsap from 'gsap'
 import { FC, useRef, useState } from 'react'
 import { FancyText, FancyTextProps } from '../fancyText/FancyText'
 import { useReducedMotion } from '@/motion/motion'
+import { useGsapEffect } from '@/motion/gsap'
 
 export interface TypeWriterProps extends FancyTextProps {
   text: string
@@ -25,8 +24,8 @@ export const TypeWriter: FC<TypeWriterProps> = ({
   const reduced = useReducedMotion()
 
   // Typing loops forever; reduced motion shows the finished text instead.
-  useGSAP(
-    () => {
+  useGsapEffect(
+    (gsap) => {
       if (!container.current || reduced) return
 
       const textTarget: TweenTarget<number> = { val: 0 }
@@ -40,11 +39,8 @@ export const TypeWriter: FC<TypeWriterProps> = ({
         },
       })
     },
-    {
-      dependencies: [text, duration, reduced],
-      scope: container,
-      revertOnUpdate: true,
-    }
+    [text, duration, reduced],
+    container
   )
   return (
     <FancyText fancy={{ depth: 7 }} ref={container} {...props} className="text">

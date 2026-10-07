@@ -27,6 +27,11 @@ export default defineConfig(
       globals: globals.browser,
     },
     rules: {
+      // useGsapEffect(effect, deps) takes a dependency list like useEffect.
+      'react-hooks/exhaustive-deps': [
+        'warn',
+        { additionalHooks: '(useGsapEffect)' },
+      ],
       // React Router route modules export these alongside the component.
       'react-refresh/only-export-components': [
         'error',

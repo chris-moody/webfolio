@@ -1,5 +1,5 @@
 import { FC, useCallback } from 'react'
-import { ColorPicker } from '@/components/colorPicker/ColorPicker'
+import { ColorPicker } from '@/data/tour.lazy'
 import { SelectionRendererProps } from '../../DefaultSelectionRenderer'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { setColor } from '@/redux/slices/theme/theme.reducer'
@@ -10,11 +10,14 @@ export const WizardColorSelection: FC<SelectionRendererProps> = ({
 }) => {
   const defaultColor = useAppSelector(selectThemeColor)
   const dispatch = useAppDispatch()
-  
-  const selectionHandler = useCallback((color: string) => {
-    onSelect({ id: 'color', next: '', value: color })()
-    dispatch(setColor(color))
-  }, [dispatch, onSelect])
+
+  const selectionHandler = useCallback(
+    (color: string) => {
+      onSelect({ id: 'color', next: '', value: color })()
+      dispatch(setColor(color))
+    },
+    [dispatch, onSelect]
+  )
 
   return (
     <div className="content wizard-color-select">

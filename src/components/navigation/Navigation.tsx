@@ -1,9 +1,14 @@
-import { FC, useState } from 'react'
+import { FC, Suspense, useState } from 'react'
 import { NavData } from './navigation.types'
-import { Drawer, IconButton } from '@mui/material'
+import { IconButton } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
-import { NavList } from './components/NavList'
 import { useLocation } from 'react-router'
+import { onDemand } from '@/utils/onDemand'
+
+// The drawer (MUI Drawer, Modal, Slide, List) loads on first use.
+const drawer = onDemand(() =>
+  import('./NavigationDrawer').then((m) => m.NavigationDrawer)
+)
 
 export interface NavigationProps {
   data: NavData[]
@@ -14,8 +19,11 @@ export const Navigation: FC<NavigationProps> = ({ data }) => {
   // The drawer belongs to the path it was opened on, so navigating closes it.
   const [openOnPath, setOpenOnPath] = useState<string | null>(null)
   const open = openOnPath === location.pathname
+  // Mounted from the first open on, so later closes can animate.
+  const [used, setUsed] = useState(false)
 
   const onClick = () => {
+    setUsed(true)
     setOpenOnPath(open ? null : location.pathname)
   }
 
@@ -29,12 +37,16 @@ export const Navigation: FC<NavigationProps> = ({ data }) => {
         aria-label="Navigation"
         sx={{ position: 'absolute', top: 0, left: 0, zIndex: 100 }}
         onClick={onClick}
+        onPointerEnter={drawer.prefetch}
+        onFocus={drawer.prefetch}
       >
         <MenuIcon />
       </IconButton>
-      <Drawer anchor="left" open={open} onClose={onClose}>
-        <NavList data={data} />
-      </Drawer>
+      {used && (
+        <Suspense fallback={null}>
+          <drawer.Component data={data} open={open} onClose={onClose} />
+        </Suspense>
+      )}
     </>
   )
 }

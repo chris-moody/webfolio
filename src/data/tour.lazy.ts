@@ -61,14 +61,25 @@ const circlePacking = preloadableLazy(() =>
     (m) => m.CirclePacking
   )
 ) // d3-force
+const colorPicker = preloadableLazy(() =>
+  import('@/components/colorPicker/ColorPicker').then((m) => m.ColorPicker)
+) // react-colorful, color names
 
 export const WaterText = waterText.Component
 export const SocketFlow = socketFlow.Component
 export const TechMarquees = techMarquees.Component
 export const FlairText = flairText.Component
 export const CirclePacking = circlePacking.Component
+export const ColorPicker = colorPicker.Component
 
-const all = [waterText, socketFlow, techMarquees, flairText, circlePacking]
+const all = [
+  waterText,
+  socketFlow,
+  techMarquees,
+  flairText,
+  circlePacking,
+  colorPicker,
+]
 
 /** Loads every split module. The server awaits this before rendering. */
 export const preloadTourMedia = () =>

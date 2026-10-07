@@ -14,7 +14,7 @@ import { slideHeadingId } from '../../wizard.ids'
 import { setSelection, setStep } from '@/redux/slices/wizard/wizard.reducer'
 import { selectWizardSelection } from '@/redux/slices/wizard/wizard.selector'
 import { buildStepOn } from '../../wizard.transitions'
-import { useGSAP } from '@gsap/react'
+import { useGsapEffect } from '@/motion/gsap'
 import { FancyNavButton } from '@/components/fancyButton/FancyButton'
 import { TextDisplay } from '@/components/textDisplay/TextDisplay'
 
@@ -121,11 +121,12 @@ export const WizardStep: FC<WizardStepProps> = ({ className, ...props }) => {
   const container = useRef<HTMLDivElement>(undefined)
   const selection = useAppSelector(selectWizardSelection)
 
-  useGSAP(
-    () => {
-      if (id) buildStepOn()
+  useGsapEffect(
+    (gsap) => {
+      if (id) buildStepOn(gsap)
     },
-    { dependencies: [id], scope: container }
+    [id],
+    container
   )
 
   useEffect(() => {

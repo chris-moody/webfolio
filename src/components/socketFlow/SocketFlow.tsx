@@ -13,9 +13,13 @@ import { SocketEdge } from './components/SocketEdge'
 import { SocketNode } from './components/SocketNode'
 import { useRef, useState } from 'react'
 import gsap from 'gsap'
+import { MotionPathPlugin } from 'gsap/MotionPathPlugin'
 import { useGSAP } from '@gsap/react'
 import { useTheme } from '@mui/material'
 import { useReducedMotion } from '@/motion/motion'
+
+// Only this slide animates along paths; the plugin loads with it.
+gsap.registerPlugin(MotionPathPlugin)
 
 const initialNodes: Node[] = [
   {

@@ -1,5 +1,4 @@
 import { Box, Typography } from '@mui/material'
-import gsap from 'gsap'
 import { Component } from 'react'
 import { redirect } from 'react-router'
 
@@ -33,7 +32,8 @@ export class ErrorBoundary extends Component<
 
   componentDidCatch(error: Error) {
     const { errorCount, errorLimit, lastError, timeout } = this.state
-    const shouldIncrement = lastError && Date.now() - lastError < 1000 * (timeout + 1)
+    const shouldIncrement =
+      lastError && Date.now() - lastError < 1000 * (timeout + 1)
     if (shouldIncrement && errorCount + 1 >= errorLimit) {
       this.setState({ error, errorCount: errorCount + 1 })
       return
@@ -43,10 +43,10 @@ export class ErrorBoundary extends Component<
       errorCount: shouldIncrement ? errorCount + 1 : 0,
       lastError: Date.now(),
     })
-    gsap.delayedCall(timeout, () => {
+    setTimeout(() => {
       this.setState({ error: null })
       redirect('/')
-    })
+    }, timeout * 1000)
   }
 
   render() {

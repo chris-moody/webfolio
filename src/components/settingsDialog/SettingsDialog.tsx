@@ -1,45 +1,19 @@
-import {
-  Box,
-  Dialog,
-  FormControl,
-  FormControlLabel,
-  FormLabel,
-  Radio,
-  RadioGroup,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  IconButton,
-  Link,
-  Typography,
-} from '@mui/material'
+import { Box, IconButton } from '@mui/material'
 import classNames from 'classnames'
-import { FC, useCallback, useState } from 'react'
+import { FC, Suspense, useState } from 'react'
 import InfoIcon from '@mui/icons-material/Settings'
-import { useAppDispatch, useAppSelector } from '@/redux/hooks'
-import { selectThemeFlair } from '@/redux/slices/theme/theme.selector'
-import { setFlair } from '@/redux/slices/theme/theme.reducer'
-import { FancyButton } from '../fancyButton/FancyButton'
-import { type MotionSetting, useMotionPreference } from '@/motion/motion'
+import { onDemand } from '@/utils/onDemand'
+
+// The dialog (MUI Dialog, Modal, focus trap, radios) isn't needed for first
+// paint: it loads on first open, or on hover/focus of the button.
+const panel = onDemand(() =>
+  import('./SettingsPanel').then((m) => m.SettingsPanel)
+)
 
 export const SettingsDialog: FC = () => {
-  const [isOpen, setIsOpen] = useState<boolean>(false)
-  const dispatch = useAppDispatch()
-  const flair = useAppSelector(selectThemeFlair)
-  const motion = useMotionPreference()
-  const handleClick = () => {
-    setIsOpen(true)
-  }
-  const handleClose = () => {
-    setIsOpen(false)
-  }
-
-  const handleFlair = useCallback(
-    (flairVal: number) => () => {
-      dispatch(setFlair(flairVal))
-    },
-    [dispatch]
-  )
+  // null until first opened: nothing loads or mounts before then. After that
+  // it stays mounted so the close transition can run.
+  const [isOpen, setIsOpen] = useState<boolean | null>(null)
 
   return (
     <Box
@@ -51,101 +25,20 @@ export const SettingsDialog: FC = () => {
         zIndex: 1000,
       }}
     >
-      <IconButton aria-label="Settings" onClick={handleClick}>
+      <IconButton
+        aria-label="Settings"
+        aria-haspopup="dialog"
+        onClick={() => setIsOpen(true)}
+        onPointerEnter={panel.prefetch}
+        onFocus={panel.prefetch}
+      >
         <InfoIcon />
       </IconButton>
-      <Dialog open={isOpen} onClose={handleClose}>
-        <DialogTitle variant="h3">What in the world?</DialogTitle>
-        <DialogContent>
-          <Typography variant="body1" mb={2}>
-            I use this space to express myself, have fun and showcase some of
-            technical ability. Right now it's built in TypeScript, React, themed
-            with MUI, and animated with GSAP and a few CSS animations. The force
-            simulation on the home page is powered by d3. I used Vite to package
-            it. Checkout of the source code&#32;
-            <Link
-              target="_blank"
-              href="https://github.com/chris-moody/webfolio"
-            >
-              here!
-            </Link>
-            .
-          </Typography>
-          <Typography variant="body1" mb={2}>
-            I encourage you to explore, and click all the buttons! If you have
-            any questions or feeback, drop me a line at&#32;
-            <Link target="_blank" href="mailto:chris@moodydigital.com">
-              chris@moodydigital.com
-            </Link>
-          </Typography>
-          {flair === 1 && (
-            <Typography variant="body1" mb={2}>
-              At a single piece of flair, you're hardly living! Try adding a bit
-              more, I doubt you'll regret it.
-            </Typography>
-          )}
-          {flair === 15 && (
-            <Typography variant="body1" mb={2}>
-              Fifteen pieces of flair! Not bad, but still only the bare minimum.
-              Take the next step.
-            </Typography>
-          )}
-          {flair === 37 && (
-            <Typography variant="body1" mb={2}>
-              Look at all that flair! I bet you've got a great smile!
-            </Typography>
-          )}
-          <Typography variant="body1" mb={2}>
-            {flair === 37 && <>Too much? </>}You can adjust your Flair below
-            {flair === 1 && <>, a little more can't hurt!</>}!
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <FancyButton
-            className={classNames({ active: flair === 1 })}
-            onClick={handleFlair(1)}
-          >
-            1 piece
-          </FancyButton>
-          <FancyButton
-            className={classNames({ active: flair === 15 })}
-            onClick={handleFlair(15)}
-          >
-            15 pieces
-          </FancyButton>
-          <FancyButton
-            className={classNames({ pressed: flair === 37 })}
-            onClick={handleFlair(37)}
-          >
-            37 pieces
-          </FancyButton>
-        </DialogActions>
-        {/* Motion comes after the flair choice it modifies. */}
-        <DialogContent sx={{ pt: 1 }}>
-          <FormControl component="fieldset">
-            <FormLabel component="legend">Motion</FormLabel>
-            <RadioGroup
-              row
-              value={motion.setting}
-              onChange={(event) =>
-                motion.setSetting(event.target.value as MotionSetting)
-              }
-            >
-              <FormControlLabel
-                value="system"
-                control={<Radio />}
-                label="Match my system"
-              />
-              <FormControlLabel
-                value="reduce"
-                control={<Radio />}
-                label="Reduce"
-              />
-              <FormControlLabel value="full" control={<Radio />} label="Full" />
-            </RadioGroup>
-          </FormControl>
-        </DialogContent>
-      </Dialog>
+      {isOpen !== null && (
+        <Suspense fallback={null}>
+          <panel.Component open={isOpen} onClose={() => setIsOpen(false)} />
+        </Suspense>
+      )}
     </Box>
   )
 }

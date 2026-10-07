@@ -9,10 +9,6 @@ import {
 import { WizardStepConfig } from './components/wizardStep/WizardStep'
 import { Box, BoxProps, Stack, styled } from '@mui/material'
 import classNames from 'classnames'
-import gsap from 'gsap'
-import { TextPlugin } from 'gsap/TextPlugin'
-import { MotionPathPlugin } from 'gsap/MotionPathPlugin'
-import { useGSAP } from '@gsap/react'
 import { WizardResult } from './wizard.types'
 import { SlideNav } from './components/SlideNav'
 import { slideHeadingId } from './wizard.ids'
@@ -26,7 +22,6 @@ import { findTourWizard, tourPath } from '@/data/tour.manifest'
 import { NotFound } from '@/components/notFound/NotFound'
 import { useSwipeable } from 'react-swipeable'
 import { useReducedMotion } from '@/motion/motion'
-gsap.registerPlugin(useGSAP, TextPlugin, MotionPathPlugin)
 
 export interface WizardConfig {
   id: string

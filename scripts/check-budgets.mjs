@@ -22,16 +22,18 @@ const budgets = {
   '/colophon': { js: 120, css: 10 },
   // Tape adds TanStack Table, Virtual, and Query; the worker is a separate file.
   '/lab/tape': { js: 165, css: 10 },
-  '/tour/home/flair': { js: 270, css: 30 },
-  '/tour/about/0': { js: 270, css: 30 },
+  '/tour/home/flair': { js: 210, css: 10 },
+  '/tour/about/0': { js: 210, css: 10 },
 }
 
 const htmlFile = (route) =>
   route === '/' ? 'index.html' : path.join(route.slice(1), 'index.html')
 
+// React Router suffixes a stylesheet with "#" when a lazy chunk imports it too.
 const gzipKb = async (assetPath) =>
-  gzipSync(await readFile(path.join(root, assetPath)), { level: 9 }).length /
-  1024
+  gzipSync(await readFile(path.join(root, assetPath.replace(/[#?].*$/, ''))), {
+    level: 9,
+  }).length / 1024
 
 const assets = (html) => {
   const js = new Set()

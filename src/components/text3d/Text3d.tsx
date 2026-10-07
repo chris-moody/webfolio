@@ -1,4 +1,3 @@
-import { useGSAP } from '@gsap/react'
 import {
   Box,
   BoxProps,
@@ -8,9 +7,9 @@ import {
   useTheme,
 } from '@mui/material'
 import classNames from 'classnames'
-import gsap from 'gsap'
 import { FC, useRef } from 'react'
 import { useReducedMotion } from '@/motion/motion'
+import { useGsapEffect } from '@/motion/gsap'
 
 export interface ThreeDProps {
   depth?: number
@@ -103,8 +102,8 @@ export const Text3d: FC<Text3dProps> = ({
   const reduced = useReducedMotion()
 
   // The wobble loops forever, so reduced motion turns it off entirely.
-  useGSAP(
-    () => {
+  useGsapEffect(
+    (gsap) => {
       if (animate && !reduced && container.current) {
         gsap.fromTo(
           container.current,
@@ -141,7 +140,8 @@ export const Text3d: FC<Text3dProps> = ({
         )
       }
     },
-    { dependencies: [animate, reduced], scope: container, revertOnUpdate: true }
+    [animate, reduced],
+    container
   )
   const median = Math.floor(layers / 2)
   return (
