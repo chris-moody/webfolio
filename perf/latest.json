@@ -1,91 +1,91 @@
 {
   "measuredAt": "2026-10-07",
-  "commit": "2042fba",
-  "tool": "Lighthouse 12.6.1, mobile emulation, simulated throttling, median of 5 runs, local static server (HTTP/1.1)",
+  "commit": "064522a",
+  "tool": "Lighthouse 12.6.1, mobile emulation, simulated throttling, median of 5 runs, local HTTP/2 server (scripts/serve-h2.mjs)",
   "routes": {
     "/": {
       "runs": 5,
       "scores": {
-        "performance": 98,
+        "performance": 100,
         "accessibility": 100,
         "bestPractices": 100,
         "seo": 100
       },
-      "lcpMs": 1960,
-      "fcpMs": 1960,
+      "lcpMs": 1395,
+      "fcpMs": 1395,
       "tbtMs": 0,
       "cls": 0,
-      "totalBytes": 139115
+      "totalBytes": 114738
     },
     "/lab/tape": {
       "runs": 5,
       "scores": {
-        "performance": 96,
+        "performance": 99,
         "accessibility": 100,
         "bestPractices": 100,
         "seo": 100
       },
-      "lcpMs": 2164,
-      "fcpMs": 2164,
-      "tbtMs": 35,
+      "lcpMs": 1569,
+      "fcpMs": 1550,
+      "tbtMs": 46,
       "cls": 0,
-      "totalBytes": 181900
+      "totalBytes": 151540
     },
     "/resume": {
       "runs": 5,
       "scores": {
-        "performance": 97,
+        "performance": 100,
         "accessibility": 100,
         "bestPractices": 100,
         "seo": 100
       },
-      "lcpMs": 2010,
-      "fcpMs": 2010,
+      "lcpMs": 1399,
+      "fcpMs": 1399,
       "tbtMs": 0,
       "cls": 0,
-      "totalBytes": 141949
+      "totalBytes": 116774
     },
     "/system": {
       "runs": 5,
       "scores": {
+        "performance": 100,
+        "accessibility": 100,
+        "bestPractices": 100,
+        "seo": 100
+      },
+      "lcpMs": 1501,
+      "fcpMs": 1501,
+      "tbtMs": 0,
+      "cls": 0,
+      "totalBytes": 127184
+    },
+    "/tour/about/0": {
+      "runs": 5,
+      "scores": {
         "performance": 97,
         "accessibility": 100,
         "bestPractices": 100,
         "seo": 100
       },
-      "lcpMs": 2020,
-      "fcpMs": 2020,
-      "tbtMs": 2,
-      "cls": 0,
-      "totalBytes": 154375
-    },
-    "/tour/about/0": {
-      "runs": 5,
-      "scores": {
-        "performance": 88,
-        "accessibility": 100,
-        "bestPractices": 100,
-        "seo": 100
-      },
-      "lcpMs": 3082,
-      "fcpMs": 3082,
-      "tbtMs": 74,
+      "lcpMs": 2101,
+      "fcpMs": 2101,
+      "tbtMs": 12,
       "cls": 0.025,
-      "totalBytes": 322194
+      "totalBytes": 275389
     },
     "/tour/about/4": {
       "runs": 5,
       "scores": {
-        "performance": 87,
+        "performance": 97,
         "accessibility": 100,
         "bestPractices": 100,
         "seo": 100
       },
-      "lcpMs": 3089,
-      "fcpMs": 3089,
-      "tbtMs": 93,
+      "lcpMs": 2102,
+      "fcpMs": 1952,
+      "tbtMs": 46,
       "cls": 0.042,
-      "totalBytes": 335384
+      "totalBytes": 288244
     }
   },
   "weights": {
@@ -162,11 +162,11 @@
     "/tour/home/flair": {
       "jsKb": 199.1,
       "cssKb": 6.7,
-      "htmlKb": 10,
+      "htmlKb": 9.9,
       "jsFiles": 28,
       "budget": {
-        "js": 270,
-        "css": 30
+        "js": 210,
+        "css": 10
       }
     },
     "/tour/about/0": {
@@ -175,8 +175,8 @@
       "htmlKb": 9.8,
       "jsFiles": 28,
       "budget": {
-        "js": 270,
-        "css": 30
+        "js": 210,
+        "css": 10
       }
     }
   }
