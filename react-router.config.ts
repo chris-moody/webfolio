@@ -4,7 +4,7 @@ import path from 'node:path'
 import { tourPaths, tourRedirects } from './src/data/tour.manifest'
 import { SITE } from './src/site'
 
-const pages = ['/', '/resume', ...tourPaths()]
+const pages = ['/', '/resume', '/lab', '/lab/tape', ...tourPaths()]
 
 // Static prerendering (ADR 0001): every page is an HTML file with its content
 // in it. Netlify serves those files directly; anything else gets 404.html with

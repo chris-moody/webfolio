@@ -14,8 +14,23 @@ export default defineConfig({
     trace: 'retain-on-failure',
   },
   projects: [
-    { name: 'desktop', use: { ...devices['Desktop Chrome'] } },
-    { name: 'mobile', use: { ...devices['Pixel 7'] } },
+    {
+      name: 'desktop',
+      use: { ...devices['Desktop Chrome'] },
+      testIgnore: /perf\.spec\.ts/,
+    },
+    {
+      name: 'mobile',
+      use: { ...devices['Pixel 7'] },
+      testIgnore: /perf\.spec\.ts/,
+    },
+    {
+      name: 'perf',
+      // Tracing records every frame's DOM; it would be measured too.
+      use: { ...devices['Desktop Chrome'], trace: 'off' },
+      testMatch: /perf\.spec\.ts/,
+      dependencies: ['desktop', 'mobile'],
+    },
   ],
   // Tests run against the production build; set E2E_BASE_URL to target a
   // deploy preview instead.

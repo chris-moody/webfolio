@@ -17,6 +17,9 @@ const budgets = {
   '/': { js: 120, css: 10 },
   '/resume': { js: 120, css: 10 },
   '/404': { js: 120, css: 10 },
+  '/lab': { js: 120, css: 10 },
+  // Tape adds TanStack Table, Virtual, and Query; the worker is a separate file.
+  '/lab/tape': { js: 165, css: 10 },
   '/tour/home/flair': { js: 430, css: 35 },
   '/tour/about/0': { js: 430, css: 35 },
 }

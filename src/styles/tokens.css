@@ -16,6 +16,11 @@
   --accent-strong: #184c9f;
   --on-accent: #ffffff;
   --focus: #1f5fc7;
+  --positive: #0f7a3a;
+  --negative: #c0262d;
+  --danger: #c0262d;
+  --flash-up: rgb(15 122 58 / 0.16);
+  --flash-down: rgb(192 38 45 / 0.16);
   color-scheme: light;
 }
 
@@ -29,6 +34,11 @@
   --accent-strong: #a7c4f8;
   --on-accent: #0a1430;
   --focus: #7ea9f4;
+  --positive: #4ade80;
+  --negative: #f87171;
+  --danger: #f87171;
+  --flash-up: rgb(74 222 128 / 0.18);
+  --flash-down: rgb(248 113 113 / 0.18);
   color-scheme: dark;
 }
 
@@ -42,6 +52,8 @@
   --color-accent-strong: var(--accent-strong);
   --color-on-accent: var(--on-accent);
   --color-focus: var(--focus);
+  --color-positive: var(--positive);
+  --color-negative: var(--negative);
 }
 
 @custom-variant dark (&:where(.dark, .dark *));

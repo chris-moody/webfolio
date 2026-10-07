@@ -14,6 +14,7 @@ module.exports = {
       url: [
         'http://localhost:4173/',
         'http://localhost:4173/resume',
+        'http://localhost:4173/lab/tape',
         'http://localhost:4173/tour/about/0',
       ],
       numberOfRuns: 5,
@@ -32,6 +33,19 @@ module.exports = {
             'categories:seo': ['error', { minScore: 1 }],
             'largest-contentful-paint': ['error', { maxNumericValue: 2500 }],
             'cumulative-layout-shift': ['error', { maxNumericValue: 0.02 }],
+          },
+        },
+        {
+          // Tape streams data continuously; layout must stay stable while it does.
+          matchingUrlPattern: 'localhost:4173/lab/tape$',
+          aggregationMethod: 'median-run',
+          assertions: {
+            'categories:performance': ['error', { minScore: 0.9 }],
+            'categories:accessibility': ['error', { minScore: 1 }],
+            'categories:best-practices': ['error', { minScore: 1 }],
+            'categories:seo': ['error', { minScore: 1 }],
+            'cumulative-layout-shift': ['error', { maxNumericValue: 0.02 }],
+            'total-blocking-time': ['error', { maxNumericValue: 200 }],
           },
         },
         {

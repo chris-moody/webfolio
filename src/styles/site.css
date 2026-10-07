@@ -19,6 +19,31 @@
   }
 }
 
+/* Tape (/lab/tape): a cell flashes when its value changes. The keyed span
+   remounts on each update, which restarts the animation without JS timers. */
+@keyframes tape-flash-up {
+  from {
+    background-color: var(--flash-up);
+  }
+}
+@keyframes tape-flash-down {
+  from {
+    background-color: var(--flash-down);
+  }
+}
+.tape-up {
+  animation: tape-flash-up 700ms ease-out;
+}
+.tape-down {
+  animation: tape-flash-down 700ms ease-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  .tape-up,
+  .tape-down {
+    animation: none;
+  }
+}
+
 /* The resume PDF is printed from /resume (scripts/build-resume-pdf.mjs).
    Everything is sized in rem, so this scales the whole page to fit two sheets. */
 @media print {

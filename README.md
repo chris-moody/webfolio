@@ -6,20 +6,21 @@ The personal site of Chris Moody, a front-end engineer focused on design systems
 
 ## Stack
 
-React 19 · TypeScript 6 (strict, `noUncheckedIndexedAccess`) · Vite 8 · React Router 7 (framework mode, static prerendering) · Tailwind 4 · MUI 6 (tour only) · Redux Toolkit · GSAP, d3, PixiJS · Vitest · Playwright + axe · Lighthouse CI · Netlify
+React 19 · TypeScript 6 (strict, `noUncheckedIndexedAccess`) · Vite 8 · React Router 7 (framework mode, static prerendering) · Tailwind 4 · TanStack Table 9, Virtual, Query (lab) · Web Workers · MUI 6 (tour only) · Redux Toolkit · GSAP, d3, PixiJS · Vitest · Playwright + axe · Lighthouse CI · Netlify
 
 ## Architecture
 
 Every page is prerendered to static HTML at build time (ADR 0001), and React hydrates it in the browser. There are two layouts:
 
-- **Site** (`/`, `/resume`, 404): Tailwind on a small token layer. No MUI, Emotion, or animation libraries load, which keeps initial JS at ~116 kB gzipped, most of it React and React Router.
+- **Site** (`/`, `/resume`, `/lab`, 404): Tailwind on a small token layer. No MUI, Emotion, or animation libraries load, which keeps initial JS at ~116 kB gzipped, most of it React and React Router.
 - **Tour** (`/tour/*`): the original guided experience, with MUI, GSAP, PixiJS, and d3. Its critical Emotion CSS is extracted per page during prerendering.
 
 ```
 src/
 ├── root.tsx, routes.ts     Document shell and route table
 ├── entry.server.tsx        Build-time renderer: full render + Emotion CSS extraction
-├── routes/site/            Home, resume, 404 (Tailwind)
+├── routes/site/            Home, resume, lab, 404 (Tailwind)
+├── lab/tape/               Real-time market grid demo: worker engine, TanStack grid, frame meter (see its ARCHITECTURE.md)
 ├── routes/tour/            Tour layout (Redux + MUI theme) and wizard/step routes
 ├── content/resume/         Resume data, the single source for the page and the PDF (ADR 0005)
 ├── data/                   Tour manifest (route structure) and wizard content
@@ -27,7 +28,7 @@ src/
 ├── components/, containers/, hooks/, redux/, theme/, utils/
 react-router.config.ts      Prerender list; writes 404.html, _redirects, sitemap, robots
 scripts/                    postbuild (resume PDF + social card), route budgets, resume history tooling
-e2e/                        Playwright: smoke, no-JS content, hydration, axe (light/dark × desktop/mobile)
+e2e/                        Playwright: smoke, no-JS content, hydration, axe (light/dark × desktop/mobile), Tape behavior, frame-time smoke budget
 docs/adr/                   Architecture decision records
 perf/                       Pre-rework baseline and per-route weights
 ```

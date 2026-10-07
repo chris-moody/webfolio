@@ -43,6 +43,10 @@ const pairs: [string, string, number][] = [
   ['accent', 'surface', 4.5],
   ['on-accent', 'accent', 4.5], // filled buttons
   ['on-accent', 'accent-strong', 4.5],
+  ['positive', 'surface', 4.5], // price up
+  ['positive', 'canvas', 4.5],
+  ['negative', 'surface', 4.5], // price down
+  ['negative', 'canvas', 4.5],
   ['focus', 'canvas', 3], // focus rings (non-text, 1.4.11)
   ['focus', 'surface', 3],
 ]

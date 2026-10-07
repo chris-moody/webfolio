@@ -6,6 +6,7 @@ import '@/styles/site.css'
 
 const nav = [
   { to: '/', label: 'Home', end: true },
+  { to: '/lab', label: 'Lab', end: false },
   { to: '/resume', label: 'Resume', end: false },
   {
     to: tourPath(TOUR_START.wizard, TOUR_START.step),
@@ -24,7 +25,7 @@ export default function SiteLayout() {
         Skip to content
       </a>
       <header className="border-b border-border bg-surface print:hidden">
-        <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-x-6 gap-y-2 px-4 py-3">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-6 gap-y-2 px-4 py-3">
           <NavLink
             to="/"
             className="font-semibold text-fg no-underline hover:text-accent"
@@ -57,12 +58,12 @@ export default function SiteLayout() {
       <main
         id="main"
         tabIndex={-1}
-        className="mx-auto w-full max-w-5xl flex-1 px-4 py-10 focus:outline-none print:max-w-none print:p-0"
+        className="mx-auto w-full max-w-6xl flex-1 px-4 py-10 focus:outline-none print:max-w-none print:p-0"
       >
         <Outlet />
       </main>
       <footer className="border-t border-border print:hidden">
-        <div className="mx-auto flex max-w-5xl flex-wrap justify-between gap-2 px-4 py-6 text-sm text-fg-muted">
+        <div className="mx-auto flex max-w-6xl flex-wrap justify-between gap-2 px-4 py-6 text-sm text-fg-muted">
           <p>
             © {new Date().getFullYear()} {resume.basics.name}
           </p>
