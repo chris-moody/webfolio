@@ -41,9 +41,11 @@ for commit in $commits; do
   fi
 done
 
+# HEAD only: other refs (e.g. an un-rewritten origin/main) are out of scope
+# for the branch being checked.
 for path in "${LEGACY_PATHS[@]}"; do
-  if [ -n "$(git rev-list --all -- "$path" | head -1)" ]; then
-    echo "✘ purged legacy path is back in history: $path" >&2
+  if [ -n "$(git rev-list HEAD -- "$path" | head -1)" ]; then
+    echo "✘ purged legacy path is back in this branch's history: $path" >&2
     status=1
   fi
 done
