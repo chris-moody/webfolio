@@ -1,35 +1,35 @@
 {
   "measuredAt": "2026-10-07",
-  "commit": "a690a4b",
+  "commit": "2042fba",
   "tool": "Lighthouse 12.6.1, mobile emulation, simulated throttling, median of 5 runs, local static server (HTTP/1.1)",
   "routes": {
     "/": {
       "runs": 5,
       "scores": {
-        "performance": 97,
+        "performance": 98,
         "accessibility": 100,
         "bestPractices": 100,
         "seo": 100
       },
-      "lcpMs": 2107,
-      "fcpMs": 1957,
+      "lcpMs": 1960,
+      "fcpMs": 1960,
       "tbtMs": 0,
       "cls": 0,
-      "totalBytes": 139887
+      "totalBytes": 139115
     },
     "/lab/tape": {
       "runs": 5,
       "scores": {
-        "performance": 97,
+        "performance": 96,
         "accessibility": 100,
         "bestPractices": 100,
         "seo": 100
       },
-      "lcpMs": 2108,
-      "fcpMs": 2108,
-      "tbtMs": 11,
+      "lcpMs": 2164,
+      "fcpMs": 2164,
+      "tbtMs": 35,
       "cls": 0,
-      "totalBytes": 182733
+      "totalBytes": 181900
     },
     "/resume": {
       "runs": 5,
@@ -39,11 +39,11 @@
         "bestPractices": 100,
         "seo": 100
       },
-      "lcpMs": 2106,
-      "fcpMs": 2106,
+      "lcpMs": 2010,
+      "fcpMs": 2010,
       "tbtMs": 0,
       "cls": 0,
-      "totalBytes": 142717
+      "totalBytes": 141949
     },
     "/system": {
       "runs": 5,
@@ -53,13 +53,27 @@
         "bestPractices": 100,
         "seo": 100
       },
-      "lcpMs": 2108,
-      "fcpMs": 2108,
-      "tbtMs": 0,
+      "lcpMs": 2020,
+      "fcpMs": 2020,
+      "tbtMs": 2,
       "cls": 0,
-      "totalBytes": 155147
+      "totalBytes": 154375
     },
     "/tour/about/0": {
+      "runs": 5,
+      "scores": {
+        "performance": 88,
+        "accessibility": 100,
+        "bestPractices": 100,
+        "seo": 100
+      },
+      "lcpMs": 3082,
+      "fcpMs": 3082,
+      "tbtMs": 74,
+      "cls": 0.025,
+      "totalBytes": 322194
+    },
+    "/tour/about/4": {
       "runs": 5,
       "scores": {
         "performance": 87,
@@ -67,113 +81,99 @@
         "bestPractices": 100,
         "seo": 100
       },
-      "lcpMs": 3185,
-      "fcpMs": 3185,
-      "tbtMs": 0,
-      "cls": 0.025,
-      "totalBytes": 353921
-    },
-    "/tour/about/4": {
-      "runs": 5,
-      "scores": {
-        "performance": 85,
-        "accessibility": 100,
-        "bestPractices": 100,
-        "seo": 100
-      },
-      "lcpMs": 3460,
-      "fcpMs": 3185,
-      "tbtMs": 0,
+      "lcpMs": 3089,
+      "fcpMs": 3089,
+      "tbtMs": 93,
       "cls": 0.042,
-      "totalBytes": 367099
+      "totalBytes": 335384
     }
   },
   "weights": {
     "/": {
-      "jsKb": 117.8,
+      "jsKb": 117.6,
       "cssKb": 6.8,
       "htmlKb": 3.6,
-      "jsFiles": 15,
-      "budget": {
-        "js": 120,
-        "css": 10
-      }
-    },
-    "/resume": {
-      "jsKb": 117.8,
-      "cssKb": 6.8,
-      "htmlKb": 5.9,
-      "jsFiles": 16,
-      "budget": {
-        "js": 120,
-        "css": 10
-      }
-    },
-    "/404": {
-      "jsKb": 116.8,
-      "cssKb": 6.8,
-      "htmlKb": 2.4,
-      "jsFiles": 15,
-      "budget": {
-        "js": 120,
-        "css": 10
-      }
-    },
-    "/lab": {
-      "jsKb": 116.7,
-      "cssKb": 6.8,
-      "htmlKb": 2.6,
       "jsFiles": 14,
       "budget": {
         "js": 120,
         "css": 10
       }
     },
-    "/system": {
-      "jsKb": 125.4,
+    "/resume": {
+      "jsKb": 117.6,
       "cssKb": 6.8,
-      "htmlKb": 10.3,
-      "jsFiles": 16,
-      "budget": {
-        "js": 130,
-        "css": 10
-      }
-    },
-    "/colophon": {
-      "jsKb": 119.5,
-      "cssKb": 6.8,
-      "htmlKb": 5.8,
+      "htmlKb": 5.9,
       "jsFiles": 15,
       "budget": {
         "js": 120,
         "css": 10
       }
     },
+    "/404": {
+      "jsKb": 116.6,
+      "cssKb": 6.8,
+      "htmlKb": 2.4,
+      "jsFiles": 14,
+      "budget": {
+        "js": 120,
+        "css": 10
+      }
+    },
+    "/lab": {
+      "jsKb": 116.5,
+      "cssKb": 6.8,
+      "htmlKb": 2.6,
+      "jsFiles": 13,
+      "budget": {
+        "js": 120,
+        "css": 10
+      }
+    },
+    "/system": {
+      "jsKb": 125.2,
+      "cssKb": 6.8,
+      "htmlKb": 10.3,
+      "jsFiles": 15,
+      "budget": {
+        "js": 130,
+        "css": 10
+      }
+    },
+    "/colophon": {
+      "jsKb": 119.3,
+      "cssKb": 6.8,
+      "htmlKb": 5.8,
+      "jsFiles": 14,
+      "budget": {
+        "js": 120,
+        "css": 10
+      }
+    },
     "/lab/tape": {
-      "jsKb": 157.3,
+      "jsKb": 157.1,
       "cssKb": 6.8,
       "htmlKb": 4.3,
-      "jsFiles": 15,
+      "jsFiles": 14,
       "budget": {
         "js": 165,
         "css": 10
       }
     },
     "/tour/home/flair": {
-      "jsKb": 256.7,
+      "jsKb": 199.1,
       "cssKb": 6.7,
-      "htmlKb": 9.9,
-      "jsFiles": 27,
+      "htmlKb": 10,
+      "jsFiles": 28,
       "budget": {
         "js": 270,
         "css": 30
       }
     },
     "/tour/about/0": {
-      "jsKb": 256.7,
+      "jsKb": 199.1,
       "cssKb": 6.7,
-      "htmlKb": 9.7,
-      "jsFiles": 27,
+      "htmlKb": 9.8,
+      "jsFiles": 28,
       "budget": {
         "js": 270,
         "css": 30
