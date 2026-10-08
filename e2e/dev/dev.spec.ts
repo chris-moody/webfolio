@@ -43,15 +43,20 @@ test('Tape streams data from its worker', async ({ page }) => {
 test('case studies, including drafts, load in dev', async ({ page }) => {
   const errors = trackErrors(page)
   await page.goto('/work')
-  const study = page
-    .getByRole('main')
-    .getByRole('link', { name: /migrating without freezing/i })
+  const study = page.getByRole('main').getByRole('link', { name: /^mkr/i })
   await expect(study).toBeVisible()
   await study.click()
-  await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
-  await expect(
-    page.getByRole('switch', { name: /orders\.tanstack-query/i })
-  ).toBeVisible()
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(/mkr/)
+  // The banner is the real mkr from npm, running in its own document.
+  const ad = page.frameLocator(
+    'iframe[title="Sample banner ad built with mkr"]'
+  )
+  await expect(ad.getByText('Your headline here')).toBeVisible()
+  const frame = page.locator('iframe[title="Sample banner ad built with mkr"]')
+  await page.getByRole('button', { name: 'Screen-capture mode' }).click()
+  await expect
+    .poll(async () => (await frame.boundingBox())?.height ?? 0)
+    .toBeGreaterThan(250)
   expect(errors).toEqual([])
 })
 

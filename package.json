@@ -49,6 +49,7 @@
     "d3": "^7.9.0",
     "gsap": "^3.15.0",
     "isbot": "^5.2.2",
+    "mkrjs": "0.6.2",
     "pixi.js": "^8.7.3",
     "react": "^19.3.0",
     "react-colorful": "^5.6.1",
@@ -56,6 +57,7 @@
     "react-redux": "^9.2.0",
     "react-router": "7.18.4",
     "react-swipeable": "^7.0.2",
+    "signals": "1.0.0",
     "web-vitals": "^6"
   },
   "devDependencies": {

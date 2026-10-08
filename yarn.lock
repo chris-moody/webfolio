@@ -5887,6 +5887,11 @@ mkdirp@^0.5.3:
   dependencies:
     minimist "^1.2.6"
 
+mkrjs@0.6.2:
+  version "0.6.2"
+  resolved "https://registry.yarnpkg.com/mkrjs/-/mkrjs-0.6.2.tgz#633f46da2d6343834049db4f4fc2144260c78337"
+  integrity sha512-ezsI9zuMp21Q0WZNj1bLkBCdssDROyyn0jaJDjn8Qre+eWuh4Nt3qtVNMgm9CCR4x6HSh1T020wZzxrl40GhPQ==
+
 module-details-from-path@^1.0.3, module-details-from-path@^1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/module-details-from-path/-/module-details-from-path-1.0.4.tgz#b662fdcd93f6c83d3f25289da0ce81c8d9685b94"
@@ -7166,6 +7171,11 @@ signal-exit@^3.0.2, signal-exit@^3.0.3:
   version "3.0.7"
   resolved "https://registry.yarnpkg.com/signal-exit/-/signal-exit-3.0.7.tgz#a9a1767f8af84155114eaabd73f99273c8f59ad9"
   integrity sha512-wnD2ZE+l+SPC/uoS0vXeE9L1+0wuaMqKlfz9AMUo38JsyLSBWSFcHR1Rri62LZc12vLr1gb3jl7iwQhgwpAbGQ==
+
+signals@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/signals/-/signals-1.0.0.tgz#65f0c1599352b35372ecaae5a250e6107376ed69"
+  integrity sha512-dE3lBiqgrgIvpGHYBy6/kiYKfh0HXRmbg0ocakBKiOefbal6ZeTtNlQlxsu9ADkNzv5OmRwRKu+IaTPSqJdZDg==
 
 simple-git-hooks@^2.14.0:
   version "2.14.0"
