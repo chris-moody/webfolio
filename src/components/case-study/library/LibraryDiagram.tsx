@@ -1,17 +1,17 @@
 /**
- * Before/after dependency diagram for the shared-library case study: three
- * apps that each grew their own copies of the same components, then the same
- * apps depending on one package. Schematic; the caption carries the content
- * for screen readers.
+ * Dependency diagram for the shared-library case study: the primary portal
+ * and two new apps each carrying their own copies of the same code, against
+ * all three depending on one package. Schematic; the caption carries the
+ * content for screen readers.
  */
 
-const APPS = ['Team A app', 'Team B app', 'Team C app']
+const APPS = ['Primary portal', 'New app 1', 'New app 2']
 
-// Before: the "same" component under three names and three implementations.
+// Without a library: the same code, copied and renamed in each new app.
 const DRIFT = [
-  ['Button', 'DataTable'],
-  ['Btn', 'ResultsTable'],
-  ['PrimaryButton', 'Grid'],
+  ['MUI theme', 'AppHeader'],
+  ['theme (copied)', 'Header'],
+  ['theme (copied)', 'TopNav'],
 ]
 
 const Box = ({
@@ -93,7 +93,7 @@ export const LibraryDiagram = () => (
         </defs>
 
         <text x={0} y={14} className="fill-fg text-[13px] font-semibold">
-          Before: every team builds its own
+          Without a library: each app copies
         </text>
         {APPS.map((app, i) => (
           <Box
@@ -108,7 +108,7 @@ export const LibraryDiagram = () => (
         ))}
 
         <text x={300} y={14} className="fill-fg text-[13px] font-semibold">
-          After: every team uses one package
+          With one: every app uses one package
         </text>
         {APPS.map((app, i) => (
           <g key={app}>
@@ -143,17 +143,18 @@ export const LibraryDiagram = () => (
           w={148}
           h={136}
           title="Shared library"
-          items={['Button', 'DataTable', 'Modal', 'design tokens']}
+          items={['MUI theme', 'layout + UI', 'Redux slices', 'RTK Query APIs']}
           strong
         />
       </svg>
     </div>
     <figcaption className="mt-2 text-sm text-fg-muted">
-      Before, each of three apps had its own button and table, under different
-      names and with different behavior, so every fix and every design change
-      had to be made three times. After, all three depend on one shared package
-      of components built on shared design tokens. (Schematic; the app and
-      component names are illustrative.)
+      Without a shared library, the two new apps start from copies of the
+      primary portal's theme and layout, renamed and drifting apart, so every
+      fix and design change has to be made three times. With one, all three apps
+      depend on a single package holding the MUI theme, layout and UI
+      components, Redux slices, and RTK Query APIs. (Schematic; the component
+      names are illustrative.)
     </figcaption>
   </figure>
 )
