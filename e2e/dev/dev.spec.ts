@@ -92,7 +92,7 @@ test('leaving the tour lands on a styled site page', async ({ page }) => {
 // elements are checked here.
 test('the density plot aggregates in its worker', async ({ page }) => {
   const errors = trackErrors(page)
-  await page.goto('/work/keeping-the-main-thread-free')
+  await page.goto('/work/large-data-responsive-ui')
   await expect
     .poll(() => page.evaluate(() => window.__plotStats?.ticksPerSecond ?? 0), {
       timeout: 15_000,
@@ -101,6 +101,9 @@ test('the density plot aggregates in its worker', async ({ page }) => {
   await expect(page.getByText(/aggregated in .* on the worker/i)).toBeVisible()
   await page.getByLabel('The main thread').check()
   await expect(page.getByText(/on the main thread\./i)).toBeVisible()
+  await expect(
+    page.getByRole('button', { name: 'Points scanned / s' })
+  ).toHaveAccessibleDescription(/counted into the grid/)
   expect(errors).toEqual([])
 })
 

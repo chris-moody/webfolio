@@ -30,7 +30,11 @@ export const DensityPlot = () => {
     if (!canvas.current || !status.current || !meterRoot.current) return
     const meter = new FrameMeter(meterRoot.current, {
       throughputLabel: 'Points scanned / s',
+      throughputDescription:
+        'Points counted into the grid per second. Each frame scans every point, so this is points × frames per second.',
       payloadLabel: 'Bytes / frame',
+      payloadDescription:
+        'Size of the finished grid the worker hands the page each frame, transferred without copying. 0 when the main thread does the work.',
       exposeAs: '__plotStats',
     })
     const initial = !isReducedMotion()

@@ -1,7 +1,7 @@
 /**
  * Two timelines of the same work: everything on the main thread (one long
- * task, input waits) versus parsing and aggregation in a worker (the main
- * thread only paints). Static SVG on the site's tokens; the text below it
+ * task, input waits) versus parsing and conversion in a worker (the main
+ * thread keeps painting). Static SVG on the site's tokens; the text below it
  * carries the same information for screen readers.
  */
 
@@ -79,8 +79,8 @@ export const ThreadDiagram = () => (
           y={22}
           name="Main thread"
           blocks={[
-            { x: 0, w: 120, label: 'parse', tone: 'work' },
-            { x: 122, w: 150, label: 'aggregate + layout', tone: 'work' },
+            { x: 0, w: 130, label: 'parse XGMML', tone: 'work' },
+            { x: 132, w: 140, label: 'convert to CX', tone: 'work' },
             { x: 274, w: 60, label: 'render', tone: 'work' },
             { x: 336, w: 10, label: 'paint', tone: 'paint' },
             ...paints(360, 24, 490),
@@ -96,25 +96,26 @@ export const ThreadDiagram = () => (
         </text>
 
         <text x={0} y={122} className="fill-fg text-[12px] font-semibold">
-          After: the main thread only paints
+          After: the worker processes, the page keeps painting
         </text>
         <Lane
           y={132}
           name="Worker"
           blocks={[
-            { x: 0, w: 120, label: 'parse', tone: 'work' },
-            { x: 122, w: 150, label: 'aggregate', tone: 'work' },
+            { x: 0, w: 130, label: 'parse XGMML', tone: 'work' },
+            { x: 132, w: 140, label: 'convert to CX', tone: 'work' },
           ]}
         />
         <Lane y={162} name="Main thread" blocks={paints(0, 24, 490)} />
       </svg>
     </div>
     <figcaption className="mt-2 text-sm text-fg-muted">
-      Before, parsing, aggregation, and rendering run as one long task on the
-      main thread, so a click during it waits until all of it finishes. After,
-      the worker does the parsing and aggregation while the main thread keeps
-      painting every frame and answers input immediately; it receives only the
-      finished result. (Schematic, not to scale.)
+      Before, parsing the XGMML, converting it to CX, and rendering run as one
+      long task on the main thread after the download, so the page freezes and a
+      click waits until all of it finishes. After, a worker parses and converts
+      while the main thread keeps painting (including the progress animation)
+      and answers input immediately; it receives only the finished result.
+      (Schematic, not to scale.)
     </figcaption>
   </figure>
 )

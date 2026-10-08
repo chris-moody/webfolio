@@ -114,6 +114,24 @@ test('the Columns menu opens without shifting the layout', async ({ page }) => {
   await expect(button).toBeFocused()
 })
 
+test('frame meter labels explain themselves on hover and focus', async ({
+  page,
+}) => {
+  await waitForData(page)
+  const label = page.getByRole('button', { name: 'Frame p95' })
+  // Screen readers get the description whether or not the tooltip shows.
+  await expect(label).toHaveAccessibleDescription(/95% of recent frames/)
+  const tip = page
+    .locator('body > div[aria-hidden="true"]')
+    .filter({ hasText: '95% of recent frames' })
+  await label.focus()
+  await expect(tip).toBeVisible()
+  await page.keyboard.press('Escape')
+  await expect(tip).toBeHidden()
+  await label.hover()
+  await expect(tip).toBeVisible()
+})
+
 test.describe('before hydration (no JavaScript)', () => {
   test.use({ javaScriptEnabled: false })
 
