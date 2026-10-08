@@ -6,7 +6,10 @@
  * - Frame time: deltas between consecutive rAF callbacks (rolling 300 frames).
  * - Long frames: Long Animation Frames API (`long-animation-frame`) where
  *   available, with script attribution; otherwise the Long Tasks API.
- * - Engine throughput and bytes per frame come from the store via `record()`.
+ * - Engine throughput and bytes per frame come from the caller via `record()`.
+ *
+ * Shared by the Tape demo and the case-study point cloud, which label the
+ * engine numbers differently (FrameMeterOptions).
  */
 
 import { semanticColors } from '@/tokens'
@@ -38,9 +41,19 @@ export interface FrameStats {
 
 declare global {
   interface Window {
-    /** Exposed for the Playwright performance smoke test. */
+    /** Exposed for the Playwright performance tests (see `exposeAs`). */
     __tapeStats?: FrameStats
+    __plotStats?: FrameStats
   }
+}
+
+export interface FrameMeterOptions {
+  /** Label for record()'s ticksPerSecond. */
+  throughputLabel?: string
+  /** Label for record()'s bytes. */
+  payloadLabel?: string
+  /** The window property the stats are published on, for tests. */
+  exposeAs?: '__tapeStats' | '__plotStats'
 }
 
 const percentile = (sorted: Float64Array, p: number) =>
@@ -63,6 +76,7 @@ export class FrameMeter {
   private readonly context: CanvasRenderingContext2D | null
   private readonly values: Record<string, HTMLElement> = {}
   private lastText = 0
+  private readonly exposeAs: NonNullable<FrameMeterOptions['exposeAs']>
   private readonly stats: FrameStats = {
     frames: 0,
     p50: 0,
@@ -79,7 +93,15 @@ export class FrameMeter {
     api: 'none',
   }
 
-  constructor(root: HTMLElement) {
+  constructor(
+    root: HTMLElement,
+    {
+      throughputLabel = 'Trades / s',
+      payloadLabel = 'Bytes / frame',
+      exposeAs = '__tapeStats',
+    }: FrameMeterOptions = {}
+  ) {
+    this.exposeAs = exposeAs
     root.replaceChildren()
     this.canvas = document.createElement('canvas')
     this.canvas.width = GRAPH_SAMPLES * 2
@@ -102,8 +124,8 @@ export class FrameMeter {
       ['dropped', 'Dropped (of 300)'],
       ['longFrames', 'Long frames'],
       ['longestMs', 'Longest'],
-      ['ticksPerSecond', 'Trades / s'],
-      ['bytesPerFrame', 'Bytes / frame'],
+      ['ticksPerSecond', throughputLabel],
+      ['bytesPerFrame', payloadLabel],
     ]
     for (const [key, label] of rows) {
       const group = document.createElement('div')
@@ -161,7 +183,7 @@ export class FrameMeter {
   stop() {
     cancelAnimationFrame(this.raf)
     this.observer?.disconnect()
-    if (window.__tapeStats === this.stats) delete window.__tapeStats
+    if (window[this.exposeAs] === this.stats) delete window[this.exposeAs]
   }
 
   private sample(delta: number) {
@@ -206,7 +228,7 @@ export class FrameMeter {
     let dropped = 0
     for (const delta of window_) if (delta > BUDGET_MS * 1.5) dropped++
     this.stats.dropped = dropped
-    window.__tapeStats = this.stats
+    window[this.exposeAs] = this.stats
 
     const ms = (value: number) => `${value.toFixed(1)} ms`
     this.text('p50', ms(this.stats.p50))

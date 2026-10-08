@@ -10,7 +10,7 @@ import {
 } from 'react'
 import { DEFAULT_CONFIG, RATES, SIZES } from '../config'
 import type { SortKey } from '../engine/query'
-import { FrameMeter } from '../FrameMeter'
+import { FrameMeter } from '@/lab/perf/FrameMeter'
 import { formatPercent, formatPrice } from '../format'
 import type { HostMode } from '../hosts'
 import { referenceQuery } from '../reference'

@@ -1,35 +1,13 @@
-import { type CSSProperties, useId, useState } from 'react'
+import { useId, useState } from 'react'
 import {
   ACCENT_SAMPLES,
   BRAND_ACCENT,
-  colorDeclarations,
   type Mode,
   resolveAccent,
   type ThemeName,
   themes,
 } from '@/tokens'
-
-/** CSS custom properties for a mode and accent, as an inline style object. */
-const tokenStyle = (
-  mode: Mode,
-  color: string,
-  theme: ThemeName
-): CSSProperties => {
-  const vars: Record<string, string> = {}
-  for (const line of colorDeclarations(mode, color)) {
-    const [name, value] = line
-      .trim()
-      .replace(/;$/, '')
-      .split(/:\s(.+)/)
-    if (name && value) vars[name] = value
-  }
-  const definition = themes[theme]
-  vars['--font-body'] = definition.font.body
-  vars['--font-display'] = definition.font.display
-  vars['--radius-theme'] = definition.radius
-  vars['colorScheme'] = mode
-  return vars as CSSProperties
-}
+import { tokenStyle } from './tokenStyle'
 
 const ratio = (value: number) => `${value.toFixed(2)}:1`
 

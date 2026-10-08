@@ -43,9 +43,11 @@ test('Tape streams data from its worker', async ({ page }) => {
 test('case studies, including drafts, load in dev', async ({ page }) => {
   const errors = trackErrors(page)
   await page.goto('/work')
-  const first = page.getByRole('main').getByRole('link').first()
-  await expect(first).toBeVisible()
-  await first.click()
+  const study = page
+    .getByRole('main')
+    .getByRole('link', { name: /migrating without freezing/i })
+  await expect(study).toBeVisible()
+  await study.click()
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
   await expect(
     page.getByRole('switch', { name: /orders\.tanstack-query/i })
@@ -83,5 +85,38 @@ test('leaving the tour lands on a styled site page', async ({ page }) => {
   await expect
     .poll(() => h1.evaluate((el) => parseFloat(getComputedStyle(el).fontSize)))
     .toBeGreaterThan(30)
+  expect(errors).toEqual([])
+})
+
+// Case-study drafts exist only in dev and preview builds, so their live
+// elements are checked here.
+test('the density plot aggregates in its worker', async ({ page }) => {
+  const errors = trackErrors(page)
+  await page.goto('/work/keeping-the-main-thread-free')
+  await expect
+    .poll(() => page.evaluate(() => window.__plotStats?.ticksPerSecond ?? 0), {
+      timeout: 15_000,
+    })
+    .toBeGreaterThan(0)
+  await expect(page.getByText(/aggregated in .* on the worker/i)).toBeVisible()
+  await page.getByLabel('The main thread').check()
+  await expect(page.getByText(/on the main thread\./i)).toBeVisible()
+  expect(errors).toEqual([])
+})
+
+test('one theme change restyles every app using the shared library', async ({
+  page,
+}) => {
+  const errors = trackErrors(page)
+  await page.goto('/work/one-library-three-teams')
+  const exportButton = page.getByRole('button', { name: 'Export' })
+  const inviteButton = page.getByRole('button', { name: 'Invite' })
+  const bg = (locator: typeof exportButton) =>
+    locator.evaluate((el) => getComputedStyle(el).backgroundColor)
+  const before = await bg(exportButton)
+  await page.getByRole('button', { name: 'Hot pink' }).click()
+  await expect.poll(() => bg(exportButton)).not.toBe(before)
+  // Same component, same new color, in a different app.
+  expect(await bg(inviteButton)).toBe(await bg(exportButton))
   expect(errors).toEqual([])
 })
