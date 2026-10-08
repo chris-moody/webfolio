@@ -1,0 +1,86 @@
+---
+title: 'mkr: ads without markup'
+summary: Banner ads at a healthcare agency came with tight deadlines, fixed sizes, and required safety text. I wrote mkr, an open-source JavaScript library that builds them entirely in code on top of GSAP, and the team adopted it for templated content.
+date: 2026-10-08
+draft: true
+order: 3
+---
+
+import { CodeCompare } from '@/components/case-study/CodeCompare'
+import { MkrBanner } from '@/components/case-study/mkr/MkrBanner'
+
+## TL;DR
+
+- **Problem:** at NeOn, an FCB Health agency, banner ads were laid out in HTML, styled in CSS, and then animated with GSAP. For small, fixed-size, short-lived creatives, managing the markup and styles took a large share of already tight timelines.
+- **What I did:** wrote [mkr](https://chris-moody.github.io/mkr/), a small library (under 6 KB gzipped) that creates, styles, and animates HTML and SVG from JavaScript alone, with helpers built for ad work: DoubleClick Studio creatives, image preloading, and scrolling safety information.
+- **Result:** the team adopted it for templated content, and saw fewer bugs between resizes, faster development, and quicker turnarounds on revisions. It's open source under the MIT license, published to npm in 2017 and maintained through 2021.
+
+## Context
+
+NeOn built digital work for healthcare brands, much of it banner ads. Ads like these are small, fixed-size, and short-lived, and they arrive in batches with tight deadlines. Many were for pharmaceutical brands, which must include Important Safety Information (ISI): a panel that scrolls inside the ad, and the full text available for review.
+
+The usual workflow split every ad across three files: markup for structure, CSS for placement and style, and JavaScript to animate it. In an ad, almost every element is absolutely positioned and animated, so most of the markup and CSS only existed to be overridden by the animation code.
+
+## Approach: everything in one place
+
+mkr started in February 2017 as _admkr_, a tool for ads, and became the general-purpose _mkr_ that April, published to npm as `mkrjs`. The idea is one vocabulary for everything: the same properties GSAP animates are the ones used to create the element in the first place.
+
+<CodeCompare
+  beforeLabel="Before: three languages for one headline"
+  afterLabel="After: one call creates, styles, and places it"
+  before={`
+<div class="ad">
+  <div class="headline">Your headline here</div>
+</div>
+
+.ad { position: relative; width: 300px; height: 250px;
+overflow: hidden; }
+.headline { position: absolute; left: 16px; top: 18px;
+font-size: 22px; opacity: 0; }
+
+gsap.to('.headline', { opacity: 1, y: -4, duration: 0.6 })`}
+  after={`
+var ad = new mkr({ css: { width: 300, height: 250 } })
+
+var headline = ad.create('div', {
+text: 'Your headline here',
+css: { x: 16, y: 18, fontSize: 22, alpha: 0 },
+})
+
+ad.tmln.to(headline, 0.6, { alpha: 1, y: 14 })`}
+/>
+
+### Create, style, and animate with one API
+
+`create(tag, options, parent)` makes an element, applies its attributes, text, and styles through GSAP, and adds it to the ad. Because GSAP applies the styles, transforms such as `x` and `y` and shorthands such as `alpha` work the same way at creation as they do in an animation. Every mkr instance comes with its own timeline, so an ad's whole sequence lives in one place.
+
+### Events that clean up after themselves
+
+Ads get reloaded, replayed, and previewed over and over, so listeners had to be easy to remove. mkr's event model runs on js-signals: `mkr.on`, `once`, and `off` accept an element, an array, or a CSS selector, keep the listener's scope, and `clearListeners` removes everything mkr added.
+
+### Built for ads
+
+- **DoubleClick Studio creatives:** `mkr.makeDC(width, height)` creates a container of the given size with the standard one-pixel border.
+- **Safety information:** `mkr.scroll` scrolls a panel at a steady speed in pixels per second. `mkr.reveal`, or adding `?isi` to the ad's URL, lays out the full text for a screen capture.
+- **Preloading:** an instance can hold back its images until it's told to load, then report when they're all ready.
+- **Constructs:** SVG drawing helpers (arc, circle, ellipse, line, polyline, polygon, regular polygon, star, rectangle, path drawing, clip paths, masks, and gradients), a 3D prism, and, from 2019, scroll components: a scroller, a scrollbar, and a scroll mask.
+
+### Run it like a product
+
+mkr has full JSDoc documentation, CodePen demos, and minified builds. Commits follow the Conventional Commits format (through commitizen), and releases are versioned and given changelogs automatically with standard-version. That discipline paid off in 0.4.0, a deliberate breaking release that made all the SVG constructs share one API (`.svg` became `.parent`, `addMask()` and `addClip()` became `create()`, `addTargets()` became `assign()`), with every change listed in the changelog.
+
+## Try it
+
+Below is a 300 × 250 ad built with the real mkr 0.6.2 from npm, running on this site's GSAP 3 through its compatibility names. It runs in an iframe, the way ads are served. The source beside it is the file that runs: no HTML, no CSS. Screen-capture mode shows `mkr.reveal` laying out the full safety text.
+
+<MkrBanner />
+
+## Result
+
+mkr was adopted across the team for templated content. It was published in April 2017, gained its SVG constructs that May and its scroll components in 2019, and its last release (0.6.2, a Safari layering fix) came in March 2021.
+
+Building ads this way gave each one a single source of truth for every element, and consolidated the dimensions and measurements specific to each size. Builds got smaller and faster to develop, the code stayed consistent between resizes, and ads were easier to maintain. The team saw fewer bugs between resizes, faster development, and quicker turnarounds on revisions.
+
+## What I'd do differently
+
+I haven't built an ad in some time, but I'd build on mkr with build scripts that cut repeated code further, copying the boilerplate HTML and shared content between resizes automatically.

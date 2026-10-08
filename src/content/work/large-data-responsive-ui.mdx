@@ -1,0 +1,95 @@
+---
+title: Large data, responsive UI
+summary: Some scientific data sets were more than one JavaScript thread could parse, convert, and draw while staying responsive. Moving the processing into a worker, rendering only what's on screen, and caching the result locally kept the interface usable at every size. A live demo with millions of points shows the core idea.
+date: 2026-10-07
+draft: true
+order: 2
+---
+
+import { CodeCompare } from '@/components/case-study/CodeCompare'
+import { ThreadDiagram } from '@/components/case-study/ThreadDiagram'
+import { DensityPlot } from '@/components/case-study/density/DensityPlot'
+
+## TL;DR
+
+- **Problem:** at Metabolon, a new web experience for exploring pathway networks froze for over a minute on the largest projects, then lagged on every scroll, pan, and zoom.
+- **What I did:** moved parsing and conversion into a web worker with a live progress report, virtualized the data table, wrote a Cytoscape.js extension that renders only the nodes in view, and cached processed projects in IndexedDB.
+- **Result:** processing took about as long as before, but the page never froze. People could see what was happening while they waited, and the table and maps stayed responsive afterwards.
+
+## Context
+
+This was part of a larger effort to give clients a new, web-based way to explore their results: metabolic pathway networks and the data tables behind them, which until then they had worked with in Cytoscape's desktop app.
+
+Project data came from the backend as XGMML, an XML format for networks that carries nodes, their connecting edges, and full data-table columns; ours also recorded each node's membership in individual pathway maps. Most projects were small: generally under three hundred data points, sometimes over five hundred, and very rarely more than a thousand. A few large projects, known from earlier discovery work on the backend, had networks of more than 2,000 nodes.
+
+## Constraints
+
+- **Cytoscape.js, for parity.** The new interface had to use Cytoscape.js so it would match what users already knew from Cytoscape desktop.
+- **XGMML only.** The backend stored nothing else, and Cytoscape.js's XGMML support was limited. The more complex features needed CX or CX2, Cytoscape's JSON-based formats, so every project had to be converted in the browser.
+- **No help from the backend.** It couldn't parse, convert, process, or store the data in another form.
+- **No WebGL.** Cytoscape.js didn't render with WebGL in 2017, so drawing cost grew with every element on screen.
+
+## What broke
+
+An early, straightforward implementation worked well on typical projects. Reviewing it against one of the large ones showed the problem:
+
+- **The download was the only asynchronous step.** A progress bar showed the download. Then parsing and conversion ran synchronously, and the page froze for over a minute with no sign of what was happening.
+- **Nothing worked until it finished.** No clicks, no scrolling, no navigation.
+- **Afterwards, every interaction lagged.** Scrolling the data table, or highlighting, panning, or zooming the map, froze the page for up to a second at a time.
+- **Animations disappeared.** Cytoscape's node animations jumped from start to finish, skipping the frames in between.
+
+Recordings in Chrome's performance panel confirmed what the symptoms suggested: long CPU spikes on the main thread during processing, and again on every interaction afterwards.
+
+## Approach
+
+<ThreadDiagram />
+
+### 1. Move the processing off the main thread
+
+Parsing the XGMML, converting it to CX, and aggregating it moved into a web worker. The page sends the downloaded data and receives the finished result. The work took about as long as before, but it no longer blocked the page: the progress animation kept moving, and the worker reported each stage as it went, so people could see that something was happening and roughly how far along it was.
+
+<CodeCompare
+  beforeLabel="Before: the page does the work"
+  afterLabel="After: the page gets progress, then the result"
+  before={`
+const project = await download(id) // async
+const network = parseXgmml(project) // blocks
+const cx = toCx(network)            // blocks
+render(cx)`}
+  after={`
+const project = await download(id)
+worker.postMessage({ project })
+worker.onmessage = ({ data }) => {
+  if (data.type === 'progress') showProgress(data)
+  else render(data.cx)
+}`}
+/>
+
+### 2. Render only what's visible
+
+The data table was virtualized: it renders the rows in view, plus a few on either side, while keeping the table's full height, so the scrollbar and scroll position behave as if every row were there.
+
+The map got the same idea. I wrote a Cytoscape.js extension that renders only the nodes inside the viewport and updates as you pan and zoom. Highlighting, panning, and zooming then cost about the same on a large network as on a small one, and Cytoscape's node animations played smoothly again.
+
+### 3. Don't do the same work twice
+
+The product team found that most customers work on one machine and stay in one project for a long time. So the app started preloading project data in the background, and saved the last project's processed data locally in IndexedDB (through Dexie). Returning to a project skipped the download and the conversion entirely. Conversion ran again only when the project's version showed an update, or when a different project was loaded.
+
+## Try it
+
+The demo below is fresh, public code with synthetic data. It recreates the core of the approach, not Metabolon's implementation. Every frame, a moving camera needs every point counted into a 480 × 300 grid again. Switch where that happens and watch the frame meter, the same one used by this site's [real-time market grid demo](/lab/tape). Hover over or focus any of the meter's labels for what it measures.
+
+<DensityPlot />
+
+## Result
+
+The processing itself couldn't be made meaningfully faster, but the experience improved a lot:
+
+- **The page stayed responsive while data processed.** Moving the work into a worker unblocked the interface, and its progress reports gave people a running account of what was happening instead of a frozen screen.
+- **The lag was largely gone.** Virtualizing the table and limiting the map to what's on screen removed the freezes on scroll, pan, and zoom.
+- **Animations came back.** Cytoscape's node animations played smoothly instead of jumping.
+- **Repeat visits were fast.** With the last project cached locally, returning to it skipped the download and the conversion.
+
+## What I'd do differently
+
+Ideally, the backend would do this processing, especially a conversion as predictable as XGMML to CX. Doing it once on the server would have taken most of the load off the browser and made the worker largely unnecessary. The local cache and the table and map optimizations would still have been worth keeping.

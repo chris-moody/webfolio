@@ -1,0 +1,58 @@
+---
+title: One library, three teams
+summary: When two new web apps were planned alongside our main client portal, I raised the risk of three teams copying the same code and set up a shared library before the debt could build up. Theme, layout, components, and data-access code moved into one package that all three apps use.
+date: 2026-10-07
+draft: true
+order: 1
+---
+
+import { LibraryDiagram } from '@/components/case-study/library/LibraryDiagram'
+import { SharedLibraryDemo } from '@/components/case-study/library/SharedLibraryDemo'
+
+## TL;DR
+
+- **Problem:** new React web apps would inevitably duplicate existing code, making it harder to maintain and introducing inconsistencies to the user experience.
+- **What I did:** raised the concern with product early and created a shared component library with clear documentation, demos, tests, and contribution model.
+- **Result:** all three teams adopted it, and the cost of maintaining parallel implementations dropped as copied code was deleted in favor of the shared references.
+
+## Context
+
+At Metabolon, our clients' needs eventually expanded into two more web apps, separate from the primary client portal and built on the same tech stack. Before either effort was far underway, I met with product to map the overlap between the three apps. Beyond several UI components, the MUI theme, some of the existing Redux slices, and RTK Query APIs could all be shared.
+
+I raised it as a concern then, and we took preventive measures while the cost was still low, rather than paying down the debt later.
+
+## Duplicate code and its impact
+
+No one sets out to build three versions of the same component or function. Each copy is a reasonable local decision:
+
+- A team needs a table with one more feature than the existing one, and changing someone else's component feels riskier than copying it.
+- There's no place to put shared code that every team can depend on, so "shared" means copy and paste.
+- Each team has its own deadlines, so waiting for another team to accept a change isn't an option.
+
+The cost only grows with time: the same bug fixed three times, the same accessibility issue found three times, and a design change that takes three teams to ship. Users see it too, as three slightly different interfaces from the same company.
+
+## Approach
+
+<LibraryDiagram />
+
+### Version it like any other app
+
+The library followed the same Git feature-branch workflow and versioning policies as our other apps, so there was nothing new for anyone to learn. Each app depended on a released version, so a library change couldn't break an app that hadn't chosen to take it. Releases had changelogs, and breaking changes were batched and announced.
+
+### Decide what goes in
+
+A library used by three teams is a product with three customers, and it needs a rule for what goes in and what stays out. Ours: a component or function belongs in the library when at least two apps need it. Otherwise it stays in its app until a second app does.
+
+## Try it
+
+The same idea, in public code: three small illustrative apps, rendered first with each team's own components, then with one shared set built on this site's design tokens. Switch between them, then change the theme, mode, or accent. With the shared library, one change reaches every app, and every accent you pick is adjusted to keep text and buttons readable (WCAG AA).
+
+<SharedLibraryDemo />
+
+## Result
+
+The quickest win was the theme and layout components. Once they were lifted out of the primary portal and distributed from the shared library, all three apps gained a consistent look and feel: the same brand colors, logo placement, and navigation. From then on, a fix or design change to shared code shipped once and reached every app.
+
+## What I'd do differently
+
+Get ahead of the problem even earlier. With more warning of what was coming, we could have created the shared library before the new apps started, avoiding the code they copied at first and the migrations that followed.
