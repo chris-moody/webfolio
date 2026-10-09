@@ -157,3 +157,6 @@ coverage
 .react-router
 build
 perf/route-weights.json
+
+# Local planning notes (not part of the site)
+plans/
