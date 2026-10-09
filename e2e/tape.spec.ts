@@ -2,6 +2,13 @@ import { expect, type Page, test } from '@playwright/test'
 
 const grid = (page: Page) => page.getByRole('grid', { name: 'Live quotes' })
 
+/** The grid's box in page coordinates, so scrolling a control into view doesn't count as a shift. */
+const gridPageBox = (page: Page) =>
+  grid(page).evaluate((el) => {
+    const { x, y, width, height } = el.getBoundingClientRect()
+    return { x: x + scrollX, y: y + scrollY, width, height }
+  })
+
 const waitForData = async (page: Page) => {
   await page.goto('/lab/tape')
   await expect(grid(page).getByRole('row').nth(1)).not.toContainText('…', {
@@ -92,12 +99,12 @@ test('switches the engine to the main thread and back', async ({ page }) => {
 
 test('the Columns menu opens without shifting the layout', async ({ page }) => {
   await waitForData(page)
-  const before = await grid(page).boundingBox()
+  const before = await gridPageBox(page)
   const button = page.getByRole('button', { name: /^columns/i })
   await button.click()
   const menu = page.getByRole('group', { name: 'Visible columns' })
   await expect(menu).toBeVisible()
-  expect(await grid(page).boundingBox()).toEqual(before)
+  expect(await gridPageBox(page)).toEqual(before)
   await expectNextTo(page)
 
   await expect(
